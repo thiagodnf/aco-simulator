@@ -26,39 +26,77 @@
 	          <a class="navbar-brand" href="#">ACO Simulator</a>
 	        </div>
 	        <div class="navbar-collapse collapse">
+
 	          <ul class="nav navbar-nav">
-	          	<li class="active"><a id="home" href="#home">Home</a></li>
-	            <li><a id="about "href="#about">About</a></li>
+	          	
 	          </ul>
 	        </div><!--/.nav-collapse -->
 	      </div>
 	    </div>
 	    <div class="sec-nav-bar">
-        <div class="container">
-        	<div class="row">
-        		<div class="col-md-12">
-	        	<button type="button" id="new-node" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-plus"></span> New Node</button>
-	            <button type="button" id="start" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-play"></span> Play</button>
-	            <button type="button" id="stop" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-stop"></span> Stop</button>
-	            <button type="button" id="clear-all" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-trash"></span> Clear All</button>
-	            <button type="button" id="popover-settings" class="btn btn-default  btn-sm" data-toggle="popover" title="Settings" data-placement="bottom"><span class="glyphicon glyphicon-cog"></span> Settings</button>
-	        	</div>
-	        	<div id="popover-settings-content" style="display: none">
-	        		<p>Animation</p>
-	        		<input type="text" id="slider-animation" class="slider" data-slider-selection="after">
-	        		<p>Ant Speed</p>
-	        		<input type="text" id="slider-ant-speed" class="slider" data-slider-selection="after">
-	        		<br>
-	        		<br>
-	        		<button type="button" id="close-settings" class="btn btn-default btn-block  btn-sm">Close</button>
-				</div>	        	
-            </div>
-        </div>
-    </div>
+	        <div class="container">
+	        	<div class="row">
+	        		<div class="col-md-10">
+			        	<button type="button" id="new-node" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-plus"></span> New Node</button>
+			            <button type="button" id="start" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-play"></span> Play</button>
+			            <button type="button" id="stop" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-stop"></span> Stop</button>
+			            <button type="button" id="clear-all" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-trash"></span> Clear All</button>	           
+		        	</div>
+		        	<div class="sidebar" style="display: none">
+		        		<h3>Settings</h3>
+		        		<form class="form" role="form">
+		        			<div class="form-group">
+		        				<label for="select-show-pheromone">Show Pheromone</label>
+		        				<select id="select-show-pheromone" class="form-control">
+					        		<option value="true">Yes</value>
+					        		<option value="false">No</value>
+					        	</select>				        		
+			        		</div>
+			        		<div class="form-group">	
+			        			<label for="select-show-best-solution" >Show Best Solution</label>
+			        			<select id="select-show-best-solution" class="form-control">
+					        		<option value="true">Yes</value>
+					        		<option value="false">No</value>
+					        	</select>			        			
+			        		</div>
+			        		<div class="form-group">	
+			        			<label for="slider-alpha">Alpha</label>
+			        			<br>
+			        			<input type="text" id="slider-alpha" data-slider-id="BC" class="slider" data-slider-selection="before">
+			        		</div>
+			        		<div class="form-group">	
+			        			<label for="slider-beta">Beta</label>
+			        			<br>
+			        			<input type="text" id="slider-beta" data-slider-id="BC" class="slider" data-slider-selection="before">
+			        		</div>
+			        		<div class="form-group">	
+			        			<label for="slider-animation">Animation Speed</label>
+			        			<br>
+			        			<input type="text" id="slider-animation" data-slider-id="BC" class="slider" data-slider-selection="before">
+			        		</div>
+			        		<div class="form-group">
+			        			<label for="lider-ant-speed">Ant Speed</label>
+			        			<br>
+			        			<input type="text" id="slider-ant-speed" data-slider-id="BC" class="slider" data-slider-selection="before">
+			        		</div>
+			        		<br>
+			        		<br>
+						</form>
+		        		<button type="button" id="close-settings" class="btn btn-default btn-block  btn-sm">Close</button>
+					</div>
+					<div class="col-md-2 text-right">
+						<button type="button" id="settings" class="btn btn-default  btn-sm" >
+						 	<span class="glyphicon glyphicon-cog"></span> Settings
+						</button>	        	
+					</div>
+	            </div>
+	        </div>
+    	</div>
 		<div class="container">
 			<canvas id="canvas" width="600" height="500"></canvas>			
 		</div>
 		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/bootstrap-colorpicker.min.js"></script>
 		<script src="js/bootstrap-slider.js"></script>		

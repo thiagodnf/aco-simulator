@@ -29,6 +29,28 @@ canvas {
     }  
 }
 
+.sidebar{
+  border: 1px solid gray;
+  padding-top: 50px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  z-index: 10;
+  height: 100%;
+  width: 300px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: #fafafa;
+}
+
+#BC .slider-selection {
+  background: gray;
+}
+#BC .slider-handle {
+  border-bottom-color: blue;
+}
+
 .navbar-custom {
   background-color: #07a144;
   border-color: #068137;
