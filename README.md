@@ -6,7 +6,7 @@ Licensed under [Apache License, Version 2.0][].
 Description
 ----
 
-This project implement the Ant System in Javascript, showing a animated view about the Ant Colony Optimization
+This project implement the Ant System in Javascript, showing a animated view about the Ant Colony Optimization developed by Marco Dorigo
 
 How to Use:
 -----
