@@ -15,6 +15,12 @@ How to Use:
 - Click in "New Node" and after, click on screen.
 - Click in "Start" and enjoy it!
 
+Algorithms
+
+This simulator has implemented the follows algorithms:
+
+- Ant System
+
 Acknowledgement
 ----
 
