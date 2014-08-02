@@ -16,6 +16,7 @@ How to Use:
 - Click in "Start" and enjoy it!
 
 Algorithms
+----
 
 This simulator has implemented the follows algorithms:
 
