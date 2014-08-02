@@ -1,6 +1,7 @@
 $(function() {
 	var OPTION_NEW_NODE = 1;
 	var OPTION_RUN = 2;
+	var OPTION_STOP = 3;
 	var ANT_ID = 0;
 	var NODE_ID = 0;
 	var ALPHA = 1;
@@ -21,6 +22,7 @@ $(function() {
 	var bestSolution = null;
 	var showPheromone = true;
 	var showBestSolution = false;
+	var showAnts = true;
 
 	//Load the Imagens
 
@@ -56,13 +58,18 @@ $(function() {
 		this.init = function(){
 			this.nodesToVisit = new Array();
 			this.visitedNodes = new Array();
+			this.path = new Array(nodes.length);
 			this.visitedNodes.push(this.initialNode);
+			this.currentNode = this.initialNode;
+			this.nextNode = -1;
+			this.angle = 0;
 
 			for(var i=0;i<nodes.length;i++){
 	  			if(i != this.initialNode){
 	  				this.nodesToVisit.push(i);
 	  			}
 	  		}
+
 	  		for(var i=0;i<nodes.length;i++){
 	  			this.path[i] = new Array(nodes.length);
 	  			for(var j=0;j<nodes.length;j++){
@@ -76,19 +83,16 @@ $(function() {
 				return;
 			}
 
-			if(nodes.length == 1){
-				if(this.currentNode == 0){
-					this.nextNode = 1;
-				}else{
-					this.nextNode = 0;
-				}
-			}else{
-				if(this.nextNode == -1){
-					this.nextNode = this.doExploration(this.currentNode);
-				}
+			if(this.nextNode == -1){
+				this.nextNode = this.doExploration(this.currentNode);
 			}
 
 			var node = nodes[this.nextNode];
+			
+			if ( ! showAnts){
+				this.x = node.x;			
+				this.y = node.y;
+			}
 
 			//Define the angle
 			
@@ -108,11 +112,14 @@ $(function() {
 
 			//Move the ant
 
-			var cos0 = y/z;
-			var sen0 = x/z;
-			
-			this.y += antSpeed*cos0;
-			this.x += antSpeed*sen0;
+			if (showAnts){
+				//Only move the ant if the show ant options is selected
+				var cos0 = y/z;
+				var sen0 = x/z;
+				
+				this.y += antSpeed*cos0;
+				this.x += antSpeed*sen0;
+			}
 
 			//Verify if the ant is into the Node
 			if(Math.pow((node.x - this.x),2) + Math.pow((node.y - this.y),2) <= Math.pow(node.radius,2)){
@@ -129,9 +136,11 @@ $(function() {
 				this.x = node.x;			
 				this.y = node.y;
 				if(this.nodesToVisit.length == 0){
+					//Back to initial node
 					if(this.currentNode !== this.initialNode){
 						this.nextNode = this.initialNode;
 					}else{
+						//Finished the tour
 						this.start = false;
 						if(this.callback !== null){
 							this.callback();
@@ -240,6 +249,22 @@ $(function() {
 		ctx.fillText(label,x-3,y+2);
 	}
 
+	function drawBestPathValue(){
+		var text = "Best Path Value is ";
+		
+		ctx.beginPath();		
+		ctx.fillStyle = "red";
+		ctx.font="12px Arial";
+
+		if(bestSolution !== null){
+			text += evaluate(bestSolution);
+		}else{
+			text += "Infinite";
+		}
+
+		ctx.fillText(text,10,20);
+	}
+
 	function drawBestSolution(ant){
 		if(ant == null){
 			return;
@@ -265,12 +290,37 @@ $(function() {
 	}
 
 	function draw(){		
+		//Clear the screen before draw
 		ctx.clearRect (0 , 0 , canvas.width,canvas.height );		
+		
 		if(showBestSolution === true){
 			drawBestSolution(bestSolution);
+			drawBestPathValue();
 		}
+
+		if(showPheromone){
+			drawPheromone();
+		}
+
 		drawNodes();
-		drawAnts();			
+
+		if(showAnts){
+			drawAnts();
+		}		
+	}
+
+	function drawPheromone(){
+		for(var i=0; i<nodes.length; i++){
+			for(var j=0; j<nodes.length; j++){
+				if(i != j){
+					if(tau === null){
+						drawLine(nodes[i].x,nodes[i].y,nodes[j].x,nodes[j].y,1,"black");
+					}else{
+						drawLine(nodes[i].x,nodes[i].y,nodes[j].x,nodes[j].y,tau[i][j],"black");
+					}
+				}
+			}
+		}		
 	}
 
 	function drawAnts(){
@@ -285,20 +335,6 @@ $(function() {
 	}
 
 	function drawNodes(){
-		if(showPheromone === true){
-			for(var i=0; i<nodes.length; i++){
-				for(var j=0; j<nodes.length; j++){
-					if(i != j){
-						if(tau === null){
-							drawLine(nodes[i].x,nodes[i].y,nodes[j].x,nodes[j].y,1,"black");
-						}else{
-							drawLine(nodes[i].x,nodes[i].y,nodes[j].x,nodes[j].y,tau[i][j],"black");
-						}
-					}
-				}
-			}
-		}
-
 		nodes.forEach(function(node) {
 			drawCircle(node.x,node.y,node.radius,node.id);
 		});
@@ -362,9 +398,10 @@ $(function() {
 		mouseY = event.clientY - rect.top;		
 	}).click(function(event) {
 		if (selectedOption == OPTION_NEW_NODE){
-			//if(ants.length <= 0){
-				ants.push(new Ant(ANT_ID++,mouseX,mouseY));
-			//}
+			tau = null;
+			dist = null;
+			bestSolution = null;
+			ants.push(new Ant(ANT_ID++,mouseX,mouseY));
 			nodes.push(new Node(NODE_ID++,mouseX,mouseY));
 			draw();
 		}
@@ -443,6 +480,7 @@ $(function() {
     
     $( "#select-show-pheromone" ).val(showPheromone.toString());
 	$( "#select-show-best-solution" ).val(showBestSolution.toString());
+	$( "#select-show-ants" ).val(showAnts.toString());
 
 	$( "#select-show-pheromone" ).change(function () {
 		if(this.value == "true"){
@@ -453,6 +491,7 @@ $(function() {
 		
 		draw();
   	});
+
   	$( "#select-show-best-solution" ).change(function () {
 		if(this.value == "true"){
 			showBestSolution = true;	
@@ -462,44 +501,58 @@ $(function() {
 		
 		draw();
   	});
-	
 
-	
+  	$( "#select-show-ants" ).change(function () {
+		if(this.value == "true"){
+			showAnts = true;	
+		}else{
+			showAnts = false;
+		}
+		
+		draw();
+  	});	
 
 	function start(){
-		//Create the pheremone
-		tau = new Array(nodes.length);
-		dist = new Array(nodes.length);
-		for (var i = 0; i < nodes.length; i++) {
-	    	tau[i] = new Array(nodes.length);
-	    	dist[i] = new Array(nodes.length);
-	  	}
 
-	  	for(var i=0;i<nodes.length;i++){
-	  		for(var j=0;j<nodes.length;j++){
-	  			tau[i][j] = 1;
-	  			dist[i][j] = 0;
-	  		}
-	  	}
+		if(tau === null){
+			//Create the pheremone and distance matrix
+			tau = new Array(nodes.length);
+			dist = new Array(nodes.length);
+			bestSolution = null;
 
-	  	//convert coordinates to distance()
-	  	for (var i = 0; i < nodes.length; i++) {
-			for (var j = i; j < nodes.length; j++) {
-				if (i != j) {
-					var x1 = nodes[i].x;
-					var y1 = nodes[i].y;
-					var x2 = nodes[j].x;
-					var y2 = nodes[j].y;
+			for (var i = 0; i < nodes.length; i++) {
+		    	tau[i] = new Array(nodes.length);
+		    	dist[i] = new Array(nodes.length);
+		  	}
 
-					dist[i][j] = euclideanDistance(x1,y1,x2,y2);
-					dist[j][i] = dist[i][j];
+		  	for(var i=0;i<nodes.length;i++){
+		  		for(var j=0;j<nodes.length;j++){
+		  			tau[i][j] = 1;
+		  			dist[i][j] = 0;
+		  		}
+		  	}
+
+		  	//convert coordinates to distance()
+		  	for (var i = 0; i < nodes.length; i++) {
+				for (var j = i; j < nodes.length; j++) {
+					if (i != j) {
+						var x1 = nodes[i].x;
+						var y1 = nodes[i].y;
+						var x2 = nodes[j].x;
+						var y2 = nodes[j].y;
+
+						dist[i][j] = euclideanDistance(x1,y1,x2,y2);
+						dist[j][i] = dist[i][j];
+					}
 				}
 			}
+			ants.forEach(function(ant) {
+	  			ant.init();	  		
+	  		});
 		}
 
 	  	ants.forEach(function(ant) {
 	  		ant.start = true;
-	  		ant.init();	  		
 	  	});
 
 		move();
@@ -508,7 +561,7 @@ $(function() {
 	var finishedAnts = 0;
 
 	function move(){
-		if(selectedOption !== OPTION_RUN){
+		if (selectedOption !== OPTION_RUN){
 			return;
 		}
 
@@ -524,8 +577,6 @@ $(function() {
 				if(finishedAnts == ants.length){
 					globalUpdateRule();
 					finishedAnts = 0;
-					//console.log("terminou");
-					//console.log(ant.visitedNodes)
 					ants.forEach(function(ant) {
 				  		ant.start = true;
 				  		ant.init();
@@ -536,7 +587,7 @@ $(function() {
 
 		draw();
 
-		if(selectedOption === OPTION_RUN){
+		if (selectedOption === OPTION_RUN){
 			setTimeout(move,animationSpeed);
 		}
 	}
@@ -562,7 +613,7 @@ $(function() {
 					for (var k = 0; k < ants.length; k++) {
 						if (ants[k].path[i][j] == 1) {
 							//deltaTau += p.getDeltaTau(ant[k], i, j);
-							deltaTau += 1/evaluate(ants[k]);
+							deltaTau += 1 / evaluate(ants[k]);
 						}
 					}
 

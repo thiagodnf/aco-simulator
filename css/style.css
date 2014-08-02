@@ -42,13 +42,20 @@ canvas {
   right: 0;
   top: 0;
   background-color: #fafafa;
+  font-size: 12px;
 }
 
 #BC .slider-selection {
   background: gray;
 }
+
 #BC .slider-handle {
   border-bottom-color: blue;
+}
+
+#select-aco{
+  padding: 5px 10px;
+  height: 31px;
 }
 
 .navbar-custom {

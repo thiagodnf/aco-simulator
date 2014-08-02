@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="Thiago Nascimento">
 		<meta name="description" content="Ant Colony Optimization for Travelling Salesman Problem">
-		<meta name="keywords" content="aco, ant colony optimization, simulation,tsp,travelling salesman problem">
+		<meta name="keywords" content="aco, ant colony optimization, ant system, as, simulation,tsp,travelling salesman problem">
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/bootstrap-colorpicker.min.css">
@@ -25,8 +25,7 @@
 	          </button>
 	          <a class="navbar-brand" href="#">ACO Simulator</a>
 	        </div>
-	        <div class="navbar-collapse collapse">
-
+	        <div class="navbar-collapse collapse">	        	
 	          <ul class="nav navbar-nav">
 	          	
 	          </ul>
@@ -40,11 +39,28 @@
 			        	<button type="button" id="new-node" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-plus"></span> New Node</button>
 			            <button type="button" id="start" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-play"></span> Play</button>
 			            <button type="button" id="stop" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-stop"></span> Stop</button>
-			            <button type="button" id="clear-all" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-trash"></span> Clear All</button>	           
+			            <button type="button" id="clear-all" class="btn btn-default  btn-sm">
+			            	<span class="glyphicon glyphicon-trash"></span> Clear All
+			            </button>
+			            <!--
+			            <div style="display: inline-block">
+			                <select id="select-aco" class="form-control" style="width: 200px;">
+				        		<option value="true">Ant System</value>
+				        		<option value="false">Ant Colony System</value>
+				        	</select>				        	
+			        	</div>
+			        	-->
 		        	</div>
 		        	<div class="sidebar" style="display: none">
 		        		<h3>Settings</h3>
 		        		<form class="form" role="form">
+		        			<div class="form-group">	
+			        			<label for="select-show-ants" >Show Ants</label>
+			        			<select id="select-show-ants" class="form-control">
+					        		<option value="true">Yes</value>
+					        		<option value="false">No</value>
+					        	</select>			        			
+			        		</div>
 		        			<div class="form-group">
 		        				<label for="select-show-pheromone">Show Pheromone</label>
 		        				<select id="select-show-pheromone" class="form-control">
@@ -93,7 +109,8 @@
 	        </div>
     	</div>
 		<div class="container">
-			<canvas id="canvas" width="600" height="500"></canvas>			
+			<canvas id="canvas" width="600" height="500"></canvas>	
+					
 		</div>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
