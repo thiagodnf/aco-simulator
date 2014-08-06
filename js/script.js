@@ -1,12 +1,13 @@
 $(function() {
+	var CONFIG_NODE_COLOR = "#f5003b";	
+	var CONFIG_TEXT_COLOR = "#ffffff";
 	var OPTION_NEW_NODE = 1;
-	var OPTION_RUN = 2;
-	var OPTION_STOP = 3;
 	var ANT_ID = 0;
 	var NODE_ID = 0;
 	var ALPHA = 1;
-	var BETA = 1;
+	var BETA = 2;
 	var RHO = 0.1;
+	var Q = 1;
 
 	var mouseX = 0;
 	var mouseY = 0;
@@ -14,14 +15,14 @@ $(function() {
 	var ctx = canvas.getContext("2d");
 	var nodes = new Array();
 	var ants = new Array();
-	var selectedOption = OPTION_NEW_NODE;
+	var selectedOption = -1;
 	var tau = null;
 	var dist = null;
-	var antSpeed = 10;
-	var animationSpeed = 21;
+	var animationSpeed = 20;
 	var bestSolution = null;
 	var showPheromone = true;
 	var showBestSolution = false;
+	var intervalID = 0;
 	var showAnts = true;
 
 	//Load the Imagens
@@ -116,7 +117,14 @@ $(function() {
 				//Only move the ant if the show ant options is selected
 				var cos0 = y/z;
 				var sen0 = x/z;
-				
+				var antSpeed = 10;
+
+				if(animationSpeed <= 20){
+					antSpeed = animationSpeed;
+				}else{
+					antSpeed = 20;
+				}
+
 				this.y += antSpeed*cos0;
 				this.x += antSpeed*sen0;
 			}
@@ -235,16 +243,16 @@ $(function() {
 	}
 
 	function resizeCanvas() {
-		canvas.width = $(".container").width();		
+		canvas.width = $("#panel").width();		
 	}	
 
 	function drawCircle(x,y,radius,label){
-		ctx.fillStyle = "red";
+		ctx.fillStyle = CONFIG_NODE_COLOR;
 		ctx.beginPath();
 		ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
 		ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
 		ctx.fill();	
-		ctx.fillStyle = "white";
+		ctx.fillStyle = CONFIG_TEXT_COLOR;
 		ctx.font="10px Arial";
 		ctx.fillText(label,x-3,y+2);
 	}
@@ -377,6 +385,7 @@ $(function() {
 		$("#start").removeAttr('disabled');
 		$("#stop").removeAttr('disabled');
 		$("#clear-all").removeAttr('disabled');
+		$("#step").removeAttr('disabled');
 	}
 
 	function disableAllButtons(){
@@ -384,6 +393,7 @@ $(function() {
 		$("#start").attr('disabled','disabled');
 		$("#stop").attr('disabled','disabled');
 		$("#clear-all").attr('disabled','disabled');
+		$("#step").attr('disabled','disabled');
 	}
 	
 	//Remove context menu when user click with right button
@@ -393,7 +403,6 @@ $(function() {
 	
 	$( "canvas" ).mousemove(function( event ) {
 		var rect = canvas.getBoundingClientRect();
-		
 		mouseX = event.clientX - rect.left;
 		mouseY = event.clientY - rect.top;		
 	}).click(function(event) {
@@ -407,6 +416,10 @@ $(function() {
 		}
 	});
 
+	$("#about").click(function(event) {
+		$('#myModal').modal('show');
+	});
+
 	$("#new-node").click(function(event) {
 		selectedOption = OPTION_NEW_NODE;		
 	});
@@ -416,17 +429,26 @@ $(function() {
 			alert("Before, you must add at least two nodes");
 			return;
 		}
+		
+		disableButtonsWhileIsRunning();
+		initParameters();
+		start();
+	});
 
-		selectedOption = OPTION_RUN;
-		disableAllButtons();
-		$("#stop").removeAttr('disabled');
-		start();		
+	$("#step").click(function(event) {
+		if(nodes.length <= 1){
+			alert("Before, you must add at least two nodes");
+			return;
+		}
+
+		disableButtonsWhileIsRunning();
+		initParameters();
+		intervalID = setInterval(step,animationSpeed);
 	});
 
 	$("#stop").click(function(event) {
-		selectedOption = OPTION_NEW_NODE;
-		enableAllButtons()	
-		$("#stop").attr('disabled','disabled');			
+		enableButtonsWhenIsStop();
+		clearInterval(intervalID);		
 	});
 
 	$("#clear-all").click(function(event) {
@@ -440,45 +462,62 @@ $(function() {
 		}
 	});
 
-	$('#settings').click(function () {
-		$(".sidebar").animate({width: 'toggle'});
-		$('#slider-animation').slider({
-			min: 1,
-			max: 40,
-			value: 40-animationSpeed+1
-		}).on('slide', function (ev) {
-			animationSpeed = 40-ev.value+1;
-	    });
-	    $('#slider-ant-speed').slider({
-			min: 1,
-			max: 20,
-			value: antSpeed
-		}).on('slide', function (ev) {
-	        antSpeed = ev.value;
-	    });
-	    $('#slider-alpha').slider({
-			min: 0,
-			max: 5,
-			step: 0.5,
-			value: ALPHA
-		}).on('slide', function (ev) {
-	        ALPHA = ev.value;
-	    });
-	    $('#slider-beta').slider({
-			min: 0,
-			max: 5,
-			step: 0.5,
-			value: BETA
-		}).on('slide', function (ev) {
-	        BETA = ev.value;
-	    });
+	$('.colorpicker-node-color').colorpicker({color:CONFIG_NODE_COLOR})
+	$('.colorpicker-text-color').colorpicker({color:CONFIG_TEXT_COLOR})
+
+	$('.colorpicker-node-color').colorpicker().on('changeColor', function(ev){
+	  	CONFIG_NODE_COLOR = ev.color.toHex();
+	  	draw();
 	});
 
-	$('#close-settings').click(function () {
-		$(".sidebar").animate({width: 'toggle'});
-	});	
-    
-    $( "#select-show-pheromone" ).val(showPheromone.toString());
+	$('.colorpicker-text-color').colorpicker().on('changeColor', function(ev){
+	  	CONFIG_TEXT_COLOR = ev.color.toHex();
+	  	draw();
+	});
+
+	$('#slider-rho').slider({
+		min: 0,
+		max: 1,
+		step: 0.1,
+		value: RHO
+	}).on('slide', function (ev) {
+		RHO = ev.value;		
+    });
+
+    $('#slider-q').slider({
+		min: 1,
+		max: 10,		
+		value: Q
+	}).on('slide', function (ev) {
+		Q = ev.value;		
+    });
+
+	$('#slider-animation').slider({
+		min: 1,
+		max: 40,
+		value: animationSpeed
+	}).on('slide', function (ev) {
+		animationSpeed = ev.value;		
+    });
+
+	$('#slider-alpha').slider({
+		min: 0,
+		max: 5,
+		step: 0.5,
+		value: ALPHA
+	}).on('slide', function (ev) {
+        ALPHA = ev.value;
+    });
+    $('#slider-beta').slider({
+		min: 0,
+		max: 5,
+		step: 0.5,
+		value: BETA
+	}).on('slide', function (ev) {
+        BETA = ev.value;
+    });
+
+	$( "#select-show-pheromone" ).val(showPheromone.toString());
 	$( "#select-show-best-solution" ).val(showBestSolution.toString());
 	$( "#select-show-ants" ).val(showAnts.toString());
 
@@ -510,11 +549,28 @@ $(function() {
 		}
 		
 		draw();
-  	});	
+  	});
 
-	function start(){
+  	$( window ).resize(function() {
+	  resizeCanvas();
+	  draw();
+	});
 
-		if(tau === null){
+  	function enableButtonsWhenIsStop(){
+  		selectedOption = -1;
+  		enableAllButtons()	
+		$("#stop").attr('disabled','disabled');
+  	}
+
+  	function disableButtonsWhileIsRunning(){
+  		selectedOption = -1;
+		disableAllButtons()	
+		$("#stop").removeAttr('disabled');
+  	}
+
+  	function initParameters(){
+  		if(tau === null){
+  			console.log("Creating a new pheromone matrix...");
 			//Create the pheremone and distance matrix
 			tau = new Array(nodes.length);
 			dist = new Array(nodes.length);
@@ -523,10 +579,7 @@ $(function() {
 			for (var i = 0; i < nodes.length; i++) {
 		    	tau[i] = new Array(nodes.length);
 		    	dist[i] = new Array(nodes.length);
-		  	}
-
-		  	for(var i=0;i<nodes.length;i++){
-		  		for(var j=0;j<nodes.length;j++){
+		    	for(var j=0;j<nodes.length;j++){
 		  			tau[i][j] = 1;
 		  			dist[i][j] = 0;
 		  		}
@@ -545,26 +598,45 @@ $(function() {
 						dist[j][i] = dist[i][j];
 					}
 				}
-			}
-			ants.forEach(function(ant) {
-	  			ant.init();	  		
-	  		});
+			}			
 		}
 
-	  	ants.forEach(function(ant) {
+		ants.forEach(function(ant) {
+			ant.init();	
 	  		ant.start = true;
 	  	});
+  	}	
 
-		move();
+	function start(){
+		clearInterval(intervalID);
+		move(function(){
+			ants.forEach(function(ant) {
+				ant.start = true;
+				ant.init();
+			});
+		})		
+
+		var speed = 40;
+
+		if(animationSpeed > 20){
+			speed = 40-animationSpeed;			
+		}else{
+			speed = 40;
+		}
+
+		intervalID = setInterval(start, speed);
+	}
+
+	function step(){
+		move(function(){
+			enableButtonsWhenIsStop();
+			clearInterval(intervalID);
+		})
 	}
 
 	var finishedAnts = 0;
 
-	function move(){
-		if (selectedOption !== OPTION_RUN){
-			return;
-		}
-
+	function move(callback){
 		ants.forEach(function(ant) {
 			ant.move();
 			ant.callback = function(){
@@ -577,19 +649,15 @@ $(function() {
 				if(finishedAnts == ants.length){
 					globalUpdateRule();
 					finishedAnts = 0;
-					ants.forEach(function(ant) {
-				  		ant.start = true;
-				  		ant.init();
-				  	});
+
+					if(callback !== null){
+						callback();
+					}				
 				}
 			}
 		});
 
 		draw();
-
-		if (selectedOption === OPTION_RUN){
-			setTimeout(move,animationSpeed);
-		}
 	}
 
 	function evaluate(ant){
@@ -613,7 +681,7 @@ $(function() {
 					for (var k = 0; k < ants.length; k++) {
 						if (ants[k].path[i][j] == 1) {
 							//deltaTau += p.getDeltaTau(ant[k], i, j);
-							deltaTau += 1 / evaluate(ants[k]);
+							deltaTau += Q / evaluate(ants[k]);
 						}
 					}
 
@@ -626,10 +694,10 @@ $(function() {
 			}
 		}
 	}
-
+	
 	function init(){
 		resizeCanvas();	
-		$("#stop").attr('disabled','disabled');
+		enableButtonsWhenIsStop();
 		draw();
 	}
 

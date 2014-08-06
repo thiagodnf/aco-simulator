@@ -15,108 +15,188 @@
 	</head>
 	<body>
 		<div class="navbar navbar-custom navbar-fixed-top" role="navigation">
-	      <div class="container">
-	        <div class="navbar-header">
-	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	            <span class="sr-only">Toggle navigation</span>
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	          </button>
-	          <a class="navbar-brand" href="#">ACO Simulator</a>
-	        </div>
-	        <div class="navbar-collapse collapse">	        	
-	          <ul class="nav navbar-nav">
-	          	
-	          </ul>
-	        </div><!--/.nav-collapse -->
-	      </div>
+	     	<div class="container">
+	        	<div class="navbar-header">
+	          		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	            		<span class="sr-only">Toggle navigation</span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+			            <span class="icon-bar"></span>
+	          		</button>
+	          		<a class="navbar-brand" href="#">ACO Simulator</a>
+	        	</div>
+	        	<div class="navbar-collapse collapse">	        	
+	          		<ul class="nav navbar-nav">
+	          	 		<li><a id="about" href="#about">About</a></li>
+	          		</ul>
+	        	</div><!--/.nav-collapse -->
+	      	</div>
 	    </div>
 	    <div class="sec-nav-bar">
 	        <div class="container">
 	        	<div class="row">
 	        		<div class="col-md-10">
-			        	<button type="button" id="new-node" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-plus"></span> New Node</button>
-			            <button type="button" id="start" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-play"></span> Play</button>
-			            <button type="button" id="stop" class="btn btn-default  btn-sm"><span class="glyphicon glyphicon-stop"></span> Stop</button>
-			            <button type="button" id="clear-all" class="btn btn-default  btn-sm">
-			            	<span class="glyphicon glyphicon-trash"></span> Clear All
-			            </button>
-			            <!--
-			            <div style="display: inline-block">
-			                <select id="select-aco" class="form-control" style="width: 200px;">
-				        		<option value="true">Ant System</value>
-				        		<option value="false">Ant Colony System</value>
-				        	</select>				        	
-			        	</div>
-			        	-->
-		        	</div>
-		        	<div class="sidebar" style="display: none">
-		        		<h3>Settings</h3>
-		        		<form class="form" role="form">
-		        			<div class="form-group">	
-			        			<label for="select-show-ants" >Show Ants</label>
-			        			<select id="select-show-ants" class="form-control">
-					        		<option value="true">Yes</value>
-					        		<option value="false">No</value>
-					        	</select>			        			
-			        		</div>
-		        			<div class="form-group">
-		        				<label for="select-show-pheromone">Show Pheromone</label>
-		        				<select id="select-show-pheromone" class="form-control">
-					        		<option value="true">Yes</value>
-					        		<option value="false">No</value>
-					        	</select>				        		
-			        		</div>
-			        		<div class="form-group">	
-			        			<label for="select-show-best-solution" >Show Best Solution</label>
-			        			<select id="select-show-best-solution" class="form-control">
-					        		<option value="true">Yes</value>
-					        		<option value="false">No</value>
-					        	</select>			        			
-			        		</div>
-			        		<div class="form-group">	
-			        			<label for="slider-alpha">Alpha</label>
-			        			<br>
-			        			<input type="text" id="slider-alpha" data-slider-id="BC" class="slider" data-slider-selection="before">
-			        		</div>
-			        		<div class="form-group">	
-			        			<label for="slider-beta">Beta</label>
-			        			<br>
-			        			<input type="text" id="slider-beta" data-slider-id="BC" class="slider" data-slider-selection="before">
-			        		</div>
-			        		<div class="form-group">	
-			        			<label for="slider-animation">Animation Speed</label>
-			        			<br>
-			        			<input type="text" id="slider-animation" data-slider-id="BC" class="slider" data-slider-selection="before">
-			        		</div>
-			        		<div class="form-group">
-			        			<label for="lider-ant-speed">Ant Speed</label>
-			        			<br>
-			        			<input type="text" id="slider-ant-speed" data-slider-id="BC" class="slider" data-slider-selection="before">
-			        		</div>
-			        		<br>
-			        		<br>
-						</form>
-		        		<button type="button" id="close-settings" class="btn btn-default btn-block  btn-sm">Close</button>
-					</div>
-					<div class="col-md-2 text-right">
-						<button type="button" id="settings" class="btn btn-default  btn-sm" >
-						 	<span class="glyphicon glyphicon-cog"></span> Settings
-						</button>	        	
-					</div>
+	        			<div class="btn-group">
+						  <button type="button" id="new-node" class="btn btn-default  btn-sm">
+			        		<span class="glyphicon glyphicon-plus"></span> New Node
+				        	</button>
+				            <button type="button" id="start" class="btn btn-default  btn-sm">
+				            	<span class="glyphicon glyphicon-play"></span> Play
+				            </button>
+				            <button type="button" id="step" class="btn btn-default btn-sm">
+				            	<span class="glyphicon glyphicon glyphicon-step-forward"></span> Step
+				            </button>
+				            <button type="button" id="stop" class="btn btn-default  btn-sm">
+				            	<span class="glyphicon glyphicon-stop"></span> Stop
+				            </button>
+				            <button type="button" id="clear-all" class="btn btn-default  btn-sm">
+				            	<span class="glyphicon glyphicon-trash"></span> Clear All
+				            </button>
+						</div>			        				           
+		        	</div>		        	
 	            </div>
 	        </div>
     	</div>
 		<div class="container">
-			<canvas id="canvas" width="600" height="500"></canvas>	
-					
+			<div class="row">
+	        	<div class="col-md-9" id="panel">
+					<canvas id="canvas" width="600" height="600"></canvas>	
+				</div>
+				<div class="col-md-3 settings">
+					<form class="form-horizontal" role="form">
+						<h3 class="settings-separator">Ant Settings</h3>
+						<div class="form-group">	
+		        			<label for="slider-alpha" class="control-label col-sm-6">Alpha</label>
+		        			<div class="col-sm-6">
+		        				<input type="text" id="slider-alpha" data-slider-id="BC" data-slider-selection="before">
+		        			</div> 
+		        		</div>
+		        		<div class="form-group">	
+		        			<label for="slider-beta" class="control-label col-sm-6">Beta</label>
+		        			<div class="col-sm-6">
+		        				<input type="text" id="slider-beta" data-slider-id="BC"  data-slider-selection="before">
+		        			</div> 
+		        		</div>
+		        		<div class="form-group">	
+		        			<label for="slider-rho" class="control-label col-sm-6">&rho;</label>
+		        			<div class="col-sm-6">
+		        				<input type="text" id="slider-rho" data-slider-id="BC"  data-slider-selection="before">
+		        			</div> 
+		        		</div>
+		        		<div class="form-group">	
+		        			<label for="slider-q" class="control-label col-sm-6">Q</label>
+		        			<div class="col-sm-6">
+		        				<input type="text" id="slider-q" data-slider-id="BC"  data-slider-selection="before">
+		        			</div> 
+		        		</div>
+	        			<h3  class="settings-separator">Visualization</h3>
+	        			<div class="form-group">	
+		        			<label for="select-show-ants" class="control-label col-sm-6" >Show Ants</label>
+		        			<div class="col-sm-6">
+			        			<select id="select-show-ants" class="form-control">
+					        		<option value="true">Yes</value>
+					        		<option value="false">No</value>
+					        	</select>			        			
+					        </div>
+		        		</div>
+		        		<div class="form-group">
+	        				<label for="select-show-pheromone" class="control-label col-sm-6">Show Pheromone</label>
+	        				<div class="col-sm-6">
+		        				<select id="select-show-pheromone" class="form-control">
+					        		<option value="true">Yes</value>
+					        		<option value="false">No</value>
+					        	</select>
+					    	</div>    
+		        		</div>
+		        		<div class="form-group">	
+		        			<label for="select-show-best-solution" class="control-label col-sm-6" >Show Best Solution</label>
+			        		<div class="col-sm-6">
+			        			<select id="select-show-best-solution" class="form-control">
+					        		<option value="true">Yes</value>
+					        		<option value="false">No</value>
+					        	</select>
+					    	</div>    		        			
+		        		</div>
+		        		<div class="form-group">	
+		        			<label for="colorpicker-node-color" class="control-label col-sm-6" >Node Color</label>
+			        		<div class="col-sm-6">
+			        			<div class="input-group colorpicker-node-color">
+								    <input type="text" value="" class="form-control" id="colorpicker-node-color" />
+								    <span class="input-group-addon"><i></i></span>
+								</div>
+					    	</div>    		        			
+		        		</div>	
+		        		<div class="form-group">	
+		        			<label for="colorpicker-text-color" class="control-label col-sm-6" >Text Color</label>
+			        		<div class="col-sm-6">
+			        			<div class="input-group colorpicker-text-color">
+								    <input type="text" value="" class="form-control" id="colorpicker-text-color" />
+								    <span class="input-group-addon"><i></i></span>
+								</div>
+					    	</div>    		        			
+		        		</div>	        		
+		        		<div class="form-group">	
+		        			<label for="slider-animation" class="control-label col-sm-6">Animation Speed</label>
+		        			<div class="col-sm-6">
+		        				<input type="text" id="slider-animation" data-slider-id="BC" data-slider-selection="before">
+		        			</div> 
+		        		</div>		        		
+					</form>
+				</div>
+			</div>			
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  	<div class="modal-dialog">
+			    <div class="modal-content">
+				     	<div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal">
+					        	<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					        </button>
+					        <h4 class="modal-title" id="myModalLabel">About</h4>
+				     	</div>
+				     	<div class="modal-body">
+				        <h4>Implemented Algorithm</h4>
+				        <br>
+			        	<ul>
+					  		<li><b>Ant System</b>
+					  			<ul class="list-unstyled">
+										<li>M. Dorigo, V. Maniezzo & A. Colorni, Ant System: Optimization by a colony of cooperating agents. IEEE Transactions on Systems, Man, and Cybernetics-Part B, 26(1):29-41,1996. <a target="_blank" href="ftp://iridia.ulb.ac.be/pub/mdorigo/journals/IJ.10-SMC96.pdf">IJ.10-SMC96.pdf</a></li>
+								</ul>
+					  		</li>
+						</ul>
+						<br>
+						<h4>Source Code</h4>
+						<br>
+						<ul>
+					  		<li><a target="_blank" href="https://github.com/thiagodnf/aco-simulator">https://github.com/thiagodnf/aco-simulator</a></li>
+						</ul>
+						<br>						
+						<h4>Acknowledgement</h4>
+						<div class="container">
+							<br>
+							<div class="row">
+	        					<div class="col-md-2">
+	        						<img src="img/logo.png" />
+	        					</div>
+								<div class="col-md-10">
+									<p>GOES - Opitimization in Software Engineering Group</p>
+									<p><a href="http://www.goes.uece.br" target="_blank">http://www.goes.uece.br</a></p>
+	        					</div>
+	        				</div>
+	        			</div>
+					    </div>
+					    <div class="modal-footer">
+					        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>					        
+					    </div>
+			    </div>
+			 </div>
 		</div>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/bootstrap-colorpicker.min.js"></script>
-		<script src="js/bootstrap-slider.js"></script>		
+		<script src="js/bootstrap-slider.min.js"></script>		
 		<script src="js/script.js"></script>
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
