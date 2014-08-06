@@ -243,7 +243,8 @@ $(function() {
 	}
 
 	function resizeCanvas() {
-		canvas.width = $("#panel").width();		
+		canvas.width = $("#panel").width();
+		canvas.height = $(window).height() - $("#navbar").height() - $(".sec-nav-bar").height()-60;
 	}	
 
 	function drawCircle(x,y,radius,label){
