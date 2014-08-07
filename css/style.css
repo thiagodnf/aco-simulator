@@ -4,7 +4,13 @@ body {
 
 canvas {
 	margin-top: 20px;
-	border: 1px solid gray;  
+	border: 1px solid gray;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;	
 }
 
 .dont-select{
@@ -49,6 +55,7 @@ canvas {
   margin-top: 20px;
   font-size: 12px; 
   background-color: #fafafa;
+  box-shadow: 1px 2px 6px #888888;
 }
 
 .settings-separator{

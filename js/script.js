@@ -2,6 +2,8 @@ $(function() {
 	var CONFIG_NODE_COLOR = "#f5003b";	
 	var CONFIG_TEXT_COLOR = "#ffffff";
 	var OPTION_NEW_NODE = 1;
+	var OPTION_MOVE_NODE = 2;
+	var OPTION_REMOVE_NODE = 3;
 	var ANT_ID = 0;
 	var NODE_ID = 0;
 	var ALPHA = 1;
@@ -15,7 +17,8 @@ $(function() {
 	var ctx = canvas.getContext("2d");
 	var nodes = new Array();
 	var ants = new Array();
-	var selectedOption = -1;
+	var selectedOption = OPTION_NEW_NODE;
+	var selectedNode = null;
 	var tau = null;
 	var dist = null;
 	var animationSpeed = 20;
@@ -25,6 +28,7 @@ $(function() {
 	var intervalID = 0;
 	var showAnts = true;
 	var what = "click";
+	var isRunning = false;
 
 	//Load the Imagens
 
@@ -40,7 +44,7 @@ $(function() {
 		this.id = id;
 		this.x = mouseX;
 		this.y = mouseY;
-		this.radius = 10;
+		this.radius = 15;
 	}
 
 	function Ant(i,x,y){
@@ -280,7 +284,7 @@ $(function() {
 			return;
 		}
 
-			ctx.beginPath();
+		ctx.beginPath();
 			
 		for (var h = 1; h < ant.visitedNodes.length; h++) {
 			var i = ant.visitedNodes[h - 1];
@@ -349,6 +353,19 @@ $(function() {
 			drawCircle(node.x,node.y,node.radius,node.id);
 		});
 	}	
+	
+	function getSelectedNode(mouseX,mouseY){
+		var selectedNode = null;
+		
+		nodes.forEach(function(node) {
+			//Verify if the ant is into the Node
+			if(Math.pow((node.x - mouseX),2) + Math.pow((node.y - mouseY),2) <= Math.pow(node.radius,2)){
+				selectedNode = node;
+			}			
+		});	
+		
+		return selectedNode;
+	}
 
 	function clone(obj) {
 	    // Handle the 3 simple types, and null or undefined
@@ -381,21 +398,17 @@ $(function() {
 
 	    throw new Error("Unable to copy obj! Its type isn't supported.");
 	}
+	
+	function desactiveAllButtons(){
+		$(".action-button").removeClass('active');
+	}
 
 	function enableAllButtons(){
-		$("#new-node").removeAttr('disabled');
-		$("#start").removeAttr('disabled');
-		$("#stop").removeAttr('disabled');
-		$("#clear-all").removeAttr('disabled');
-		$("#step").removeAttr('disabled');
+		$(".action-button").removeAttr('disabled');		
 	}
 
 	function disableAllButtons(){
-		$("#new-node").attr('disabled','disabled');
-		$("#start").attr('disabled','disabled');
-		$("#stop").attr('disabled','disabled');
-		$("#clear-all").attr('disabled','disabled');
-		$("#step").attr('disabled','disabled');
+		$(".action-button").attr('disabled','disabled');		
 	}
 	
 	//Remove context menu when user click with right button
@@ -406,7 +419,15 @@ $(function() {
 	$( "canvas" ).mousemove(function( event ) {
 		var rect = canvas.getBoundingClientRect();
 		mouseX = event.clientX - rect.left;
-		mouseY = event.clientY - rect.top;		
+		mouseY = event.clientY - rect.top;
+		
+		if (selectedOption == OPTION_MOVE_NODE){
+			if(selectedNode !== null){
+				selectedNode.x = mouseX;
+				selectedNode.y = mouseY;
+				draw();
+			}
+		}
 	}).click(function(event) {
 		if (selectedOption == OPTION_NEW_NODE){
 			tau = null;
@@ -415,7 +436,21 @@ $(function() {
 			ants.push(new Ant(ANT_ID++,mouseX,mouseY));
 			nodes.push(new Node(NODE_ID++,mouseX,mouseY));
 			draw();
+		}else if (selectedOption == OPTION_REMOVE_NODE){
+			var selectedNode = getSelectedNode(mouseX,mouseY);
+			if(selectedNode !== null){
+				if(confirm("Do you want to delete the node "+selectedNode.id)){
+					console.log("Oi");
+				}
+			}
 		}
+	}).mousedown(function() {
+		if (selectedOption == OPTION_MOVE_NODE){
+			selectedNode = getSelectedNode(mouseX,mouseY);
+		}		
+	}).mouseup(function() {
+		selectedNode = null
+		//console.log("mouseup");
 	});
 
 	$("#about").click(function(event) {
@@ -423,7 +458,21 @@ $(function() {
 	});
 
 	$("#new-node").click(function(event) {
+		desactiveAllButtons();
+		$(this).addClass("active");
 		selectedOption = OPTION_NEW_NODE;		
+	});
+	
+	$("#move").click(function(event) {
+		desactiveAllButtons();
+		$(this).addClass("active");
+		selectedOption = OPTION_MOVE_NODE;		
+	});
+	
+	$("#remove").click(function(event) {
+		desactiveAllButtons();
+		$(this).addClass("active");
+		selectedOption = OPTION_REMOVE_NODE;		
 	});
 
 	$("#start").click(function(event) {
@@ -554,19 +603,17 @@ $(function() {
   	});
 
   	$( window ).resize(function() {
-	  resizeCanvas();
-	  draw();
+		resizeCanvas();
+		draw();
 	});
 
   	function enableButtonsWhenIsStop(){
-  		selectedOption = -1;
   		enableAllButtons()	
 		$("#stop").attr('disabled','disabled');
   	}
 
   	function disableButtonsWhileIsRunning(){
-  		selectedOption = -1;
-		disableAllButtons()	
+  		disableAllButtons()	
 		$("#stop").removeAttr('disabled');
   	}
 
@@ -611,13 +658,14 @@ $(function() {
 
 	function start(){
 		clearInterval(intervalID);
+		
 		move(function(){
 			ants.forEach(function(ant) {
 				ant.start = true;
 				ant.init();
-			});
-		})		
-
+			});			
+		})
+				
 		intervalID = setInterval(start, getAnimationSpeed());
 	}
 
