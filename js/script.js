@@ -40,8 +40,9 @@ $(function() {
 
 	imgAnt.src = 'img/ant.png';
 
-	function Node(id,mouseX,mouseY){
+	function Node(id,ant,mouseX,mouseY){
 		this.id = id;
+		this.ant = ant;
 		this.x = mouseX;
 		this.y = mouseY;
 		this.radius = 15;
@@ -220,10 +221,8 @@ $(function() {
 	function rouletteWheel(probability, sumProbability) {
 		var j = 0;
 		var p = probability[j];
-		//var r = PseudoRandom.randDouble(0.0, sumProbability);		
 		var r = 0.0 + (Math.random() * (sumProbability - 0.0)) 
-		//var r = Math.floor(Math.random() * (sumProbability)) + 0;
-
+		
 		while (p < r) {
 			j = j + 1;
 			p = p + probability[j];
@@ -252,15 +251,24 @@ $(function() {
 		canvas.height = $(window).height() - $("#navbar").height() - $(".sec-nav-bar").height()-60;
 	}	
 
-	function drawCircle(x,y,radius,label){
-		ctx.fillStyle = CONFIG_NODE_COLOR;
+	function drawCircle(node){
 		ctx.beginPath();
-		ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
-		ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+		if(node == selectedNode){
+			ctx.fillStyle = shadeColor1(CONFIG_NODE_COLOR,-40);
+		}else{
+			ctx.fillStyle = CONFIG_NODE_COLOR;
+		}
+		ctx.arc(node.x,node.y, node.radius, 0, 2 * Math.PI, false);
+		ctx.arc(node.x,node.y, node.radius, 0, 2 * Math.PI, false);
 		ctx.fill();	
 		ctx.fillStyle = CONFIG_TEXT_COLOR;
 		ctx.font="10px Arial";
-		ctx.fillText(label,x-3,y+2);
+		ctx.fillText(node.id,node.x-3,node.y+2);
+	}
+	
+	function shadeColor1(color, percent) {  
+		var num = parseInt(color.slice(1),16), amt = Math.round(2.55 * percent), R = (num >> 16) + amt, G = (num >> 8 & 0x00FF) + amt, B = (num & 0x0000FF) + amt;
+		return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100 + (B<255?B<1?0:B:255)).toString(16).slice(1);
 	}
 
 	function drawBestPathValue(){
@@ -315,7 +323,7 @@ $(function() {
 		if(showPheromone){
 			drawPheromone();
 		}
-
+		
 		drawNodes();
 
 		if(showAnts){
@@ -350,7 +358,7 @@ $(function() {
 
 	function drawNodes(){
 		nodes.forEach(function(node) {
-			drawCircle(node.x,node.y,node.radius,node.id);
+			drawCircle(node);
 		});
 	}	
 	
@@ -365,6 +373,14 @@ $(function() {
 		});	
 		
 		return selectedNode;
+	}
+	
+	function remove(array,element){
+		// Find and remove item from an array
+		var i = array.indexOf(element);
+		if(i != -1) {
+			array.splice(i, 1);
+		}
 	}
 
 	function clone(obj) {
@@ -423,34 +439,55 @@ $(function() {
 		
 		if (selectedOption == OPTION_MOVE_NODE){
 			if(selectedNode !== null){
+				resetAll();
+				
 				selectedNode.x = mouseX;
-				selectedNode.y = mouseY;
+				selectedNode.y = mouseY;			
+				
 				draw();
 			}
 		}
 	}).click(function(event) {
 		if (selectedOption == OPTION_NEW_NODE){
-			tau = null;
-			dist = null;
-			bestSolution = null;
-			ants.push(new Ant(ANT_ID++,mouseX,mouseY));
-			nodes.push(new Node(NODE_ID++,mouseX,mouseY));
+			resetAll();			
+			var ant = new Ant(ANT_ID++,mouseX,mouseY);
+			var node = new Node(NODE_ID++,ant,mouseX,mouseY);
+			ant.initialNode = node.id;
+			ants.push(ant);
+			nodes.push(node);
 			draw();
 		}else if (selectedOption == OPTION_REMOVE_NODE){
 			var selectedNode = getSelectedNode(mouseX,mouseY);
 			if(selectedNode !== null){
 				if(confirm("Do you want to delete the node "+selectedNode.id)){
-					console.log("Oi");
+					remove(ants,selectedNode.ant);
+					remove(nodes,selectedNode);	
+					
+					resetAll();
+
+					//Restart the all index
+					var index = 0;
+					nodes.forEach(function(nodes) {
+						nodes.id = index++;
+						nodes.ant.initialNode = nodes.id;						
+					});
+					//update que next node index
+					NODE_ID = index;
+					
+					draw();
 				}
 			}
 		}
 	}).mousedown(function() {
-		if (selectedOption == OPTION_MOVE_NODE){
+		if (selectedOption == OPTION_MOVE_NODE || selectedOption == OPTION_REMOVE_NODE){
 			selectedNode = getSelectedNode(mouseX,mouseY);
+			if(selectedNode != null){
+				draw();
+			}
 		}		
 	}).mouseup(function() {
-		selectedNode = null
-		//console.log("mouseup");
+		selectedNode = null	
+		draw();
 	});
 
 	$("#about").click(function(event) {
@@ -655,6 +692,19 @@ $(function() {
 	  		ant.start = true;
 	  	});
   	}	
+	
+	function resetAll(){
+		console.log("[LOG] ResetAll");
+		tau = null;
+		dist = null;
+		bestSolution = null;
+		
+		nodes.forEach(function(node) {
+			node.ant.x = node.x;
+			node.ant.y = node.y;
+			node.ant.init();
+		});
+	}				
 
 	function start(){
 		clearInterval(intervalID);
