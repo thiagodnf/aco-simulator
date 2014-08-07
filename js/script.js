@@ -115,6 +115,12 @@ $(function() {
 				this.angle = 180 + toDegrees(Math.acos(Math.abs(y/z)))
 			}else if(x < 0 && y < 0){	//Quarto Quadrante
 				this.angle = toDegrees(Math.asin(x/z));
+			}else if(y == 0 && x < 0){
+				this.angle = -90;
+			}else if(y == 0 && x > 0){
+				this.angle = 90;
+			}else if(y > 0 && x == 0){
+				this.angle = -180;
 			}
 
 			//Move the ant
@@ -806,7 +812,7 @@ $(function() {
 	function init(){
 		resizeCanvas();	
 		enableButtonsWhenIsStop();
-		draw();
+		draw();		
 	}
 
 	init();
