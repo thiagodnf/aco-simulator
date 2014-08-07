@@ -24,6 +24,7 @@ $(function() {
 	var showBestSolution = false;
 	var intervalID = 0;
 	var showAnts = true;
+	var what = "click";
 
 	//Load the Imagens
 
@@ -444,7 +445,7 @@ $(function() {
 
 		disableButtonsWhileIsRunning();
 		initParameters();
-		intervalID = setInterval(step,animationSpeed);
+		intervalID = setInterval(step,getAnimationSpeed());
 	});
 
 	$("#stop").click(function(event) {
@@ -617,15 +618,7 @@ $(function() {
 			});
 		})		
 
-		var speed = 40;
-
-		if(animationSpeed > 20){
-			speed = 40-animationSpeed;			
-		}else{
-			speed = 40;
-		}
-
-		intervalID = setInterval(start, speed);
+		intervalID = setInterval(start, getAnimationSpeed());
 	}
 
 	function step(){
@@ -694,6 +687,22 @@ $(function() {
 				}
 			}
 		}
+	}
+
+	function getAnimationSpeed(){
+		var speed = 40;
+
+		if(animationSpeed > 20){
+			speed = 40-animationSpeed;			
+		}else{
+			speed = 40;
+		}
+
+		return speed;
+	}
+
+	function isMobile() { 
+		return ('ontouchstart' in document.documentElement); 
 	}
 	
 	function init(){
