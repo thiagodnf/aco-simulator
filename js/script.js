@@ -8,10 +8,8 @@ var NODE_ID = 1;
 
 var canvas = null;
 var selectedOption = OPTIONS.ADD_NODE;
+
 var nodes = [];
-
-var nodeGroup = new fabric.Group([], {});
-
 var edges = [];
 
 function resizeWindow() {
@@ -88,16 +86,16 @@ function addNode(pos){
 
     var newNode = makeNode(pos.x, pos.y);
 
-    nodes.forEach(function(n){
+    // nodes.forEach(function(n){
 
-        var edge = makeEdge(newNode, n);
+    //     var edge = makeEdge(newNode, n);
 
-        edges.push(edge);
+    //     edges.push(edge);
 
-        canvas.add(edge);
+    //     canvas.add(edge);
 
-        edge.sendToBack();
-    });
+    //     edge.sendToBack();
+    // });
 
     newNode.on('moving', function (event) {
 
@@ -149,6 +147,33 @@ function setMoveNode(){
     });
 }
 
+function setShowPheromones(show) {
+    if (show) {
+
+        for(var i=0;i<nodes.length;i++){
+            for(var j=i+1;j<nodes.length;j++){
+
+                var edge = makeEdge(nodes[i], nodes[j]);
+
+                edges.push(edge);
+
+                canvas.add(edge);
+
+                edge.sendToBack();
+
+            }
+        }
+
+    } else {
+
+        edges.forEach(e => {
+            canvas.remove(e);
+        });
+
+        edges = [];
+    }
+}
+
 $(function () {
 
     canvas = new fabric.Canvas('canvas', {
@@ -193,6 +218,10 @@ $(function () {
         if (e.key === "Backspace") {
             deleteSelectedNodes();
         };
+    });
+
+    $('#show-pheromones').change(function() {
+        setShowPheromones(this.checked);
     });
 
     setAddNode();
