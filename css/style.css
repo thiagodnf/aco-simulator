@@ -5,5 +5,4 @@ body{
 canvas{
     border-radius: .25rem;
     border: 1px solid rgba(0,0,0,.125);
-    /* cursor: crosshair !important; */
 }

@@ -151,9 +151,10 @@ function setMoveNode(){
 
 $(function () {
 
-    canvas = new fabric.Canvas('canvas');
-
-    canvas.defaultCursor = 'crosshair';
+    canvas = new fabric.Canvas('canvas', {
+        selection: false,
+        defaultCursor: 'crosshair'
+    });
 
     $(window).resize(resizeWindow);
 
