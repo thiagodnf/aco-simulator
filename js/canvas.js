@@ -14,6 +14,7 @@ class Canvas {
 
         this.selectedOption = OPTIONS.ADD_NODE;
         this.nodes = [];
+        this.edges = [];
 
         this.canvas = new fabric.Canvas('canvas', {
             selection: false,
@@ -49,7 +50,7 @@ class Canvas {
 
         var selected = [];
 
-        edges.forEach(function(edge){
+        this.edges.forEach(function(edge){
             if(edge.source.id == id){
                 selected.push(edge);
             }else if(edge.target.id == id){
@@ -114,6 +115,10 @@ class Canvas {
 
     addNode(pos){
 
+        if (this.nodes.length >= this.nodesLimit) {
+            return;
+        }
+
 
         let that = this;
 
@@ -169,12 +174,30 @@ class Canvas {
     }
 
     deleteSelectedNodes(){
-        this.canvas.remove(...this.canvas.getActiveObjects());
+        this.canvas.getActiveObjects().forEach(node =>{
+            this.canvas.remove(node);
+            this.nodes = this.nodes.filter(n => n.id !== node.id);
+        });
         this.canvas.discardActiveObject().renderAll();
     }
 
     clearAll(){
         this.canvas.clear()
         this.nodes = [];
+    }
+
+    play(){
+
+    }
+
+    stop(){
+
+    }
+
+    async step(callback){
+
+        await new Promise(r => setTimeout(r, 1000));
+
+        callback();
     }
 }

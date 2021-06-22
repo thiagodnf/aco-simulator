@@ -33,23 +33,17 @@ function setShowPheromones(show) {
     }
 }
 
+function setToolbarActive(active){
+    $(".toolbar button").prop( "disabled", active );
+    $(".toolbar input").prop( "disabled", active );
+    $(".toolbar #stop").prop( "disabled", !active );
+}
+
 $(function () {
 
     canvas = new Canvas();
 
     $(window).resize(resizeWindow);
-
-    resizeWindow();
-
-    $("#add-node").click(() => canvas.setAddNode());
-
-    $("#move-node").click(() => canvas.setMoveNode());
-
-    $("#clear-all").click((event) => {
-        bootbox.confirm("Are you sure?", function(result){
-            canvas.clear();
-        })
-    });
 
     $(document).keyup(function (e) {
         if (["Backspace", "Delete"].includes(e.key)) {
@@ -57,9 +51,37 @@ $(function () {
         };
     });
 
+    $("#add-node").click(() => canvas.setAddNode());
+
+    $("#move-node").click(() => canvas.setMoveNode());
+
+    $("#clear-all").click((event) => {
+        canvas.clear();
+    });
+
+    $("#play").click(() => {
+        canvas.play();
+        setToolbarActive(true);
+    });
+
+    $("#step").click(() => {
+        setToolbarActive(true);
+        canvas.step(() =>{
+            setToolbarActive(false);
+        });
+    });
+
+    $("#stop").click(() => {
+        canvas.stop();
+        setToolbarActive(false);
+    });
+
+
     $('#show-pheromones').change(function() {
         setShowPheromones(this.checked);
     });
+
+    resizeWindow();
 
     canvas.setAddNode();
 });
