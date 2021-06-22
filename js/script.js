@@ -47,7 +47,7 @@ $(function () {
 
     $(document).keyup(function (e) {
         if (["Backspace", "Delete"].includes(e.key)) {
-            canvas.deleteSelectedNodes();
+            canvas.removeSelectedNodes();
         };
     });
 
@@ -55,9 +55,7 @@ $(function () {
 
     $("#move-node").click(() => canvas.setMoveNode());
 
-    $("#clear-all").click((event) => {
-        canvas.clear();
-    });
+    $("#clear-all").click(() => canvas.clear());
 
     $("#play").click(() => {
         canvas.play();
@@ -84,4 +82,8 @@ $(function () {
     resizeWindow();
 
     canvas.setAddNode();
+
+    canvas.on("addedNode", (a) =>{
+
+    });
 });

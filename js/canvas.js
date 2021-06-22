@@ -5,6 +5,8 @@ var OPTIONS = {
 
 var NODE_ID = 1;
 
+var ANT_IMG = null;
+
 class Canvas {
 
     constructor() {
@@ -15,13 +17,22 @@ class Canvas {
         this.selectedOption = OPTIONS.ADD_NODE;
         this.nodes = [];
         this.edges = [];
+        this.events = new utils.Events();
 
         this.canvas = new fabric.Canvas('canvas', {
             selection: false,
             defaultCursor: 'crosshair'
         });
 
+        fabric.Image.fromURL('img/ant.png', function(img) {
+            ANT_IMG = img;
+        });
+
         this.canvas.on('mouse:up', (event) => this.onMoveUp(event));
+    }
+
+    on(eventName, callback){
+        this.events.on(eventName, callback);
     }
 
     onMoveUp(event) {
@@ -61,6 +72,23 @@ class Canvas {
         return selected;
     }
 
+    makeAnt(){
+
+        var ant = fabric.util.object.clone(ANT_IMG);
+
+        ant.set({
+            left: 0,
+            top: 0,
+            hasControls: false,
+            hasBorders: true,
+            lockScalingX: true,
+            lockScalingY: true,
+            lockRotation: true,
+        });
+
+        return ant;
+    }
+
     makeNode(x, y){
 
         var nodeId = NODE_ID++;
@@ -86,7 +114,7 @@ class Canvas {
         });
 
         return new fabric.Group([node, label], {
-            id: nodeId.toString(),
+            id: nodeId,
             left: node.left,
             top: node.top,
             originX: 'center',
@@ -119,7 +147,6 @@ class Canvas {
             return;
         }
 
-
         let that = this;
 
         var newNode = this.makeNode(pos.x, pos.y);
@@ -150,6 +177,14 @@ class Canvas {
 
         this.nodes.push(newNode)
         this.canvas.add(newNode);
+
+        this.events.emit('addedNode', [newNode]);
+    }
+
+    removeNode(node){
+        this.canvas.remove(node);
+        this.nodes = this.nodes.filter(n => n.id !== node.id);
+        this.events.emit('removedNode', [node]);
     }
 
     setAddNode(){
@@ -162,7 +197,6 @@ class Canvas {
     setMoveNode(){
         this.canvas.defaultCursor = 'default';
         this.selectedOption = OPTIONS.MOVE_NODE;
-
         this.nodes.forEach(this.toggleSelectable);
     }
 
@@ -173,10 +207,9 @@ class Canvas {
         });
     }
 
-    deleteSelectedNodes(){
-        this.canvas.getActiveObjects().forEach(node =>{
-            this.canvas.remove(node);
-            this.nodes = this.nodes.filter(n => n.id !== node.id);
+    removeSelectedNodes(){
+        this.canvas.getActiveObjects().forEach((node) => {
+            this.removeNode(node)
         });
         this.canvas.discardActiveObject().renderAll();
     }
@@ -195,6 +228,8 @@ class Canvas {
     }
 
     async step(callback){
+
+        this.canvas.add(this.makeAnt());
 
         await new Promise(r => setTimeout(r, 1000));
 
