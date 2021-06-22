@@ -5,8 +5,5 @@ body{
 canvas{
     border-radius: .25rem;
     border: 1px solid rgba(0,0,0,.125);
-}
-
-.bi{
-    padding-right: 5px;
+    /* cursor: crosshair !important; */
 }
