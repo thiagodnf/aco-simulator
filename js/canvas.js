@@ -8,11 +8,11 @@ class Canvas {
 
     constructor() {
 
-        this.speed = 1;
+        this.antSpeed = 100;
         this.animation = null;
 
         // Default Settings
-        this.nodesLimit = 5;
+        this.nodesLimit = 20;
 
         this.selectedOption = OPTIONS.ADD_NODE;
         this.nodes = [];
@@ -25,7 +25,12 @@ class Canvas {
             defaultCursor: 'crosshair',
         });
 
-        FabricjsUtils.loadImages();
+        FabricjsUtils.loadImages(()=>{
+            this.addNode({x:100, y:100})
+            this.addNode({x:200, y:200})
+            this.addNode({x:100, y:200})
+            this.addNode({x:200, y:100})
+        });
 
         this.canvas.on('mouse:up', (event) => this.onMoveUp(event));
     }
@@ -73,17 +78,7 @@ class Canvas {
 
 
 
-    makeEdge(source, target) {
-        return new fabric.Line([source.left, source.top, target.left, target.top], {
-            fill: 'black',
-            stroke: '#666',
-            strokeWidth: 1,
-            selectable: false,
-            evented: false,
-            source: source,
-            target: target
-        });
-    }
+
 
     findNodeById(nodeId) {
         return this.nodes.filter(n => n.id === nodeId)[0];
@@ -96,62 +91,9 @@ class Canvas {
         }
 
         var node = FabricjsUtils.makeNode(pos.x, pos.y);
-        var ant = FabricjsUtils.makeImage(pos.x, pos.y);
+        var ant = FabricjsUtils.makeAnt(pos.x, pos.y);
 
-        ant.node = node;
-
-        ant.isDone = () => {
-
-            var distX = Math.pow((ant.node.left - ant.left), 2);
-            var distY = Math.pow((ant.node.top - ant.top), 2);
-
-            return distX + distY <= Math.pow(14, 2);
-        }
-
-        var toDegrees = (radians) => {
-            return radians * (180 / Math.PI);
-        }
-
-        var speed = 20;
-
-        ant.step = () => {
-
-            if (ant.isDone()) {
-                return true;
-            }
-
-            var x = (ant.node.left - ant.left);
-            var y = (ant.node.top - ant.top);
-            var z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
-            var cos0 = y / z;
-            var sen0 = x / z;
-            var angle = 10;
-
-            if (x > 0 && y < 0) {	//Primeiro Quadrante
-                angle = 90 - toDegrees(Math.asin(Math.abs(y / z)))
-            } else if (x > 0 && y > 0) {	//Segundo Quadrante
-                angle = 180 - toDegrees(Math.acos(Math.abs(y / z)));
-            } else if (x < 0 && y > 0) {	//Terceiro Quadrante
-                angle = 180 + toDegrees(Math.acos(Math.abs(y / z)))
-            } else if (x < 0 && y < 0) {	//Quarto Quadrante
-                angle = toDegrees(Math.asin(x / z));
-            } else if (y == 0 && x < 0) {
-                angle = -90;
-            } else if (y == 0 && x > 0) {
-                angle = 90;
-            } else if (y > 0 && x == 0) {
-                angle = -180;
-            }
-
-            ant.set({
-                top: ant.top += speed * cos0,
-                left: ant.left += speed * sen0,
-                angle: angle,
-            })
-
-            return false;
-        }
-
+        ant.setNode(node);
 
 
         // var ant = new Ant(this, pos.x, pos.y)
@@ -181,12 +123,16 @@ class Canvas {
         //     });
         // });
 
+
+        //ant.moveTo(10);
+
         this.nodes.push(node)
         this.ants.push(ant);
 
         this.canvas.add(node);
         this.canvas.add(ant);
 
+        node.sendToBack();
         ant.bringToFront();
 
         this.events.emit('addedNode', [node]);
@@ -225,37 +171,32 @@ class Canvas {
         this.canvas.discardActiveObject().renderAll();
     }
 
+    setAntSpeed(value){
+        this.antSpeed = value;
+    }
+
+    setPlay(){
+        this.step(this.antSpeed, false)
+        this.events.emit('played');
+    }
+
+    setStep(){
+        this.step(this.antSpeed, true)
+        this.events.emit('played');
+    }
+
     clearAll() {
         this.canvas.clear()
         this.nodes = [];
     }
 
-    play() {
-
-        var that = this;
-
-        var render = function () {
-
-            that.canvas.renderAll();
-
-            that.nodes.forEach((node) => node.step());
-
-            that.animation = fabric.util.requestAnimFrame(render);
-        }
-
-        fabric.util.requestAnimFrame(render);
-
-        this.events.emit('played');
-    }
-
     stop() {
-        // cancelRequestAnimFrame(this.animation);
         clearTimeout(this.animation);
         this.animation = null;
         this.events.emit('stopped');
     }
 
-    step() {
+    step(antSpeed, runOnce) {
 
         this.events.emit('step');
 
@@ -265,10 +206,6 @@ class Canvas {
 
         ArrayUtils.shuffle(nodeIds);
 
-        this.ants.forEach((ant, i) => {
-            ant.node = this.findNodeById(nodeIds[i]);
-        });
-
         var render = function () {
 
             that.canvas.renderAll();
@@ -276,22 +213,23 @@ class Canvas {
             var dones = [];
 
             that.ants.forEach((ant, i) => {
-                dones.push(ant.step())
+                var nextNode = that.findNodeById(nodeIds[i]);
+                dones.push(ant.step(nextNode, antSpeed))
             });
 
             var isDone = dones.reduce((acc, v) => acc && v);
 
             if (isDone) {
-                that.stop();
-            } else {
-                that.animation = setTimeout(render, that.speed);
-                //that.animation = fabric.util.requestAnimFrame(render);
+                if(runOnce){
+                    that.stop();
+                }else{
+                    that.step(that.antSpeed, false);
+                }
+            } else if(that.animation) {
+                that.animation = setTimeout(render, 1);
             }
         }
 
-        render();
-        // this.animation = setInterval(render, this.speed);
-
-        // fabric.util.requestAnimFrame(render);
+        that.animation = setTimeout(render, 1);
     }
 }

@@ -43,18 +43,7 @@ $(function () {
 
     canvas = new Canvas();
 
-    window.cancelRequestAnimFrame = (function(){
-        return  window.cancelAnimationFrame ||
-                window.webkitCancelRequestAnimationFrame ||
-                window.mozCancelRequestAnimationFrame ||
-                window.oCancelRequestAnimationFrame ||
-                window.msCancelRequestAnimationFrame ||
-                clearTimeout
-    })();
-
     $(window).resize(resizeWindow);
-
-
 
     $(document).keyup(function (e) {
         if (["Backspace", "Delete"].includes(e.key)) {
@@ -69,23 +58,23 @@ $(function () {
     $("#clear-all").click(() => canvas.clear());
 
     $("#play").click(() => {
-        canvas.play();
+        canvas.setPlay();
         setToolbarActive(true);
     });
 
     $("#step").click(() => {
+        canvas.setStep();
         setToolbarActive(true);
-        canvas.step();
     });
 
-    $("#stop").click(() => {
-        canvas.stop();
-        setToolbarActive(false);
-    });
-
+    $("#stop").click(() => canvas.stop());
 
     $('#show-pheromones').change(function() {
         setShowPheromones(this.checked);
+    });
+
+    $('#ant-speed').change(function() {
+        canvas.setAntSpeed(this.value)
     });
 
     resizeWindow();

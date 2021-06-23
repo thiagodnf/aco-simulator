@@ -4,9 +4,10 @@ class FabricjsUtils{
 
     static ANT_IMG = null;
 
-    static loadImages(){
+    static loadImages(callback){
         fabric.Image.fromURL('img/ant.png', function(img) {
             FabricjsUtils.ANT_IMG = img;
+            callback();
         });
     }
 
@@ -22,19 +23,6 @@ class FabricjsUtils{
             hasControls: false,
             hasBorders: true,
         }
-    }
-
-    static makeImage(x, y){
-
-        var ant = fabric.util.object.clone(FabricjsUtils.ANT_IMG);
-
-        ant.set({
-            left: x,
-            top: y,
-            ...FabricjsUtils.getDefaultSettings()
-        });
-
-        return ant;
     }
 
     static makeCircle(x, y){
@@ -54,7 +42,7 @@ class FabricjsUtils{
         return new fabric.Text(text.toString(), {
             left: x,
             top: y,
-            fontSize: 14,
+            fontSize: 20,
             fill: 'black',
             ...FabricjsUtils.getDefaultSettings()
         });
@@ -64,13 +52,7 @@ class FabricjsUtils{
 
         return new fabric.Group(items, {
             id: id,
-
             ...FabricjsUtils.getDefaultSettings(),
-
-            step: () =>{
-                ant.step();
-                //
-            }
         });
     }
 
@@ -83,5 +65,33 @@ class FabricjsUtils{
         var label = FabricjsUtils.makeText(x, y, nodeId);
 
         return FabricjsUtils.makeGroup(nodeId, [node, label]);
+    }
+
+    static makeEdge(source, target) {
+        return new fabric.Line([source.left, source.top, target.left, target.top], {
+            fill: 'black',
+            stroke: '#666',
+            strokeWidth: 1,
+            selectable: false,
+            evented: false,
+            source: source,
+            target: target
+        });
+    }
+
+    static makeAnt(x, y){
+
+        var img = document.createElement('img');
+
+        img.src = 'img/ant.png';
+
+        var ant = new fabric.Ant(img, {
+            left: x,
+            top: y,
+            name: 'Image',
+            ...FabricjsUtils.getDefaultSettings()
+        });
+
+        return ant;
     }
 }
