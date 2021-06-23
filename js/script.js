@@ -41,6 +41,7 @@ function setToolbarActive(active){
 
 $(function () {
 
+    var url  = new Url;
     canvas = new Canvas();
 
     $(window).resize(resizeWindow);
@@ -76,6 +77,8 @@ $(function () {
         $('#ant-speed-value').text(canvas.antSpeed)
     });
 
+    $('#ant-speed-value').text(canvas.antSpeed)
+
     resizeWindow();
 
     canvas.setAddNode();
@@ -93,5 +96,18 @@ $(function () {
     canvas.addNode({ x: 100, y: 200 })
     canvas.addNode({ x: 200, y: 100 })
 
-    $('#ant-speed-value').text(canvas.antSpeed)
+    RandomUtils.setSeed(url.query.seed);
+
+    let numberOfNodes = RandomUtils.nextInt(1, canvas.nodesLimit/ 2);
+
+    for(var i=0;i<numberOfNodes; i++){
+
+        let x = RandomUtils.nextFloat(100, 500);
+        let y = RandomUtils.nextFloat(100, 500);
+
+        canvas.addNode({ x: x, y: y })
+    }
+    console.log(numberOfNodes)
+
+    //console.log(RandomUtils.nextInt(10,20));
 });
