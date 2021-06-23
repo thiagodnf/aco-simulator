@@ -2,6 +2,13 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
     type: 'ant',
     initialize: function (element, options) {
         this.callSuper('initialize', element, options);
+        this.on('moving', this.moving);
+    },
+    moving: function (event) {
+        this.currentNode.set({
+            top: this.top,
+            left: this.left,
+        });
     },
     setCurrentNode: function (node) {
         this.currentNode = node;

@@ -10,6 +10,7 @@ class Canvas {
 
         this.antSpeed = 100;
         this.animation = null;
+        this.isRunning = false;
 
         // Default Settings
         this.nodesLimit = 50;
@@ -82,9 +83,6 @@ class Canvas {
         var node = FabricjsUtils.makeNode(pos.x, pos.y);
         var ant = FabricjsUtils.makeAnt(node);
 
-
-        // var ant = new Ant(this, pos.x, pos.y)
-
         // var ant = new Ant();
         // nodes.forEach(function(n){
 
@@ -110,9 +108,6 @@ class Canvas {
         //     });
         // });
 
-
-        //ant.moveTo(10);
-
         this.nodes.push(node)
         this.ants.push(ant);
 
@@ -135,13 +130,13 @@ class Canvas {
         this.canvas.defaultCursor = 'crosshair';
         this.selectedOption = OPTIONS.ADD_NODE;
         this.canvas.discardActiveObject().renderAll();
-        this.nodes.forEach(this.toggleSelectable);
+        this.ants.forEach(this.toggleSelectable);
     }
 
     setMoveNode() {
         this.canvas.defaultCursor = 'default';
         this.selectedOption = OPTIONS.MOVE_NODE;
-        this.nodes.forEach(this.toggleSelectable);
+        this.ants.forEach(this.toggleSelectable);
     }
 
     toggleSelectable(node) {
@@ -162,30 +157,29 @@ class Canvas {
         this.antSpeed = value;
     }
 
-    setPlay() {
-        this.step(this.antSpeed, false)
-        this.events.emit('played');
-    }
-
-    setStep() {
-        this.step(this.antSpeed, true)
-        this.events.emit('played');
-    }
-
     clearAll() {
         this.canvas.clear()
         this.nodes = [];
     }
 
-    stop() {
-        clearTimeout(this.animation);
-        this.animation = null;
-        this.events.emit('stopped');
+    play() {
+        this.isRunning = true;
+        this.updateCanvas(this.antSpeed, false)
+
     }
 
-    step(antSpeed, runOnce) {
+    step() {
+        this.isRunning = true;
+        this.updateCanvas(this.antSpeed, true)
+    }
 
-        this.events.emit('step');
+    stop() {
+        this.isRunning = false;
+    }
+
+    updateCanvas(antSpeed, runOnce) {
+
+        this.events.emit('running');
 
         var that = this;
 
@@ -195,8 +189,6 @@ class Canvas {
 
         var render = function () {
 
-            that.canvas.renderAll();
-
             var dones = [];
 
             that.ants.forEach((ant, i) => {
@@ -204,13 +196,20 @@ class Canvas {
                 dones.push(ant.step(nextNode, antSpeed))
             });
 
+            that.canvas.renderAll();
+
             var isDone = dones.reduce((acc, v) => acc && v);
 
             if (isDone) {
                 if (runOnce) {
-                    that.stop();
+                    that.events.emit('stopped');
                 } else {
-                    that.step(that.antSpeed, false);
+                    if (that.isRunning) {
+                        that.updateCanvas(that.antSpeed, false);
+                    } else {
+                        clearTimeout(that.animation);
+                        that.events.emit('stopped');
+                    }
                 }
             } else if (that.animation) {
                 that.animation = setTimeout(render, 1);

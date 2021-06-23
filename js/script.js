@@ -57,15 +57,9 @@ $(function () {
 
     $("#clear-all").click(() => canvas.clear());
 
-    $("#play").click(() => {
-        canvas.setPlay();
-        setToolbarActive(true);
-    });
+    $("#play").click(() => {canvas.play();});
 
-    $("#step").click(() => {
-        canvas.setStep();
-        setToolbarActive(true);
-    });
+    $("#step").click(() => { canvas.step();});
 
     $("#stop").click(() => canvas.stop());
 
@@ -81,7 +75,13 @@ $(function () {
 
     canvas.setAddNode();
 
+    canvas.on("running", () =>{
+        console.log("running")
+        setToolbarActive(true);
+    });
+
     canvas.on("stopped", () =>{
+        console.log("stopped")
         setToolbarActive(false);
     });
 
