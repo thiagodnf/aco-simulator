@@ -69,6 +69,7 @@ $(function () {
 
     $('#ant-speed').change(function() {
         canvas.setAntSpeed(this.value)
+        $('#ant-speed-value').text(canvas.antSpeed)
     });
 
     resizeWindow();
@@ -76,12 +77,10 @@ $(function () {
     canvas.setAddNode();
 
     canvas.on("running", () =>{
-        console.log("running")
         setToolbarActive(true);
     });
 
     canvas.on("stopped", () =>{
-        console.log("stopped")
         setToolbarActive(false);
     });
 
@@ -89,4 +88,6 @@ $(function () {
     canvas.addNode({ x: 200, y: 200 })
     canvas.addNode({ x: 100, y: 200 })
     canvas.addNode({ x: 200, y: 100 })
+
+    $('#ant-speed-value').text(canvas.antSpeed)
 });

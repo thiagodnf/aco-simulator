@@ -3,17 +3,17 @@ var OPTIONS = {
     MOVE_NODE: 2,
 };
 
-
 class Canvas {
 
     constructor() {
 
-        this.antSpeed = 100;
-        this.animation = null;
-        this.isRunning = false;
-
         // Default Settings
         this.nodesLimit = 50;
+        this.maxAntSpeed = 500;
+
+        this.antSpeed = 250;
+        this.animation = null;
+        this.isRunning = false;
 
         this.selectedOption = OPTIONS.ADD_NODE;
         this.nodes = [];
@@ -154,7 +154,7 @@ class Canvas {
     }
 
     setAntSpeed(value) {
-        this.antSpeed = value;
+        this.antSpeed = Math.max(1, this.maxAntSpeed - value);
     }
 
     clearAll() {
@@ -163,12 +163,22 @@ class Canvas {
     }
 
     play() {
+
+        if(this.isRunning){
+            return;
+        }
+
         this.isRunning = true;
         this.updateCanvas(this.antSpeed, false)
 
     }
 
     step() {
+
+        if(this.isRunning){
+            return;
+        }
+
         this.isRunning = true;
         this.updateCanvas(this.antSpeed, true)
     }
@@ -201,6 +211,7 @@ class Canvas {
             var isDone = dones.reduce((acc, v) => acc && v);
 
             if (isDone) {
+                that.events.emit('done');
                 if (runOnce) {
                     that.events.emit('stopped');
                 } else {
