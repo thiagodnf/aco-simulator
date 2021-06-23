@@ -12,7 +12,7 @@ class Canvas {
         this.animation = null;
 
         // Default Settings
-        this.nodesLimit = 20;
+        this.nodesLimit = 50;
 
         this.selectedOption = OPTIONS.ADD_NODE;
         this.nodes = [];
@@ -23,13 +23,6 @@ class Canvas {
         this.canvas = new fabric.Canvas('canvas', {
             selection: false,
             defaultCursor: 'crosshair',
-        });
-
-        FabricjsUtils.loadImages(()=>{
-            this.addNode({x:100, y:100})
-            this.addNode({x:200, y:200})
-            this.addNode({x:100, y:200})
-            this.addNode({x:200, y:100})
         });
 
         this.canvas.on('mouse:up', (event) => this.onMoveUp(event));
@@ -76,10 +69,6 @@ class Canvas {
         return selected;
     }
 
-
-
-
-
     findNodeById(nodeId) {
         return this.nodes.filter(n => n.id === nodeId)[0];
     }
@@ -91,9 +80,7 @@ class Canvas {
         }
 
         var node = FabricjsUtils.makeNode(pos.x, pos.y);
-        var ant = FabricjsUtils.makeAnt(pos.x, pos.y);
-
-        ant.setNode(node);
+        var ant = FabricjsUtils.makeAnt(node);
 
 
         // var ant = new Ant(this, pos.x, pos.y)
@@ -171,16 +158,16 @@ class Canvas {
         this.canvas.discardActiveObject().renderAll();
     }
 
-    setAntSpeed(value){
+    setAntSpeed(value) {
         this.antSpeed = value;
     }
 
-    setPlay(){
+    setPlay() {
         this.step(this.antSpeed, false)
         this.events.emit('played');
     }
 
-    setStep(){
+    setStep() {
         this.step(this.antSpeed, true)
         this.events.emit('played');
     }
@@ -220,12 +207,12 @@ class Canvas {
             var isDone = dones.reduce((acc, v) => acc && v);
 
             if (isDone) {
-                if(runOnce){
+                if (runOnce) {
                     that.stop();
-                }else{
+                } else {
                     that.step(that.antSpeed, false);
                 }
-            } else if(that.animation) {
+            } else if (that.animation) {
                 that.animation = setTimeout(render, 1);
             }
         }

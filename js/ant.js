@@ -3,69 +3,43 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
     initialize: function (element, options) {
         this.callSuper('initialize', element, options);
     },
-    setNode: function(node){
-        this.node = node;
+    setCurrentNode: function (node) {
+        this.currentNode = node;
         this.set({
             top: node.top,
             left: node.left,
         })
     },
-    isDone:  function (nextNode){
+    isDone: function (nextNode) {
 
         var distX = Math.abs(nextNode.left - this.left);
         var distY = Math.abs(nextNode.top - this.top);
 
         return distX <= 0.1 && distY <= 0.1
     },
-    step: function(nextNode, speed){
-
-        var toDegrees = (radians) => {
-            return radians * (180 / Math.PI);
-        }
+    step: function (nextNode, speed) {
 
         if (this.isDone(nextNode)) {
-            this.setNode(nextNode)
+            this.setCurrentNode(nextNode)
             return true;
         }
 
-        var x = (nextNode.left - this.node.left);
-        var y = (nextNode.top - this.node.top);
-        var z = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        var dx = (nextNode.left - this.currentNode.left);
+        var dy = (nextNode.top - this.currentNode.top);
+        var dz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        var segments = dz / speed;
 
-        var segments = z / speed;
+        var angle = Math.atan2(dx, dy) * (180 / Math.PI);
 
-        var cos0 = y / z;
-        var sen0 = x / z;
-        var angle = 10;
-
-        if (x > 0 && y < 0) {	//Primeiro Quadrante
-            angle = 90 - toDegrees(Math.asin(Math.abs(y / z)))
-        } else if (x > 0 && y > 0) {	//Segundo Quadrante
-            angle = 180 - toDegrees(Math.acos(Math.abs(y / z)));
-        } else if (x < 0 && y > 0) {	//Terceiro Quadrante
-            angle = 180 + toDegrees(Math.acos(Math.abs(y / z)))
-        } else if (x < 0 && y < 0) {	//Quarto Quadrante
-            angle = toDegrees(Math.asin(x / z));
-        } else if (y == 0 && x < 0) {
-            angle = -90;
-        } else if (y == 0 && x > 0) {
-            angle = 90;
-        } else if (y > 0 && x == 0) {
-            angle = -180;
-        }
+        var cos0 = dx / dz;
+        var sen0 = dy / dz;
 
         this.set({
-            top: this.top += segments * cos0,
-            left: this.left += segments * sen0,
-            angle: angle,
+            top: this.top += segments * sen0,
+            left: this.left += segments * cos0,
+            angle: 180 - angle,
         });
 
         return false;
     }
 });
-
-// fabric.Ant.fromObject = function (object, callback, context) {
-//     fabric.util.loadImage(object.src, function (img) {
-//         callback && callback(new fabric.Ant(img, object));
-//     });
-// };

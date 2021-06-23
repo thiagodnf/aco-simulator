@@ -84,4 +84,9 @@ $(function () {
     canvas.on("stopped", () =>{
         setToolbarActive(false);
     });
+
+    canvas.addNode({ x: 100, y: 100 })
+    canvas.addNode({ x: 200, y: 200 })
+    canvas.addNode({ x: 100, y: 200 })
+    canvas.addNode({ x: 200, y: 100 })
 });

@@ -2,15 +2,6 @@ var NODE_ID = 0;
 
 class FabricjsUtils{
 
-    static ANT_IMG = null;
-
-    static loadImages(callback){
-        fabric.Image.fromURL('img/ant.png', function(img) {
-            FabricjsUtils.ANT_IMG = img;
-            callback();
-        });
-    }
-
     static getDefaultSettings(){
         return {
             originX: 'center',
@@ -79,16 +70,15 @@ class FabricjsUtils{
         });
     }
 
-    static makeAnt(x, y){
+    static makeAnt(node){
 
-        var img = document.createElement('img');
-
-        img.src = 'img/ant.png';
+        var img = document.getElementById('ant-image');
 
         var ant = new fabric.Ant(img, {
-            left: x,
-            top: y,
-            name: 'Image',
+            left: node.left,
+            top: node.top,
+            initialNode: node,
+            currentNode: node,
             ...FabricjsUtils.getDefaultSettings()
         });
 
