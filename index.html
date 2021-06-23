@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,53 +14,61 @@
     <!-- Vendor -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"  integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
 
     <!-- Application -->
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">ACO Simulator</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="https://github.com/thiagodnf/aco-simulator" target="_blank">Source Code</a>
-                    </li>
-                </ul>
-                <a class="btn btn-success" href="">Share</a>
+<body class="d-flex flex-column h-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">ACO Simulator</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbar">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://github.com/thiagodnf/aco-simulator" target="_blank">Source Code</a>
+                        </li>
+                    </ul>
+                    <!-- <a class="btn btn-success" href="">Share</a> -->
+                </div>
             </div>
-        </div>
-    </nav>
-    <main>
+        </nav>
+    </header>
+    <main class="flex-shrink-0">
         <div class="container-fluid">
 
-            <div class="toolbar mb-3 pt-3">
-                <div class="btn-group me-2">
-                    <button id="play" class="btn btn-outline-primary"><i class="fa fa-play me-1"></i>Play</button>
-                    <button id="step" class="btn btn-outline-primary"><i class="fa fa-step-forward me-1"></i>Step</button>
-                    <button id="stop" class="btn btn-outline-primary" disabled><i class="fa fa-stop me-1"></i>Stop</button>
+            <div class="toolbar row my-2">
+                <div class="col">
+                    <div class="btn-group me-2">
+                        <button id="play" class="btn btn-sm btn-outline-primary"><i class="fa fa-play me-1"></i>Play</button>
+                        <button id="step" class="btn btn-sm btn-outline-primary"><i class="fa fa-step-forward me-1"></i>Step</button>
+                        <button id="stop" class="btn btn-sm btn-outline-primary" disabled><i class="fa fa-stop me-1"></i>Stop</button>
+                    </div>
+                    <div class="btn-group me-2 ">
+                        <input type="radio" class="btn-check" name="options" id="add-node" autocomplete="off" checked>
+                        <label class="btn btn-sm btn-outline-secondary" for="add-node"><i class="fa fa-plus"></i></label>
+                        <input type="radio" class="btn-check" name="options" id="move-node" autocomplete="off">
+                        <label class="btn btn-sm btn-outline-secondary" for="move-node"><i class="fa fa-mouse-pointer"></i></label>
+                    </div>
+                    <div class="btn-group">
+                        <button id="clear-all" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash me-1"></i>Clear All</button>
+                    </div>
                 </div>
-                <div class="btn-group me-2 ">
-                    <input type="radio" class="btn-check" name="options" id="add-node" autocomplete="off" checked>
-                    <label class="btn btn-outline-secondary" for="add-node"><i class="fa fa-plus"></i></label>
-                    <input type="radio" class="btn-check" name="options" id="move-node" autocomplete="off">
-                    <label class="btn btn-outline-secondary" for="move-node"><i class="fa fa-mouse-pointer"></i></label>
-                </div>
-                <div class="btn-group">
-                    <button id="clear-all" class="btn btn-outline-danger"><i class="fa fa-trash me-1"></i>Clear All</button>
+                <div class="col-auto">
+                    <a class="btn btn-sm btn-success" href=""><i class="fa fa-share-alt me-1"></i>Share</a>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-lg-9 mb-3">
+                <div class="col-lg-9 mb-0 mb-3 mb-lg-0">
                     <canvas id="canvas"></canvas>
                 </div>
-                <div class="col-lg-3 mb-3">
+                <div class="col-lg-3 mb-3 mb-lg-0">
                     <div class="card card-body">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
@@ -94,6 +102,24 @@
         </div>
         <img id="ant-image" class="d-none" src="img/ant.png"/>
     </main>
+
+    <footer class="footer mt-auto py-2 bg-light">
+        <div class="container-fluid small text-muted">
+            <div class="row">
+                <div class="col me-auto">
+                    <span >Made with <i class="far fa-heart"></i> in JS</span>
+                </div>
+                <div class="col-auto">
+                    <a href="/old-version" class="text-decoration-none text-muted" target="_blank">Old Version</a>
+                    <span class="mx-2">|</span>
+                    <a href="https://github.com/thiagodnf/aco-simulator" class="text-decoration-none text-muted" target="_blank">Source Code</a>
+                    <span class="mx-2">|</span>
+                    <a href="#" class="flag-icon flag-icon-us"></a>
+                    <a href="#" class="flag-icon flag-icon-br"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Vendor -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

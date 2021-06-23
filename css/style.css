@@ -1,8 +1,11 @@
 body{
-    margin-top: 56px;
+    font-size: 14px;
 }
-
 canvas{
     border-radius: .25rem;
     border: 1px solid rgba(0,0,0,.125);
+}
+
+main > .container-fluid {
+    padding-top: 56px
 }

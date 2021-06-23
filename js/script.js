@@ -2,7 +2,7 @@ var canvas = null;
 
 function resizeWindow() {
     canvas.setWidth($(".col-lg-9").width());
-    canvas.setHeight($(window).height() - $("#canvas").offset().top - 20);
+    canvas.setHeight($(window).height() - $("#canvas").offset().top - $("footer").height() - 30);
     canvas.calcOffset();
 }
 
@@ -55,7 +55,11 @@ $(function () {
 
     $("#move-node").click(() => canvas.setMoveNode());
 
-    $("#clear-all").click(() => canvas.clear());
+    $("#clear-all").click(() => {
+        if(confirm("Are you sure?")){
+            canvas.clear()
+        }
+    });
 
     $("#play").click(() => {canvas.play();});
 
