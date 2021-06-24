@@ -7,8 +7,6 @@ var LAYER = {
     ANT: 4,
 };
 
-
-
 class FabricjsUtils{
 
     static NODE_RADIUS = 15;
@@ -78,10 +76,10 @@ class FabricjsUtils{
 
         var items = [];
 
-        for (var i = NODE_RADIUS*2; i < width; i += FabricjsUtils.NODE_RADIUS*2) {
+        for (var i = FabricjsUtils.NODE_RADIUS*2; i < width; i += FabricjsUtils.NODE_RADIUS*2) {
             items.push(FabricjsUtils.makeLine(i, 0, i, height));
         }
-        for (var i = NODE_RADIUS*2; i < height; i += FabricjsUtils.NODE_RADIUS*2) {
+        for (var i = FabricjsUtils.NODE_RADIUS*2; i < height; i += FabricjsUtils.NODE_RADIUS*2) {
             items.push(FabricjsUtils.makeLine(0, i, width, i));
         }
 

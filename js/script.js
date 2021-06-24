@@ -108,17 +108,4 @@ $(function () {
         canvas.addNode({ x: node[0], y: node[1] });
     })
     console.log(nodes);
-
-    // let numberOfNodes = RandomUtils.nextInt(1, canvas.nodesLimit / 2);
-
-    // for (var i = 0; i < numberOfNodes; i++) {
-
-    //     let x = RandomUtils.nextFloat(100, 500);
-    //     let y = RandomUtils.nextFloat(100, 500);
-
-    //     canvas.addNode({ x: x, y: y })
-    // }
-    // console.log(numberOfNodes)
-
-    //console.log(RandomUtils.nextInt(10,20));
 });

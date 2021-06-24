@@ -29,14 +29,6 @@ class Canvas {
         });
 
         this.canvas.on('mouse:up', (event) => this.onMoveUp(event));
-        // this.canvas.on('mouse:down', this.onMoveDown);
-
-        fabric.Canvas.prototype.sort = function() {
-            this._objects.sort((x, y) => {
-                return x.layer > y.layer;
-            });
-            this.renderAll();
-        }
     }
 
     on(eventName, callback) {
@@ -88,6 +80,11 @@ class Canvas {
         return this.nodes.filter(n => n.id === nodeId)[0];
     }
 
+    sortCanvas(){
+        this.canvas._objects.sort((a, b) => (a.layer > b.layer) ? 1 : -1);
+        this.canvas.renderAll();
+    }
+
     addNode(pos) {
 
         if (this.isRunning) {
@@ -107,9 +104,11 @@ class Canvas {
         this.canvas.add(node);
         this.canvas.add(ant);
 
-        this.canvas.sort();
+        this.sortCanvas()
 
         this.events.emit('addedNode', [node]);
+
+
 
         // console.log(ant)
 
@@ -151,7 +150,7 @@ class Canvas {
             this.canvas.remove(this.grid);
         }
 
-        this.canvas.sort();
+        this.sortCanvas();
     }
 
     setAddNode() {
