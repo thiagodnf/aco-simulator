@@ -1,10 +1,10 @@
-class Environment{
+class Environment {
 
-    constructor(canvas){
-        this.bestAnt;
-        this.bestValue;
-        this.generation = 0;
-        this.numberOfDoneAnts = 0;
+    constructor(canvas) {
+        this.bestTourDistance;
+        this.bestTour;
+        this.generation;
+        this.antsWithTheirTourDone;
         this.canvas = canvas;
         this.events = new utils.Events();
         this.reset();
@@ -14,40 +14,37 @@ class Environment{
         this.events.on(eventName, callback);
     }
 
-    reset(){
-        this.bestAnt = null;
-        this.bestValue = Number.MAX_SAFE_INTEGER;
-        this.canvas.updateBestAnt(this.bestAnt, this.bestValue);
+    reset() {
+        this.generation = 0;
+        this.antsWithTheirTourDone = [];
+        this.bestTour = [];
+        this.bestTourDistance = Number.NaN;
+        this.canvas.updateGeneration(this.generation, this.bestTour, this.bestTourDistance);
     }
 
-    updateBestAnt(ant) {
+    setTourDone(ant) {
 
-        let value = this.calculateValue(ant.visitedNodes);
+        this.antsWithTheirTourDone.push(ant);
 
-        if (value < this.bestValue) {
-            this.bestAnt = ant;
-            this.bestValue = value;
-            this.canvas.updateBestAnt(this.bestAnt, this.bestValue);
-        }
+        if (this.isGenerationDone()) {
 
-        this.numberOfDoneAnts++;
+            let bestAnt = this.antsWithTheirTourDone.reduce(function (p, v) {
+                return (p.tourDistance < v.tourDistance ? p : v);
+            });
 
-        let generation = Math.round(this.numberOfDoneAnts / this.canvas.nodes.length);
+            if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
+                this.bestTour = bestAnt.visitedNodes;
+                this.bestTourDistance = bestAnt.tourDistance;
+            }
 
-        if(generation != this.generation){
-            this.generation = generation;
-            this.canvas.updateGeneration(this.generation, this.bestValue);
+            this.generation++;
+            this.antsWithTheirTourDone = [];
+
+            this.canvas.updateGeneration(this.generation, this.bestTour, this.bestTourDistance);
         }
     }
 
-    calculateValue(visitedNodes) {
-
-        let totalDistance = 0.0;
-
-        for (var i = 0; i < visitedNodes.length - 1; i++) {
-            totalDistance += FabricjsUtils.getEuclideanDistance(visitedNodes[i], visitedNodes[i + 1]);
-        }
-
-        return totalDistance;
+    isGenerationDone() {
+        return this.antsWithTheirTourDone.length == this.canvas.ants.length;
     }
 }

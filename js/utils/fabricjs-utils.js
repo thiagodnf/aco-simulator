@@ -100,6 +100,7 @@ class FabricjsUtils{
 
     static makeBestSolution(nodes){
 
+
         var items = [];
 
         for (var i = 0; i < nodes.length - 1; i++) {

@@ -5,29 +5,29 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         this.on('moving', (event) => this.onMoving(event));
         this.nextNode = null;
         this.nodesToVisit = []
-        this.visitedNodes = []
+        this.visitedNodes = [];
+        this.tourDistance = 0.0;
     },
     init: function(nodes){
 
         if (this.nodesToVisit.length != 0) {
             return;
         }
-        if(this.currentNode != this.initialNode){
+        if (this.currentNode != this.initialNode) {
             this.nodesToVisit = [this.initialNode];
             return;
         }
 
-        this.nodesToVisit = []
-        this.visitedNodes = [this.initialNode]
+        this.nodesToVisit = [];
+        this.tourDistance = 0.0;
         this.currentNode = this.initialNode;
+        this.visitedNodes = [this.initialNode];
 
         nodes.forEach(node => {
             if (node != this.initialNode) {
                 this.nodesToVisit.push(node);
             }
         });
-
-        //console.log(this.currentNode.id, this.nodesToVisit.map(e => e.id));
     },
     onMoving: function (event) {
         this.currentNode.set({
@@ -37,13 +37,16 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         this.currentNode.setCoords()
     },
     onDone: function (canvas, nextNode) {
+
+        this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, nextNode);
+
         this.setCurrentNode(nextNode)
         this.nextNode = null;
         this.visitedNodes.push(nextNode);
         this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== nextNode.id);
 
         if (this.currentNode == this.initialNode) {
-            canvas.environment.updateBestAnt(this);
+            canvas.environment.setTourDone(this);
         }
     },
     setCurrentNode: function (node) {
@@ -89,5 +92,5 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         });
 
         return false;
-    }
+    },
 });

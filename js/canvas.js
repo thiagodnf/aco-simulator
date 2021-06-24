@@ -22,9 +22,6 @@ class Canvas {
         this.ants = [];
         this.edges = [];
         this.selectedOption;
-        this.events = new utils.Events();
-        this.system = new RandomSystem();
-        this.environment = new Environment(this);
 
         this.canvas = new fabric.Canvas('canvas', {
             selection: false,
@@ -32,6 +29,10 @@ class Canvas {
         });
 
         this.canvas.on('mouse:up', (event) => this.onMoveUp(event));
+
+        this.events = new utils.Events();
+        this.system = new RandomSystem();
+        this.environment = new Environment(this);
     }
 
     on(eventName, callback) {
@@ -104,10 +105,8 @@ class Canvas {
         this.nodes.push(node)
         this.canvas.add(node);
 
-        // if(node.id == 0){
-            this.ants.push(ant);
-            this.canvas.add(ant);
-        // }
+        this.ants.push(ant);
+        this.canvas.add(ant);
 
         this.sortCanvas()
 
@@ -155,21 +154,6 @@ class Canvas {
             this.canvas.add(this.grid);
         } else {
             this.canvas.remove(this.grid);
-        }
-
-        this.sortCanvas();
-    }
-
-    showBestSolution(visible) {
-
-        if (!this.bestSolution) {
-            return;
-        }
-
-        if (visible) {
-            this.canvas.add(this.bestSolution);
-        } else {
-            this.canvas.remove(this.bestSolution);
         }
 
         this.sortCanvas();
@@ -257,26 +241,18 @@ class Canvas {
         this.events.emit('stopped');
     }
 
-    updateGeneration(generation, bestValue){
-        this.events.emit('generationUpdated', [{generation, bestValue}]);
-    }
-
-    updateBestAnt(ant, value){
-
-        if (!ant) {
-            return;
-        }
+    updateGeneration(generation, bestTour, bestValue){
 
         if (this.bestSolution) {
             this.canvas.remove(this.bestSolution);
         }
 
-        this.bestSolution = FabricjsUtils.makeBestSolution(ant.visitedNodes)
+        this.bestSolution = FabricjsUtils.makeBestSolution(bestTour)
         this.canvas.add(this.bestSolution);
 
         this.sortCanvas()
 
-        this.events.emit('bestValueUpdated', [value]);
+        this.events.emit('generationUpdated', [{generation, bestValue}]);
     }
 
     updateCanvas(antSpeed, runOnce) {

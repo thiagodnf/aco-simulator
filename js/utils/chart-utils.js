@@ -12,7 +12,6 @@ class ChartUtils{
                 title: {
                     text: "Generation"
                 },
-                min: 1
             },
 
             yAxis: {
@@ -45,9 +44,10 @@ class ChartUtils{
         return {
             chart: chart,
             addPoint: (value) => {
-                chart.series[0].addPoint(value);
+                if (!Number.isNaN(value)) {
+                    chart.series[0].addPoint(value);
+                }
             }
         };
     }
-
 }

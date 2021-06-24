@@ -1,11 +1,17 @@
 body{
     font-size: 14px;
 }
+
 canvas{
     border-radius: .25rem;
     border: 1px solid rgba(0,0,0,.125);
 }
 
-main > .container-fluid {
+.toolbar{
+    background-color: #fafafa;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+main {
     padding-top: 56px
 }
