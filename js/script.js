@@ -1,4 +1,5 @@
-var canvas = null;
+let canvas = null;
+let chart = null;
 
 function resizeWindow() {
     canvas.setWidth($(".col-lg-9").width());
@@ -43,6 +44,7 @@ $(function () {
 
     var url  = new Url;
     canvas = new Canvas();
+    chart = ChartUtils.init("chart");
 
     $(window).resize(resizeWindow);
 
@@ -95,17 +97,22 @@ $(function () {
         setToolbarActive(false);
     });
 
-    // canvas.addNode({ x: 90, y: 90 })
-    // canvas.addNode({ x: 180, y: 180 })
-    // canvas.addNode({ x: 90, y: 180 })
-    // canvas.addNode({ x: 180, y: 90 });
+    canvas.on("generationUpdated", function(data){
+        $(".generation-counter").text(data.generation.toLocaleString("en-US"));
+        $(".best-value").text(data.bestValue.toLocaleString("en-US"));
+        chart.addPoint(data.bestValue);
+    });
+
+    canvas.addNode({ x: 90, y: 90 })
+    canvas.addNode({ x: 180, y: 180 })
+    canvas.addNode({ x: 90, y: 180 })
+    canvas.addNode({ x: 180, y: 90 });
 
     RandomUtils.setSeed(url.query.seed);
 
     let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());
 
     nodes.forEach((node) =>{
-        canvas.addNode({ x: node[0], y: node[1] });
-    })
-    console.log(nodes);
+        // canvas.addNode({ x: node[0], y: node[1] });
+    });
 });

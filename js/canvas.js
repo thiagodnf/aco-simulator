@@ -16,12 +16,15 @@ class Canvas {
         this.isRunning = false;
 
         this.grid = null;
+        this.bestSolution = null;
 
         this.nodes = [];
         this.ants = [];
         this.edges = [];
         this.selectedOption;
         this.events = new utils.Events();
+        this.system = new RandomSystem();
+        this.environment = new Environment(this);
 
         this.canvas = new fabric.Canvas('canvas', {
             selection: false,
@@ -99,12 +102,16 @@ class Canvas {
         var ant = FabricjsUtils.makeAnt(node);
 
         this.nodes.push(node)
-        this.ants.push(ant);
-
         this.canvas.add(node);
-        this.canvas.add(ant);
+
+        // if(node.id == 0){
+            this.ants.push(ant);
+            this.canvas.add(ant);
+        // }
 
         this.sortCanvas()
+
+        this.environment.reset();
 
         this.events.emit('addedNode', [node]);
 
@@ -148,6 +155,21 @@ class Canvas {
             this.canvas.add(this.grid);
         } else {
             this.canvas.remove(this.grid);
+        }
+
+        this.sortCanvas();
+    }
+
+    showBestSolution(visible) {
+
+        if (!this.bestSolution) {
+            return;
+        }
+
+        if (visible) {
+            this.canvas.add(this.bestSolution);
+        } else {
+            this.canvas.remove(this.bestSolution);
         }
 
         this.sortCanvas();
@@ -235,23 +257,44 @@ class Canvas {
         this.events.emit('stopped');
     }
 
+    updateGeneration(generation, bestValue){
+        this.events.emit('generationUpdated', [{generation, bestValue}]);
+    }
+
+    updateBestAnt(ant, value){
+
+        if (!ant) {
+            return;
+        }
+
+        if (this.bestSolution) {
+            this.canvas.remove(this.bestSolution);
+        }
+
+        this.bestSolution = FabricjsUtils.makeBestSolution(ant.visitedNodes)
+        this.canvas.add(this.bestSolution);
+
+        this.sortCanvas()
+
+        this.events.emit('bestValueUpdated', [value]);
+    }
+
     updateCanvas(antSpeed, runOnce) {
 
         var that = this;
 
         that.events.emit('running');
 
-        var nodeIds = this.nodes.map(e => e.id);
-
-        ArrayUtils.shuffle(nodeIds);
+        that.ants.forEach(ant => {
+            ant.init(this.nodes);
+        });
 
         var render = function () {
 
             var dones = [];
 
-            that.ants.forEach((ant, i) => {
-                var nextNode = that.findNodeById(nodeIds[i]);
-                dones.push(ant.move(nextNode, antSpeed))
+            that.ants.forEach(ant => {
+                dones.push(ant.move(that, antSpeed))
             });
 
             that.canvas.renderAll();

@@ -11,6 +11,14 @@ class FabricjsUtils{
 
     static NODE_RADIUS = 15;
 
+    static getEuclideanDistance(el1, el2){
+
+        var dx = (el1.left - el2.left);
+        var dy = (el1.top - el2.top);
+
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    }
+
     static getDefaultSettings(){
         return {
             originX: 'center',
@@ -87,6 +95,30 @@ class FabricjsUtils{
             selectable: false,
             evented: false,
             layer: LAYER.GRID,
+        });
+    }
+
+    static makeBestSolution(nodes){
+
+        var items = [];
+
+        for (var i = 0; i < nodes.length - 1; i++) {
+
+            let source = nodes[i];
+            let target = nodes[i + 1];
+
+            let line = FabricjsUtils.makeLine(source.left, source.top, target.left, target.top);
+
+            line.stroke = 'red';
+            line.strokeWidth = 2;
+
+            items.push(line);
+        }
+
+        return new fabric.Group(items, {
+            selectable: false,
+            evented: false,
+            layer: LAYER.EDGE,
         });
     }
 
