@@ -58,19 +58,23 @@ $(function () {
 
     $("#clear-all").click(() => {
         if(confirm("Are you sure?")){
-            canvas.clear()
+            canvas.clearAll()
         }
     });
 
-    $("#play").click(() => {canvas.play();});
+    $("#play").click(() => {canvas.setPlay();});
 
-    $("#step").click(() => { canvas.step();});
+    $("#step").click(() => { canvas.setStep();});
 
-    $("#stop").click(() => canvas.stop());
+    $("#stop").click(() => canvas.setStop());
 
     $('#show-pheromones').change(function() {
         setShowPheromones(this.checked);
     });
+
+    $('#show-grid').change((function() {
+        canvas.showGrid(this.checked);
+    }));
 
     $('#ant-speed').change(function() {
         canvas.setAntSpeed(this.value)
@@ -91,23 +95,30 @@ $(function () {
         setToolbarActive(false);
     });
 
-    canvas.addNode({ x: 100, y: 100 })
-    canvas.addNode({ x: 200, y: 200 })
-    canvas.addNode({ x: 100, y: 200 })
-    canvas.addNode({ x: 200, y: 100 })
+    // canvas.addNode({ x: 90, y: 90 })
+    // canvas.addNode({ x: 180, y: 180 })
+    // canvas.addNode({ x: 90, y: 180 })
+    // canvas.addNode({ x: 180, y: 90 });
 
     RandomUtils.setSeed(url.query.seed);
 
-    let numberOfNodes = RandomUtils.nextInt(1, canvas.nodesLimit/ 2);
+    let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());
 
-    for(var i=0;i<numberOfNodes; i++){
+    nodes.forEach((node) =>{
+        canvas.addNode({ x: node[0], y: node[1] });
+    })
+    console.log(nodes);
 
-        let x = RandomUtils.nextFloat(100, 500);
-        let y = RandomUtils.nextFloat(100, 500);
+    // let numberOfNodes = RandomUtils.nextInt(1, canvas.nodesLimit / 2);
 
-        canvas.addNode({ x: x, y: y })
-    }
-    console.log(numberOfNodes)
+    // for (var i = 0; i < numberOfNodes; i++) {
+
+    //     let x = RandomUtils.nextFloat(100, 500);
+    //     let y = RandomUtils.nextFloat(100, 500);
+
+    //     canvas.addNode({ x: x, y: y })
+    // }
+    // console.log(numberOfNodes)
 
     //console.log(RandomUtils.nextInt(10,20));
 });

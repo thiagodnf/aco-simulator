@@ -15,10 +15,12 @@ class Canvas {
         this.animation = null;
         this.isRunning = false;
 
-        this.selectedOption = OPTIONS.ADD_NODE;
+        this.grid = null;
+
         this.nodes = [];
         this.ants = [];
         this.edges = [];
+        this.selectedOption;
         this.events = new utils.Events();
 
         this.canvas = new fabric.Canvas('canvas', {
@@ -27,6 +29,14 @@ class Canvas {
         });
 
         this.canvas.on('mouse:up', (event) => this.onMoveUp(event));
+        // this.canvas.on('mouse:down', this.onMoveDown);
+
+        fabric.Canvas.prototype.sort = function() {
+            this._objects.sort((x, y) => {
+                return x.layer > y.layer;
+            });
+            this.renderAll();
+        }
     }
 
     on(eventName, callback) {
@@ -43,16 +53,20 @@ class Canvas {
         this.canvas.setWidth(width);
     }
 
+    getWidth() {
+        return this.canvas.width;
+    }
+
     setHeight(height) {
         this.canvas.setHeight(height);
     }
 
-    calcOffset() {
-        this.canvas.calcOffset();
+    getHeight() {
+        return this.canvas.height;
     }
 
-    clear() {
-        this.canvas.clear();
+    calcOffset() {
+        this.canvas.calcOffset();
     }
 
     outEdges(id) {
@@ -76,12 +90,28 @@ class Canvas {
 
     addNode(pos) {
 
+        if (this.isRunning) {
+            return;
+        }
+
         if (this.nodes.length >= this.nodesLimit) {
             return;
         }
 
         var node = FabricjsUtils.makeNode(pos.x, pos.y);
         var ant = FabricjsUtils.makeAnt(node);
+
+        this.nodes.push(node)
+        this.ants.push(ant);
+
+        this.canvas.add(node);
+        this.canvas.add(ant);
+
+        this.canvas.sort();
+
+        this.events.emit('addedNode', [node]);
+
+        // console.log(ant)
 
         // var ant = new Ant();
         // nodes.forEach(function(n){
@@ -107,43 +137,44 @@ class Canvas {
         //         });
         //     });
         // });
-
-        this.nodes.push(node)
-        this.ants.push(ant);
-
-        this.canvas.add(node);
-        this.canvas.add(ant);
-
-        node.sendToBack();
-        ant.bringToFront();
-
-        this.events.emit('addedNode', [node]);
     }
 
-    removeNode(node) {
-        this.canvas.remove(node);
-        this.nodes = this.nodes.filter(n => n.id !== node.id);
-        this.events.emit('removedNode', [node]);
+    showGrid(visible) {
+
+        if (!this.grid) {
+            this.grid = FabricjsUtils.makeGrid(this.canvas.width, this.canvas.height);
+        }
+
+        if (visible) {
+            this.canvas.add(this.grid);
+        } else {
+            this.canvas.remove(this.grid);
+        }
+
+        this.canvas.sort();
     }
 
     setAddNode() {
         this.canvas.defaultCursor = 'crosshair';
         this.selectedOption = OPTIONS.ADD_NODE;
-        this.canvas.discardActiveObject().renderAll();
-        this.ants.forEach(this.toggleSelectable);
+        this.lockCanvas(true);
     }
 
     setMoveNode() {
         this.canvas.defaultCursor = 'default';
         this.selectedOption = OPTIONS.MOVE_NODE;
-        this.ants.forEach(this.toggleSelectable);
+        this.lockCanvas(false);
     }
 
-    toggleSelectable(node) {
-        node.set({
-            selectable: !node.selectable,
-            evented: !node.selectable
-        });
+    removeNode(ant) {
+
+        this.canvas.remove(ant);
+        this.canvas.remove(ant.currentNode);
+
+        this.ants = this.ants.filter((n, i) => i !== this.ants.indexOf(ant));
+        this.nodes = this.nodes.filter((n, i) => i !== this.nodes.indexOf(ant.currentNode));
+
+        console.log(this.nodes)
     }
 
     removeSelectedNodes() {
@@ -160,38 +191,56 @@ class Canvas {
     clearAll() {
         this.canvas.clear()
         this.nodes = [];
+        this.ants = [];
     }
 
-    play() {
+    lockCanvas(lock){
+        this.ants.forEach((ant) => {
+            ant.set({
+                selectable: !lock,
+                evented: !lock
+            });
+        });
+        this.canvas.discardActiveObject().renderAll();
+    }
 
-        if(this.isRunning){
+    setPlay() {
+
+        if (this.isRunning) {
             return;
         }
 
         this.isRunning = true;
+        this.lockCanvas(true);
         this.updateCanvas(this.antSpeed, false)
-
     }
 
-    step() {
+    setStep() {
 
-        if(this.isRunning){
+        if (this.isRunning) {
             return;
         }
 
         this.isRunning = true;
+        this.lockCanvas(true);
         this.updateCanvas(this.antSpeed, true)
     }
 
-    stop() {
+    setStop(){
         this.isRunning = false;
+    }
+
+    stop(){
+        this.isRunning = false;
+        this.lockCanvas(false);
+        this.events.emit('stopped');
     }
 
     updateCanvas(antSpeed, runOnce) {
 
-        this.events.emit('running');
-
         var that = this;
+
+        that.events.emit('running');
 
         var nodeIds = this.nodes.map(e => e.id);
 
@@ -203,7 +252,7 @@ class Canvas {
 
             that.ants.forEach((ant, i) => {
                 var nextNode = that.findNodeById(nodeIds[i]);
-                dones.push(ant.step(nextNode, antSpeed))
+                dones.push(ant.move(nextNode, antSpeed))
             });
 
             that.canvas.renderAll();
@@ -211,15 +260,14 @@ class Canvas {
             var isDone = dones.reduce((acc, v) => acc && v);
 
             if (isDone) {
-                that.events.emit('done');
                 if (runOnce) {
-                    that.events.emit('stopped');
+                    that.stop();
                 } else {
                     if (that.isRunning) {
                         that.updateCanvas(that.antSpeed, false);
                     } else {
                         clearTimeout(that.animation);
-                        that.events.emit('stopped');
+                        that.stop();
                     }
                 }
             } else if (that.animation) {

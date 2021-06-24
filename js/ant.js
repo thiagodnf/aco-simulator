@@ -2,20 +2,22 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
     type: 'ant',
     initialize: function (element, options) {
         this.callSuper('initialize', element, options);
-        this.on('moving', this.moving);
+        this.on('moving', (event) => this.moving(event));
     },
     moving: function (event) {
         this.currentNode.set({
             top: this.top,
             left: this.left,
         });
+        this.currentNode.setCoords()
     },
     setCurrentNode: function (node) {
         this.currentNode = node;
         this.set({
             top: node.top,
             left: node.left,
-        })
+        });
+        this.setCoords()
     },
     isDone: function (nextNode) {
 
@@ -24,7 +26,7 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
 
         return distX <= 0.1 && distY <= 0.1
     },
-    step: function (nextNode, speed) {
+    move: function (nextNode, speed) {
 
         if (this.isDone(nextNode)) {
             this.setCurrentNode(nextNode)
