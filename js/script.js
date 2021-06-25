@@ -1,3 +1,4 @@
+let url = null;
 let canvas = null;
 let chart = null;
 
@@ -5,33 +6,6 @@ function resizeWindow() {
     canvas.setWidth($(".col-lg-9").width());
     canvas.setHeight($(window).height() - $("#canvas").offset().top - $("footer").height() - 30);
     canvas.calcOffset();
-}
-
-function setShowPheromones(show) {
-    if (show) {
-
-        for(var i=0;i<nodes.length;i++){
-            for(var j=i+1;j<nodes.length;j++){
-
-                var edge = makeEdge(nodes[i], nodes[j]);
-
-                edges.push(edge);
-
-                canvas.add(edge);
-
-                edge.sendToBack();
-
-            }
-        }
-
-    } else {
-
-        edges.forEach(e => {
-            canvas.remove(e);
-        });
-
-        edges = [];
-    }
 }
 
 function setToolbarActive(active){
@@ -42,7 +16,7 @@ function setToolbarActive(active){
 
 $(function () {
 
-    var url  = new Url;
+    url = new Url;
     canvas = new Canvas();
     chart = ChartUtils.init("chart");
 
@@ -59,7 +33,7 @@ $(function () {
     $("#move-node").click(() => canvas.setMoveNode());
 
     $("#clear-all").click(() => {
-        if(confirm("Are you sure?")){
+        if (confirm("Are you sure?")) {
             canvas.clearAll()
         }
     });
@@ -71,7 +45,7 @@ $(function () {
     $("#stop").click(() => canvas.setStop());
 
     $('#show-pheromones').change(function() {
-        setShowPheromones(this.checked);
+        canvas.setShowPheromones(this.checked);
     });
 
     $('#show-grid').change((function() {
@@ -104,9 +78,11 @@ $(function () {
     });
 
     canvas.addNode({ x: 90, y: 90 })
+    canvas.addNode({ x: 180, y: 90 });
     canvas.addNode({ x: 180, y: 180 })
     canvas.addNode({ x: 90, y: 180 })
-    canvas.addNode({ x: 180, y: 90 });
+
+
 
     RandomUtils.setSeed(url.query.seed);
 

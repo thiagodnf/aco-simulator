@@ -21,6 +21,7 @@ class Canvas {
         this.nodes = [];
         this.ants = [];
         this.edges = [];
+        this.cnn = 1.0;
         this.selectedOption;
 
         this.canvas = new fabric.Canvas('canvas', {
@@ -31,8 +32,8 @@ class Canvas {
         this.canvas.on('mouse:up', (event) => this.onMoveUp(event));
 
         this.events = new utils.Events();
-        this.system = new RandomSystem();
         this.environment = new Environment(this);
+        this.system = new AntSystem(this);
     }
 
     on(eventName, callback) {
@@ -112,6 +113,8 @@ class Canvas {
 
         this.environment.reset();
 
+        this.upateCnn();
+
         this.events.emit('addedNode', [node]);
 
 
@@ -144,6 +147,18 @@ class Canvas {
         // });
     }
 
+    upateCnn(){
+
+        let tour = NearestNeighbour.solve(this);
+        let nodes = tour.map(e => this.findNodeById(e));
+
+        this.cnn = FabricjsUtils.getEuclideanDistanceFromArray(nodes)
+    }
+
+    getNij(i, j){
+        return 1.0 / this.getTourDistance(i, j);
+    }
+
     showGrid(visible) {
 
         if (!this.grid) {
@@ -155,6 +170,31 @@ class Canvas {
         } else {
             this.canvas.remove(this.grid);
         }
+
+        this.sortCanvas();
+    }
+
+    setShowPheromones(visible) {
+
+        if (visible) {
+            this.edges = FabricjsUtils.makeEdges(this.nodes, this.environment);
+            this.canvas.add(this.edges);
+        } else {
+            this.canvas.remove(this.edges);
+        }
+
+        this.sortCanvas();
+    }
+
+    updatePheromones(){
+
+        if(this.edges){
+            this.canvas.remove(this.edges);
+        }
+
+        this.edges = FabricjsUtils.makeEdges(this.nodes, this.environment);
+
+        this.canvas.add(this.edges);
 
         this.sortCanvas();
     }
@@ -179,6 +219,8 @@ class Canvas {
         this.ants = this.ants.filter((n, i) => i !== this.ants.indexOf(ant));
         this.nodes = this.nodes.filter((n, i) => i !== this.nodes.indexOf(ant.currentNode));
 
+        this.upateCnn();
+
         console.log(this.nodes)
     }
 
@@ -197,6 +239,14 @@ class Canvas {
         this.canvas.clear()
         this.nodes = [];
         this.ants = [];
+    }
+
+    getAlpha(){
+        return 2.0;
+    }
+
+    getBeta(){
+        return 1.0;
     }
 
     lockCanvas(lock){
@@ -252,7 +302,23 @@ class Canvas {
 
         this.sortCanvas()
 
+        this.system.runGlobalUpdateRule();
+
+        this.updatePheromones();
+
         this.events.emit('generationUpdated', [{generation, bestValue}]);
+    }
+
+    getNumberOfAnts(){
+        return this.ants.length;
+    }
+
+    getNumberOfNodes(){
+        return this.nodes.length;
+    }
+
+    getTourDistance(i, j){
+        return FabricjsUtils.getEuclideanDistance(this.findNodeById(i), this.findNodeById(j));
     }
 
     updateCanvas(antSpeed, runOnce) {

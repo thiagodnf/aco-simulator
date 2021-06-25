@@ -11,6 +11,17 @@ class FabricjsUtils{
 
     static NODE_RADIUS = 15;
 
+    static getEuclideanDistanceFromArray(array) {
+
+        let total = 0.0;
+
+        for (let i = 0; i < array.length - 1; i++) {
+            total += FabricjsUtils.getEuclideanDistance(array[i], array[i + 1]);
+        }
+
+        return total;
+    }
+
     static getEuclideanDistance(el1, el2){
 
         var dx = (el1.left - el2.left);
@@ -84,11 +95,13 @@ class FabricjsUtils{
 
         var items = [];
 
-        for (var i = FabricjsUtils.NODE_RADIUS*2; i < width; i += FabricjsUtils.NODE_RADIUS*2) {
+        for (var i = FabricjsUtils.NODE_RADIUS*2,j=1; i < width; i += FabricjsUtils.NODE_RADIUS*2, j++) {
             items.push(FabricjsUtils.makeLine(i, 0, i, height));
+            items.push(FabricjsUtils.makeText(i, 7, j));
         }
-        for (var i = FabricjsUtils.NODE_RADIUS*2; i < height; i += FabricjsUtils.NODE_RADIUS*2) {
+        for (var i = FabricjsUtils.NODE_RADIUS*2,j=1; i < height; i += FabricjsUtils.NODE_RADIUS*2,j++) {
             items.push(FabricjsUtils.makeLine(0, i, width, i));
+            items.push(FabricjsUtils.makeText(7, i, j));
         }
 
         return new fabric.Group(items, {
@@ -98,8 +111,43 @@ class FabricjsUtils{
         });
     }
 
-    static makeBestSolution(nodes){
+    static makeEdges(nodes, environment){
 
+        var items = [];
+
+        let values = Object.values(environment.tau);
+
+        let min = Math.min(...values);
+        let max = Math.max(...values)
+
+        var normalize = (value, min, max) => {
+            return (value - min) / (max - min) * 2
+        }
+
+        nodes.forEach(n1 =>{
+            nodes.forEach(n2 =>{
+                if(n1 != n2){
+
+                    let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
+
+                    let tau = environment.getTau(n1.id, n2.id);
+
+                    edge.stroke = 'black';
+                    edge.strokeWidth = normalize(tau, min, max);
+
+                    items.push(edge);
+                }
+            })
+        })
+
+        return new fabric.Group(items, {
+            selectable: false,
+            evented: false,
+            layer: LAYER.EDGE,
+        });
+    }
+
+    static makeBestSolution(nodes){
 
         var items = [];
 

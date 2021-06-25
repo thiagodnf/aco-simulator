@@ -6,6 +6,7 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         this.nextNode = null;
         this.nodesToVisit = []
         this.visitedNodes = [];
+        this.path = {};
         this.tourDistance = 0.0;
     },
     init: function(nodes){
@@ -18,6 +19,7 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
             return;
         }
 
+        this.path = {};
         this.nodesToVisit = [];
         this.tourDistance = 0.0;
         this.currentNode = this.initialNode;
@@ -40,9 +42,14 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
 
         this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, nextNode);
 
-        this.setCurrentNode(nextNode)
-        this.nextNode = null;
+        //Mark arc as visited
         this.visitedNodes.push(nextNode);
+        this.setPath(this.currentNode.id, nextNode.id, 1);
+        this.setPath(nextNode.id, this.currentNode.id, 1);
+
+        this.nextNode = null;
+        this.setCurrentNode(nextNode)
+
         this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== nextNode.id);
 
         if (this.currentNode == this.initialNode) {
@@ -93,4 +100,18 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
 
         return false;
     },
+    getPath: function(i, j) {
+        if (i < j) {
+            return this.path[i + "_" + j];
+        } else {
+            return this.path[j + "_" + i];
+        }
+    },
+    setPath: function(i, j, value) {
+        if (i < j) {
+            this.path[i + "_" + j] = value;
+        } else {
+            this.path[j + "_" + i] = value;
+        }
+    }
 });
