@@ -20,7 +20,7 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         this.tourDistance = 0.0;
         this.currentNode = this.initialNode;
         this.visitedNodes = [this.initialNode];
-        this.nodesToVisit = nodes.filter(n => n != this.initialNode);
+        this.nodesToVisit = nodes.filter(n => n.id !== this.initialNode.id);
     },
     onMoving: function (event) {
         this.currentNode.set({
@@ -29,22 +29,21 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         });
         this.currentNode.setCoords()
     },
-    onDone: function (canvas, nextNode) {
+    onDone: function (canvas) {
 
-        this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, nextNode);
+        this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, this.nextNode);
+        this.setPath(this.currentNode.id, this.nextNode.id, 1);
+        this.setPath(this.nextNode.id, this.currentNode.id, 1);
 
-        this.visitedNodes.push(nextNode);
+        this.visitedNodes.push(this.nextNode);
 
-        this.setPath(this.currentNode.id, nextNode.id, 1);
-        this.setPath(nextNode.id, this.currentNode.id, 1);
+        this.setCurrentNode(this.nextNode)
+        this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== this.nextNode.id);
 
         this.nextNode = null;
-        this.setCurrentNode(nextNode)
-
-        this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== nextNode.id);
 
         if (this.nodesToVisit.length == 0) {
-            if (this.currentNode == this.initialNode) {
+            if (this.currentNode.id == this.initialNode.id) {
                 canvas.environment.setTourDone(this);
             } else {
                 this.nodesToVisit = [this.initialNode];
@@ -59,10 +58,14 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         });
         this.setCoords()
     },
-    isDone: function (nextNode) {
+    isDone: function () {
 
-        var distX = Math.abs(nextNode.left - this.left);
-        var distY = Math.abs(nextNode.top - this.top);
+        if (!this.nextNode) {
+            return true;
+        }
+
+        var distX = Math.abs(this.nextNode.left - this.left);
+        var distY = Math.abs(this.nextNode.top - this.top);
 
         return distX <= 0.1 && distY <= 0.1
     },
@@ -72,8 +75,8 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
             this.nextNode = canvas.findNodeById(canvas.system.getNextNodeId(this));
         }
 
-        if (this.isDone(this.nextNode)) {
-            this.onDone(canvas, this.nextNode)
+        if (this.isDone()) {
+            this.onDone(canvas)
             return true;
         }
 

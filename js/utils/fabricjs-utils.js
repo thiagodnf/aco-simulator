@@ -112,34 +112,33 @@ class FabricjsUtils{
         });
     }
 
-    static makeEdges(nodes, environment){
+    static makeEdges(nodes, environment) {
 
         var items = [];
 
-        let values = Object.values(environment.tau);
+        let p = ArrayUtils.minMax(Object.values(environment.tau));
 
-        let min = Math.min(...values);
-        let max = Math.max(...values)
+        for (var i = 0; i < nodes.length; i++) {
+            for (var j = i + 1; j < nodes.length; j++) {
 
-        var normalize = (value, min, max) => {
-            return (value - min) / (max - min) * 2
-        }
+                let n1 = nodes[i];
+                let n2 = nodes[j];
+                let tau = environment.getTau(n1.id, n2.id);
 
-        nodes.forEach(n1 => {
-            nodes.forEach(n2 => {
-                if (n1 != n2) {
+                let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
 
-                    let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
+                let nTau = NormalizeUtils.normalize(tau, p.min, p.max, 0, 2);
 
-                    let tau = environment.getTau(n1.id, n2.id);
-
-                    edge.stroke = 'black';
-                    edge.strokeWidth = normalize(tau, min, max);
-
-                    items.push(edge);
+                if (Number.isNaN(nTau)) {
+                    nTau = 2;
                 }
-            })
-        })
+
+                edge.stroke = 'black';
+                edge.strokeWidth = nTau;
+
+                items.push(edge);
+            }
+        }
 
         return new fabric.Group(items, {
             selectable: false,

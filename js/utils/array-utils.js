@@ -7,4 +7,11 @@ class ArrayUtils {
             [array[i], array[j]] = [array[j], array[i]];
         }
     }
+
+    static minMax(array) {
+        return {
+            min: Math.min(...array),
+            max: Math.max(...array)
+        }
+    }
 }

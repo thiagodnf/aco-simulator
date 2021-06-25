@@ -3,11 +3,10 @@ let canvas = null;
 let chart = null;
 
 function resizeWindow() {
-    canvas.setDimensions({
-        width: $(".col-lg-9").width(),
-        height: $(window).height() - $("#canvas").offset().top - $("footer").height() - 30
-    });
-    canvas.calcOffset();
+    canvas.resize(
+        $(".col-lg-9").width(),
+        $(window).height() - $("#canvas").offset().top - $("footer").height() - 30
+    );
 }
 
 function setToolbarActive(active){
@@ -51,11 +50,10 @@ $(function () {
         }
     });
 
-    $('#show-pheromones').change(() => canvas.setToggleShowPheromones());
+    $('#show-grid').change(() => canvas.toggleShowGrid());
+    $('#show-pheromones').change(() => canvas.toggleShowPheromones());
 
-    $('#show-grid').change((function() {
-        canvas.showGrid(this.checked);
-    }));
+
 
     $('input[name=ant-speed').change(function() {
         canvas.setAntSpeed(this.value)

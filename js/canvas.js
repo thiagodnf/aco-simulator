@@ -13,7 +13,7 @@ class Canvas extends fabric.Canvas {
 
         // Default Settings
         this.nodesLimit = 50;
-        this.showGrid = true;
+        this.showGrid = false;
         this.showPheromones = false;
 
         this.antSpeed = 80;
@@ -25,7 +25,7 @@ class Canvas extends fabric.Canvas {
 
         this.nodes = [];
         this.ants = [];
-        this.edges = [];
+        this.pheromones = [];
         this.cnn = 1.0;
         this.selectedOption;
 
@@ -46,6 +46,12 @@ class Canvas extends fabric.Canvas {
         }
     }
 
+    resize(width, height){
+        this.setDimensions({width: width, height: height});
+        this.calcOffset();
+        this.updateGrid();
+    }
+
     addNode(pos) {
 
         if (this.isRunning) {
@@ -62,15 +68,16 @@ class Canvas extends fabric.Canvas {
         this.nodes.push(node)
         this.add(node);
 
+        if(this.ants.length <= 3){
         this.ants.push(ant);
         this.add(ant);
+        }
 
         this.environment.reset();
 
+        this.updatePheromones();
         this.upateCnn();
         this.sortCanvas();
-
-        this.edges = FabricjsUtils.makeEdges(this.nodes, this.environment);
 
         this.events.emit('addedNode', [node]);
     }
@@ -112,25 +119,58 @@ class Canvas extends fabric.Canvas {
         return 1.0 / this.getTourDistance(i, j);
     }
 
-    showGrid(visible) {
-
-        if (!this.grid) {
-            this.grid = FabricjsUtils.makeGrid(this.width, this.height);
-        }
-
+    replace(oldEl, newEl){
         if (visible) {
-            this.add(this.grid);
+            this.add(el);
         } else {
-            this.remove(this.grid);
+            this.remove(el);
+        }
+        this.sortCanvas();
+    }
+
+    setVisible(el, visible){
+        if (visible) {
+            this.add(el);
+        } else {
+            this.remove(el);
+        }
+        this.sortCanvas();
+    }
+
+    updateGrid() {
+        this.remove(this.grid);
+        this.grid = FabricjsUtils.makeGrid(this.width, this.height);
+
+        if (this.showGrid) {
+            this.add(this.grid);
         }
 
         this.sortCanvas();
     }
 
-    updatePheromones(){
+    updatePheromones() {
+        this.remove(this.pheromones);
+        this.pheromones = FabricjsUtils.makeEdges(this.nodes, this.environment);
 
-        // this.edges = FabricjsUtils.makeEdges(this.nodes, this.environment);
+        if (this.showPheromones) {
+            this.add(this.pheromones);
+        }
 
+        this.sortCanvas();
+    }
+
+    toggleShowGrid() {
+
+        this.showGrid =  !this.showGrid;
+
+        this.updateGrid();
+    }
+
+    toggleShowPheromones() {
+
+        this.showPheromones =  !this.showPheromones;
+
+        this.updatePheromones();
     }
 
     setAddNode() {
@@ -161,19 +201,6 @@ class Canvas extends fabric.Canvas {
             this.removeNode(node)
         });
         this.discardActiveObject().renderAll();
-    }
-
-    setToggleShowPheromones() {
-
-        this.showPheromones =  !this.showPheromones;
-
-        if (this.showPheromones) {
-            this.add(this.edges);
-        } else {
-            this.remove(this.edges);
-        }
-
-        this.sortCanvas();
     }
 
     setAntSpeed(value) {
