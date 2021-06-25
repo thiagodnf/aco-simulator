@@ -3,8 +3,10 @@ let canvas = null;
 let chart = null;
 
 function resizeWindow() {
-    canvas.setWidth($(".col-lg-9").width());
-    canvas.setHeight($(window).height() - $("#canvas").offset().top - $("footer").height() - 30);
+    canvas.setDimensions({
+        width: $(".col-lg-9").width(),
+        height: $(window).height() - $("#canvas").offset().top - $("footer").height() - 30
+    });
     canvas.calcOffset();
 }
 
@@ -28,15 +30,10 @@ $(function () {
         };
     });
 
-    $("#add-node").click(() => canvas.setAddNode());
-
-    $("#move-node").click(() => canvas.setMoveNode());
-
-    $("#clear-all").click(() => {
-        if (confirm("Are you sure?")) {
-            canvas.clearAll()
-        }
-    });
+    window.onerror = (errorMsg, url, lineNumber) => {
+        alert(errorMsg);
+        return false;
+    }
 
     $("#play").click(() => {canvas.setPlay();});
 
@@ -44,17 +41,24 @@ $(function () {
 
     $("#stop").click(() => canvas.setStop());
 
-    $('#show-pheromones').change(function() {
-        canvas.setShowPheromones(this.checked);
+    $("#add-node").click(() => canvas.setAddNode());
+
+    $("#move-node").click(() => canvas.setMoveNode());
+
+    $("#clear-all").click(() => {
+        if (confirm("Are you sure?")) {
+            canvas.setClearAll()
+        }
     });
+
+    $('#show-pheromones').change(() => canvas.setToggleShowPheromones());
 
     $('#show-grid').change((function() {
         canvas.showGrid(this.checked);
     }));
 
-    $('#ant-speed').change(function() {
+    $('input[name=ant-speed').change(function() {
         canvas.setAntSpeed(this.value)
-        $('#ant-speed-value').text(canvas.antSpeed)
     });
 
     $('#ant-speed-value').text(canvas.antSpeed)
@@ -86,9 +90,9 @@ $(function () {
 
     RandomUtils.setSeed(url.query.seed);
 
-    let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());
+    // let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());
 
-    nodes.forEach((node) =>{
-        // canvas.addNode({ x: node[0], y: node[1] });
-    });
+    // nodes.forEach((node) =>{
+    //     // canvas.addNode({ x: node[0], y: node[1] });
+    // });
 });

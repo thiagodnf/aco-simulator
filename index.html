@@ -104,9 +104,23 @@
                                         <label class="form-check-label" for="show-pheromones">Show Pheromones</label>
                                     </div>
                                     <div>
-                                        <label for="ant-speed" class="form-label">Ant Speed</label>
-                                        <input type="range" class="form-range" id="ant-speed" min="1" max="500" step="1" value="250">
-                                        <small class="text-muted">Value: <span id="ant-speed-value">0</span></small>
+                                        <label class="form-label d-block">Ant Speed</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ant-speed" id="slow" value="250">
+                                            <label class="form-check-label" for="slow">Slow</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ant-speed" id="good" value="80" checked>
+                                            <label class="form-check-label" for="good">Good</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ant-speed" id="fast" value="10">
+                                            <label class="form-check-label" for="fast">Fast</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="ant-speed" id="crazy" value="1">
+                                            <label class="form-check-label" for="crazy">Crazy</label>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -142,6 +156,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/domurl@2.3.4/url.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.src.js"></script>
+    <script src="http://chancejs.com/chance.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.4.0/fabric.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
@@ -153,19 +168,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
-    <script src="http://chancejs.com/chance.min.js"></script>
+
 
     <!-- Application -->
 
-    <script src="js/systems/random-system.js"></script>
-    <script src="js/systems/ant-system.js"></script>
+    <!-- Util-->
     <script src="js/utils/fabricjs-utils.js"></script>
+    <script src="js/utils/normalize-utils.js"></script>
     <script src="js/utils/random-utils.js"></script>
     <script src="js/utils/array-utils.js"></script>
     <script src="js/utils/chart-utils.js"></script>
     <script src="js/utils/nearest-neighbour.js"></script>
-    <script src="js/ant-exploration/pseudo-random-proportional-rule.js"></script>
-    <script src="js/ant-selection/roulette-wheel.js"></script>
+
+    <!-- Exploration-->
+    <script src="js/aco/exploration/ant-exploration.js"></script>
+    <script src="js/aco/exploration/pseudo-random-proportional.js"></script>
+    <!-- Selection-->
+    <script src="js/aco/selection/ant-selection.js"></script>
+    <script src="js/aco/selection/roulette-wheel.js"></script>
+    <!-- ACO-->
+    <script src="js/systems/random-system.js"></script>
+    <script src="js/systems/ant-system.js"></script>
 
 
 

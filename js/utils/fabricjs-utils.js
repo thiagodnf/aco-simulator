@@ -1,4 +1,5 @@
 var NODE_ID = 0;
+var ANT_ID = 0;
 
 var LAYER = {
     GRID: 1,
@@ -124,9 +125,9 @@ class FabricjsUtils{
             return (value - min) / (max - min) * 2
         }
 
-        nodes.forEach(n1 =>{
-            nodes.forEach(n2 =>{
-                if(n1 != n2){
+        nodes.forEach(n1 => {
+            nodes.forEach(n2 => {
+                if (n1 != n2) {
 
                     let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
 
@@ -202,9 +203,12 @@ class FabricjsUtils{
 
     static makeAnt(node){
 
+        var antId = ANT_ID++;
+
         var img = document.getElementById('ant-image');
 
         var ant = new fabric.Ant(img, {
+            id: antId,
             left: node.left,
             top: node.top,
             layer: LAYER.ANT,
@@ -213,8 +217,8 @@ class FabricjsUtils{
             ...FabricjsUtils.getDefaultSettings()
         });
 
-        ant.scaleToWidth(30);
-        ant.scaleToHeight(30);
+        ant.scaleToWidth(FabricjsUtils.NODE_RADIUS * 2);
+        ant.scaleToHeight(FabricjsUtils.NODE_RADIUS * 2);
 
         return ant;
     }

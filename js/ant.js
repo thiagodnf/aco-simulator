@@ -4,18 +4,14 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         this.callSuper('initialize', element, options);
         this.on('moving', (event) => this.onMoving(event));
         this.nextNode = null;
-        this.nodesToVisit = []
-        this.visitedNodes = [];
         this.path = {};
+        this.nodesToVisit = [];
         this.tourDistance = 0.0;
+        this.visitedNodes = [];
     },
-    init: function(nodes){
+    initializeNodesToVisit: function(nodes){
 
-        if (this.nodesToVisit.length != 0) {
-            return;
-        }
-        if (this.currentNode != this.initialNode) {
-            this.nodesToVisit = [this.initialNode];
+        if (this.nodesToVisit.length !== 0) {
             return;
         }
 
@@ -24,12 +20,7 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         this.tourDistance = 0.0;
         this.currentNode = this.initialNode;
         this.visitedNodes = [this.initialNode];
-
-        nodes.forEach(node => {
-            if (node != this.initialNode) {
-                this.nodesToVisit.push(node);
-            }
-        });
+        this.nodesToVisit = nodes.filter(n => n != this.initialNode);
     },
     onMoving: function (event) {
         this.currentNode.set({
@@ -42,8 +33,8 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
 
         this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, nextNode);
 
-        //Mark arc as visited
         this.visitedNodes.push(nextNode);
+
         this.setPath(this.currentNode.id, nextNode.id, 1);
         this.setPath(nextNode.id, this.currentNode.id, 1);
 
@@ -52,8 +43,12 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
 
         this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== nextNode.id);
 
-        if (this.currentNode == this.initialNode) {
-            canvas.environment.setTourDone(this);
+        if (this.nodesToVisit.length == 0) {
+            if (this.currentNode == this.initialNode) {
+                canvas.environment.setTourDone(this);
+            } else {
+                this.nodesToVisit = [this.initialNode];
+            }
         }
     },
     setCurrentNode: function (node) {
@@ -73,7 +68,7 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
     },
     move: function (canvas, speed) {
 
-        if(!this.nextNode){
+        if (!this.nextNode) {
             this.nextNode = canvas.findNodeById(canvas.system.getNextNodeId(this));
         }
 

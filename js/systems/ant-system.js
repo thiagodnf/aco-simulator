@@ -2,7 +2,7 @@ class AntSystem extends RandomSystem {
 
     constructor(canvas){
         super(canvas);
-        this.exploration = new PseudoRandomProportionalRule(canvas);
+        this.exploration = new PseudoRandomProportional(canvas, new RouletteWheel());
         this.Q = 1.0;
     }
 
