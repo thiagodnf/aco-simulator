@@ -15,13 +15,7 @@ class AntSystem extends RandomSystem {
 	}
 
     getNextNodeId(ant){
-
-        // Get the next node given the current node
-        let nextNode = this.exploration.doExploration(ant, ant.currentNode.id);
-
-        // console.log(ant.currentNode.id + " -> "+ nextNode)
-
-        return nextNode;
+        return this.exploration.doExploration(ant, ant.currentNode.id);
     }
 
     runGlobalUpdateRule() {

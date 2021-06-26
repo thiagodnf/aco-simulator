@@ -8,6 +8,10 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         this.nodesToVisit = [];
         this.tourDistance = 0.0;
         this.visitedNodes = [];
+
+        this.initialNodeId = -1;
+        this.currentNodeId = -1;
+        this.visitedNodeIds = [];
     },
     initializeNodesToVisit: function(nodes){
 
@@ -15,12 +19,25 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
             return;
         }
 
+        // if (this.nodesToVisit.length == 0) {
+        //     if (this.currentNode.id == this.initialNode.id) {
+        //         canvas.environment.setTourDone(this);
+        //     } else {
+        //         this.nodesToVisit = [this.initialNode];
+        //     }
+        // }
+
         this.path = {};
         this.nodesToVisit = [];
         this.tourDistance = 0.0;
+
         this.currentNode = this.initialNode;
         this.visitedNodes = [this.initialNode];
         this.nodesToVisit = nodes.filter(n => n.id !== this.initialNode.id);
+
+        this.currentNodeId = initialNodeId;
+        this.nodeIdsToVisit = [];
+
     },
     onMoving: function (event) {
         this.currentNode.set({
@@ -50,13 +67,31 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
             }
         }
     },
+    isGenerationDone: function(){
+        return this.currentNode.id === this.initialNode.id;
+    },
     setCurrentNode: function (node) {
+
+        this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, node);
+        this.setPath(this.currentNode.id, node.id, 1);
+        this.setPath(node.id, this.currentNode.id, 1);
+        this.visitedNodes.push(node);
+
         this.currentNode = node;
+
         this.set({
             top: node.top,
             left: node.left,
         });
-        this.setCoords()
+        this.setCoords();
+
+        this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== node.id);
+
+        if (this.nodesToVisit.length == 0) {
+            if (this.currentNode.id !== this.initialNode.id) {
+                this.nodesToVisit = [this.initialNode];
+            }
+        }
     },
     isDone: function () {
 

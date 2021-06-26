@@ -1,6 +1,8 @@
 let url = null;
 let canvas = null;
 let chart = null;
+let $generationCounter = null;
+let $bestValue = null;
 
 function resizeWindow() {
     canvas.resize(
@@ -20,6 +22,8 @@ $(function () {
     url = new Url;
     canvas = new Canvas();
     chart = ChartUtils.init("chart");
+    $generationCounter = $(".generation-counter");
+    $bestValue = $(".best-value");
 
     $(window).resize(resizeWindow);
 
@@ -53,8 +57,6 @@ $(function () {
     $('#show-grid').change(() => canvas.toggleShowGrid());
     $('#show-pheromones').change(() => canvas.toggleShowPheromones());
 
-
-
     $('input[name=ant-speed').change(function() {
         canvas.setAntSpeed(this.value)
     });
@@ -74,9 +76,9 @@ $(function () {
     });
 
     canvas.on("generationUpdated", function(data){
-        $(".generation-counter").text(data.generation.toLocaleString("en-US"));
-        $(".best-value").text(data.bestValue.toLocaleString("en-US"));
-        chart.addPoint(data.bestValue);
+        $generationCounter.text(data.generation.toLocaleString("en-US"));
+        $bestValue.text(data.bestTourDistance.toLocaleString("en-US"));
+        // chart.addPoint(data.bestTourDistance);
     });
 
     canvas.addNode({ x: 90, y: 90 })

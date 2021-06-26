@@ -20,7 +20,7 @@ class PseudoRandomProportional extends AntExploration {
             let j = node.id;
 
             tij[j] = Math.pow(this.canvas.environment.getTau(i, j), this.canvas.getAlpha());
-            nij[j] = Math.pow(this.canvas.getNij(i, j), this.canvas.getBeta());
+            nij[j] = Math.pow(this.canvas.environment.getNij(i, j), this.canvas.getBeta());
 
             sum += tij[j] * nij[j];
         });

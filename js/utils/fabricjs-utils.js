@@ -12,6 +12,61 @@ class FabricjsUtils{
 
     static NODE_RADIUS = 15;
 
+    static moveWithAnimation(canvas, el, target, speed) {
+
+        let distances = FabricjsUtils.getEuclideanDistance(el, target);
+
+        var segments = distances / speed;
+
+        return new Promise((resolve, reject) => {
+
+            var render = function () {
+
+                if (FabricjsUtils.isSamePosition(el, target)) {
+                    return resolve(el);
+                }
+
+                var dx = (target.left - el.left);
+                var dy = (target.top - el.top);
+                var dz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
+                var angle = Math.atan2(dx, dy) * (180 / Math.PI);
+
+                var cos0 = dx / dz;
+                var sen0 = dy / dz;
+
+                el.set({
+                    top: el.top += segments * sen0,
+                    left: el.left += segments * cos0,
+                    angle: 180 - angle,
+                });
+                el.setCoords();
+
+                canvas.renderAll();
+
+                setTimeout(render, 1);
+            };
+
+            setTimeout(render, 1);
+        });
+    }
+
+    static isSamePosition(el1, el2) {
+
+        var distX = Math.abs(el1.left - el2.left);
+        var distY = Math.abs(el1.top - el2.top);
+
+        return distX <= 0.1 && distY <= 0.1
+    }
+
+    static getEuclideanDistance(el1, el2){
+
+        var dx = (el1.left - el2.left);
+        var dy = (el1.top - el2.top);
+
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    }
+
     static getEuclideanDistanceFromArray(array) {
 
         let total = 0.0;
@@ -21,14 +76,6 @@ class FabricjsUtils{
         }
 
         return total;
-    }
-
-    static getEuclideanDistance(el1, el2){
-
-        var dx = (el1.left - el2.left);
-        var dy = (el1.top - el2.top);
-
-        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     }
 
     static getDefaultSettings(){
@@ -44,6 +91,12 @@ class FabricjsUtils{
             hasBorders: true,
         }
     }
+
+
+
+
+
+
 
     static makeCircle(x, y){
         return new fabric.Circle({
@@ -68,20 +121,20 @@ class FabricjsUtils{
         });
     }
 
-    static makeEmptyGroup(){
-        return new fabric.Group([], {
-            selectable: false,
-            evented: false,
-        });
-    }
+    // static makeEmptyGroup(){
+    //     return new fabric.Group([], {
+    //         selectable: false,
+    //         evented: false,
+    //     });
+    // }
 
-    static makeGroup(id, items){
+    // static makeGroup(id, items){
 
-        return new fabric.Group(items, {
-            id: id,
-            ...FabricjsUtils.getDefaultSettings(),
-        });
-    }
+    //     return new fabric.Group(items, {
+    //         id: id,
+    //         ...FabricjsUtils.getDefaultSettings(),
+    //     });
+    // }
 
     static makeLine(x1, y1, x2, y2) {
         return new fabric.Line([x1, y1, x2, y2], {
@@ -171,22 +224,22 @@ class FabricjsUtils{
         });
     }
 
-    static makeNode(x, y){
+    // static makeNode(x, y){
 
-        var nodeId = NODE_ID++;
+    //     var nodeId = NODE_ID++;
 
-        var node =  FabricjsUtils.makeCircle(x, y);
+    //     var node =  FabricjsUtils.makeCircle(x, y);
 
-        var label = FabricjsUtils.makeText(x, y, nodeId);
+    //     var label = FabricjsUtils.makeText(x, y, nodeId);
 
-        var group = FabricjsUtils.makeGroup(nodeId, [node, label]);
+    //     var group = FabricjsUtils.makeGroup(nodeId, [node, label]);
 
-        group.set({
-            layer: LAYER.NODE,
-        });
+    //     group.set({
+    //         layer: LAYER.NODE,
+    //     });
 
-        return group;
-    }
+    //     return group;
+    // }
 
     static makeEdge(source, target) {
         return new fabric.Line([source.left, source.top, target.left, target.top], {
@@ -213,6 +266,8 @@ class FabricjsUtils{
             layer: LAYER.ANT,
             initialNode: node,
             currentNode: node,
+            initialNodeId: node.id,
+            currentNodeId: node.id,
             ...FabricjsUtils.getDefaultSettings()
         });
 
