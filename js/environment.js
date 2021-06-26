@@ -27,7 +27,7 @@ class Environment {
         });
 
         if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
-            this.bestTour = bestAnt.visitedNodes;
+            this.bestTour = bestAnt.visitedNodeIds;
             this.bestTourDistance = bestAnt.tourDistance;
         }
     }

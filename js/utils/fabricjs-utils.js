@@ -18,11 +18,16 @@ class FabricjsUtils{
 
         var segments = distances / speed;
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
 
             var render = function () {
 
                 if (FabricjsUtils.isSamePosition(el, target)) {
+                    el.set({
+                        top: target.top,
+                        left: target.left,
+                    });
+                    el.setCoords();
                     return resolve(el);
                 }
 

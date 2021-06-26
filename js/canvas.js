@@ -30,6 +30,7 @@ class Canvas extends fabric.Canvas {
         this.pheromones = [];
         this.cnn = 1.0;
         this.selectedOption;
+        this.index = null;
 
         this.on('mouse:up', (event) => this.onMoveUp(event))
 
@@ -65,10 +66,10 @@ class Canvas extends fabric.Canvas {
         this.nodes.push(node)
         this.add(node);
 
-        //if (this.ants.length <= 1) {
+        // if (this.ants.length <= 0) {
             this.ants.push(ant);
             this.add(ant);
-        //}
+        // }
 
         this.environment.reset();
 
@@ -223,41 +224,39 @@ class Canvas extends fabric.Canvas {
         this.discardActiveObject().renderAll();
     }
 
+    getNumberOfAnts() {
+        return this.ants.length;
+    }
+
+    getNumberOfNodes() {
+        return this.nodes.length;
+    }
+
     setPlay() {
 
-        this.isPlay = true;
-
-        if (this.isRunning) {
+        if (this.isPlay) {
             return;
         }
 
-        this.isRunning = true;
+        this.isPlay = true;
+
         this.lockCanvas(true);
-        // this.updateCanvas(this.antSpeed, false)
         this.moveAnts();
     }
 
     setStep() {
 
-        if (this.isRunning) {
+        if (this.isPlay) {
             return;
         }
 
-        this.isRunning = true;
         this.lockCanvas(true);
-        // this.updateCanvas(this.antSpeed, true)
-
         this.moveAnts();
     }
 
     setStop() {
-        this.isRunning = false;
-    }
-
-    stop() {
-        this.isRunning = false;
+        this.isPlay = false;
         this.lockCanvas(false);
-        this.fire('stopped');
     }
 
     updateGeneration() {
@@ -282,21 +281,39 @@ class Canvas extends fabric.Canvas {
         });
     }
 
-    getNumberOfAnts() {
-        return this.ants.length;
-    }
-
-    getNumberOfNodes() {
-        return this.nodes.length;
-    }
-
     moveAnts() {
+
+        this.fire('running', {});
 
         let that = this;
 
         let promisses = this.ants.map(ant => this.moveAnt(ant));
 
         Promise.all(promisses).then((result) => {
+
+
+            let total = 0;
+
+            result.forEach((a) => {
+                if(a ){
+                    total++;
+                }
+            });
+
+            if(total != 0 && total != that.getNumberOfAnts()){
+
+                if(!that.index){
+                    that.index = result.indexOf(false);
+
+                    console.log(total)
+                    console.log("index", that.index)
+                }
+            }
+
+
+
+
+
 
             var isGenerationDone = result.reduce((acc, v) => acc && v);
 
@@ -306,9 +323,9 @@ class Canvas extends fabric.Canvas {
 
             if (that.isPlay) {
                 that.moveAnts();
+            } else {
+                this.fire('stopped', {});
             }
-
-            that.isRunning = false;
         });
     }
 
@@ -316,9 +333,17 @@ class Canvas extends fabric.Canvas {
 
         let that = this;
 
-        ant.initializeNodesToVisit(this.nodes);
-
         return new Promise((resolve) => {
+
+            if (ant.visitedNodeIds.length == that.getNumberOfNodes()) {
+                ant.nodeIdsToVisit.push(ant.initialNodeId);
+            }
+
+            ant.initializeNodesToVisit(that.nodes);
+
+            if(that.index && that.index == ant.id){
+                console.log(ant.nodeIdsToVisit, ant.visitedNodeIds)
+            }
 
             let nextNodeId = that.aco.getNextNodeId(ant);
             let nextNode = that.findNodeById(nextNodeId);
@@ -326,8 +351,6 @@ class Canvas extends fabric.Canvas {
             FabricjsUtils.moveWithAnimation(that, ant, nextNode, that.antSpeed).then(() => {
 
                 ant.setCurrentNode(nextNode);
-
-                // console.log(ant.visitedNodes.map(e => e.id))
 
                 resolve(ant.isGenerationDone())
             });

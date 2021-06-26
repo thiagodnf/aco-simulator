@@ -3,40 +3,26 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
     initialize: function (element, options) {
         this.callSuper('initialize', element, options);
         this.on('moving', (event) => this.onMoving(event));
-        this.nextNode = null;
-        this.path = {};
-        this.nodesToVisit = [];
-        this.tourDistance = 0.0;
-        this.visitedNodes = [];
 
-        this.initialNodeId = -1;
-        this.currentNodeId = -1;
+        this.tourDistance = 0.0;
+        this.path = {};
+
+        this.nodeIdsToVisit = [];
         this.visitedNodeIds = [];
     },
     initializeNodesToVisit: function(nodes){
 
-        if (this.nodesToVisit.length !== 0) {
+        if (this.nodeIdsToVisit.length !== 0) {
             return;
         }
 
-        // if (this.nodesToVisit.length == 0) {
-        //     if (this.currentNode.id == this.initialNode.id) {
-        //         canvas.environment.setTourDone(this);
-        //     } else {
-        //         this.nodesToVisit = [this.initialNode];
-        //     }
-        // }
-
         this.path = {};
-        this.nodesToVisit = [];
+
         this.tourDistance = 0.0;
 
-        this.currentNode = this.initialNode;
-        this.visitedNodes = [this.initialNode];
-        this.nodesToVisit = nodes.filter(n => n.id !== this.initialNode.id);
-
-        this.currentNodeId = initialNodeId;
-        this.nodeIdsToVisit = [];
+        this.currentNodeId = this.initialNodeId;
+        this.visitedNodeIds = [this.initialNodeId];
+        this.nodeIdsToVisit = nodes.map(n => n.id).filter(id => id != this.initialNodeId);
 
     },
     onMoving: function (event) {
@@ -46,38 +32,18 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         });
         this.currentNode.setCoords()
     },
-    onDone: function (canvas) {
-
-        this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, this.nextNode);
-        this.setPath(this.currentNode.id, this.nextNode.id, 1);
-        this.setPath(this.nextNode.id, this.currentNode.id, 1);
-
-        this.visitedNodes.push(this.nextNode);
-
-        this.setCurrentNode(this.nextNode)
-        this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== this.nextNode.id);
-
-        this.nextNode = null;
-
-        if (this.nodesToVisit.length == 0) {
-            if (this.currentNode.id == this.initialNode.id) {
-                canvas.environment.setTourDone(this);
-            } else {
-                this.nodesToVisit = [this.initialNode];
-            }
-        }
-    },
     isGenerationDone: function(){
-        return this.currentNode.id === this.initialNode.id;
+        return this.currentNodeId == this.initialNodeId;
     },
     setCurrentNode: function (node) {
 
         this.tourDistance += FabricjsUtils.getEuclideanDistance(this.currentNode, node);
         this.setPath(this.currentNode.id, node.id, 1);
         this.setPath(node.id, this.currentNode.id, 1);
-        this.visitedNodes.push(node);
 
-        this.currentNode = node;
+        this.visitedNodeIds.push(node.id);
+
+        this.currentNodeId = node.id;
 
         this.set({
             top: node.top,
@@ -85,53 +51,7 @@ fabric.Ant = fabric.util.createClass(fabric.Image, {
         });
         this.setCoords();
 
-        this.nodesToVisit = this.nodesToVisit.filter(n => n.id !== node.id);
-
-        if (this.nodesToVisit.length == 0) {
-            if (this.currentNode.id !== this.initialNode.id) {
-                this.nodesToVisit = [this.initialNode];
-            }
-        }
-    },
-    isDone: function () {
-
-        if (!this.nextNode) {
-            return true;
-        }
-
-        var distX = Math.abs(this.nextNode.left - this.left);
-        var distY = Math.abs(this.nextNode.top - this.top);
-
-        return distX <= 0.1 && distY <= 0.1
-    },
-    move: function (canvas, speed) {
-
-        if (!this.nextNode) {
-            this.nextNode = canvas.findNodeById(canvas.system.getNextNodeId(this));
-        }
-
-        if (this.isDone()) {
-            this.onDone(canvas)
-            return true;
-        }
-
-        var dx = (this.nextNode.left - this.currentNode.left);
-        var dy = (this.nextNode.top - this.currentNode.top);
-        var dz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-        var segments = dz / speed;
-
-        var angle = Math.atan2(dx, dy) * (180 / Math.PI);
-
-        var cos0 = dx / dz;
-        var sen0 = dy / dz;
-
-        this.set({
-            top: this.top += segments * sen0,
-            left: this.left += segments * cos0,
-            angle: 180 - angle,
-        });
-
-        return false;
+        this.nodeIdsToVisit = this.nodeIdsToVisit.filter(id => id != node.id);
     },
     getPath: function(i, j) {
         if (i < j) {
