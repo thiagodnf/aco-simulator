@@ -5,24 +5,55 @@ class Environment {
         this.bestTour;
         this.tau = {};
         this.canvas = canvas;
+
+        this.nodes = [];
+        this.ants = [];
+        this.alpha = 1.0;
+        this.beta = 1.0;
+
         this.reset();
     }
 
+    getNumberOfAnts() {
+        return this.ants.length;
+    }
+
+    getNumberOfNodes() {
+        return this.nodes.length;
+    }
+
+    getAlpha() {
+        return this.alpha;
+    }
+
+    getBeta() {
+        return this.beta;
+    }
+
     reset() {
+
         this.tau = {};
         this.bestTour = [];
         this.bestTourDistance = Number.NaN;
 
-        for (let i = 0; i < this.canvas.nodes.length; i++) {
-            for (let j = i + 1; j < this.canvas.nodes.length; j++) {
-                this.setTau(i, j, this.canvas.aco.getT0());
+        for (let i = 0; i < this.getNumberOfNodes(); i++) {
+            for (let j = i + 1; j < this.getNumberOfNodes(); j++) {
+                this.setTau(i, j, this.getT0());
             }
         }
     }
 
-    setBestAnt(ants) {
+    getT0() {
 
-        let bestAnt = ants.reduce(function (p, v) {
+        let k = this.getNumberOfAnts();
+        let cnn = this.canvas.cnn;
+
+        return k / cnn;
+    }
+
+    setBestAnt() {
+
+        let bestAnt = this.ants.reduce(function (p, v) {
             return (p.tourDistance < v.tourDistance ? p : v);
         });
 
@@ -32,12 +63,16 @@ class Environment {
         }
     }
 
+    findNodeById(nodeId) {
+        return this.nodes.filter(n => n.id == nodeId)[0];
+    }
+
     getNij(i, j) {
         return 1.0 / this.getTourDistance(i, j);
     }
 
     getTourDistance(i, j) {
-        return FabricjsUtils.getEuclideanDistance(this.canvas.findNodeById(i), this.canvas.findNodeById(j));
+        return FabricjsUtils.getEuclideanDistance(this.findNodeById(i), this.findNodeById(j));
     }
 
     getTau(i, j) {

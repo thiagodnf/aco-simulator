@@ -34,7 +34,6 @@
                             <a class="nav-link" href="https://github.com/thiagodnf/aco-simulator" target="_blank">Source Code</a>
                         </li>
                     </ul>
-                    <!-- <a class="btn btn-success" href="">Share</a> -->
                 </div>
             </div>
         </nav>
@@ -45,19 +44,21 @@
             <div class="container-fluid">
                 <div class="row py-2">
                     <div class="col">
-                        <div class="btn-group me-2">
-                            <button id="play" class="btn btn-sm btn-outline-primary"><i class="fa fa-play me-1"></i>Play</button>
-                            <button id="step" class="btn btn-sm btn-outline-primary"><i class="fa fa-step-forward me-1"></i>Step</button>
-                            <button id="stop" class="btn btn-sm btn-outline-primary" disabled><i class="fa fa-stop me-1"></i>Stop</button>
-                        </div>
-                        <div class="btn-group me-2 ">
-                            <input type="radio" class="btn-check" name="options" id="add-node" autocomplete="off" checked>
-                            <label class="btn btn-sm btn-outline-secondary" for="add-node"><i class="fa fa-plus"></i></label>
-                            <input type="radio" class="btn-check" name="options" id="move-node" autocomplete="off">
-                            <label class="btn btn-sm btn-outline-secondary" for="move-node"><i class="fa fa-mouse-pointer"></i></label>
-                        </div>
-                        <div class="btn-group">
-                            <button id="clear-all" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash me-1"></i>Clear All</button>
+                        <div class="btn-toolbar">
+                            <div class="btn-group me-2">
+                                <button id="play" class="btn btn-sm btn-outline-primary"><i class="fa fa-play me-1"></i>Play</button>
+                                <button id="step" class="btn btn-sm btn-outline-primary"><i class="fa fa-step-forward me-1"></i>Step</button>
+                                <button id="stop" class="btn btn-sm btn-outline-primary" disabled><i class="fa fa-stop me-1"></i>Stop</button>
+                            </div>
+                            <div class="btn-group me-2 ">
+                                <input type="radio" class="btn-check" name="options" id="add-node" autocomplete="off" checked>
+                                <label class="btn btn-sm btn-outline-secondary" for="add-node"><i class="fa fa-plus"></i></label>
+                                <input type="radio" class="btn-check" name="options" id="move-node" autocomplete="off">
+                                <label class="btn btn-sm btn-outline-secondary" for="move-node"><i class="fa fa-mouse-pointer"></i></label>
+                            </div>
+                            <div class="btn-group">
+                                <button id="clear-all" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash me-1"></i>Clear All</button>
+                            </div>
                         </div>
                     </div>
                     <div class="col-auto">
@@ -187,14 +188,12 @@
     <script src="js/aco/selection/ant-selection.js"></script>
     <script src="js/aco/selection/roulette-wheel.js"></script>
     <!-- ACO-->
-    <script src="js/systems/random-system.js"></script>
-    <script src="js/systems/ant-system.js"></script>
-
-
-    <script src="js/ant.js"></script>
-    <script src="js/node.js"></script>
-
-    <script src="js/environment.js"></script>
+    <script src="js/aco/random-system.js"></script>
+    <script src="js/aco/ant-system.js"></script>
+    <!-- Model -->
+    <script src="js/aco/model/ant.js"></script>
+    <script src="js/aco/model/node.js"></script>
+    <script src="js/aco/model/environment.js"></script>
 
     <script src="js/canvas.js"></script>
     <script src="js/events.js"></script>

@@ -20,6 +20,9 @@ function setToolbarActive(active){
 $(function () {
 
     url = new Url;
+
+    RandomUtils.setSeed(url.query.seed);
+
     canvas = new Canvas();
     chart = ChartUtils.init("chart");
     $generationCounter = $(".generation-counter");
@@ -88,7 +91,7 @@ $(function () {
 
 
 
-    RandomUtils.setSeed(url.query.seed);
+
 
     // let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());
 

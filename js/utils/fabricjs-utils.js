@@ -129,21 +129,6 @@ class FabricjsUtils{
         });
     }
 
-    // static makeEmptyGroup(){
-    //     return new fabric.Group([], {
-    //         selectable: false,
-    //         evented: false,
-    //     });
-    // }
-
-    // static makeGroup(id, items){
-
-    //     return new fabric.Group(items, {
-    //         id: id,
-    //         ...FabricjsUtils.getDefaultSettings(),
-    //     });
-    // }
-
     static makeLine(x1, y1, x2, y2) {
         return new fabric.Line([x1, y1, x2, y2], {
             stroke: 'lightgray',
@@ -182,22 +167,22 @@ class FabricjsUtils{
         for (var i = 0; i < nodes.length; i++) {
             for (var j = i + 1; j < nodes.length; j++) {
 
-                let n1 = nodes[i];
-                let n2 = nodes[j];
-                let tau = environment.getTau(n1.id, n2.id);
+                // let n1 = nodes[i];
+                // let n2 = nodes[j];
+                // let tau = environment.getTau(n1.id, n2.id);
 
-                let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
+                // let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
 
-                let nTau = NormalizeUtils.normalize(tau, p.min, p.max, 0, 2);
+                // let nTau = NormalizeUtils.normalize(tau, p.min, p.max, 0, 2);
 
-                if (Number.isNaN(nTau)) {
-                    nTau = 2;
-                }
+                // if (Number.isNaN(nTau)) {
+                //     nTau = 2;
+                // }
 
-                edge.stroke = 'black';
-                edge.strokeWidth = nTau;
+                // edge.stroke = 'black';
+                // edge.strokeWidth = nTau;
 
-                items.push(edge);
+                // items.push(edge);
             }
         }
 

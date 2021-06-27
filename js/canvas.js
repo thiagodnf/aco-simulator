@@ -25,8 +25,8 @@ class Canvas extends fabric.Canvas {
         this.bestSolution = null;
         this.generation = 0;
 
-        this.nodes = [];
-        this.ants = [];
+        // this.nodes = [];
+        // this.ants = [];
         this.pheromones = [];
         this.cnn = 1.0;
         this.selectedOption;
@@ -35,7 +35,7 @@ class Canvas extends fabric.Canvas {
         this.on('mouse:up', (event) => this.onMoveUp(event))
 
         this.environment = new Environment(this);
-        this.aco = new AntSystem(this);
+        this.aco = new AntSystem(this.environment);
     }
 
     onMoveUp(event) {
@@ -56,18 +56,18 @@ class Canvas extends fabric.Canvas {
             return;
         }
 
-        if (this.nodes.length >= this.nodesLimit) {
+        if (this.environment.getNumberOfNodes() >= this.nodesLimit) {
             return;
         }
 
         var node = new aco.Node(pos.x, pos.y);
         var ant = FabricjsUtils.makeAnt(node);
 
-        this.nodes.push(node)
+        this.environment.nodes.push(node)
         this.add(node);
 
         // if (this.ants.length <= 0) {
-            this.ants.push(ant);
+            this.environment.ants.push(ant);
             this.add(ant);
         // }
 
@@ -100,14 +100,10 @@ class Canvas extends fabric.Canvas {
         return selected;
     }
 
-    findNodeById(nodeId) {
-        return this.nodes.filter(n => n.id === nodeId)[0];
-    }
-
     upateCnn() {
 
-        let tour = NearestNeighbour.solve(this);
-        let nodes = tour.map(e => this.findNodeById(e));
+        let tour = NearestNeighbour.solve(this.environment);
+        let nodes = tour.map(e => this.environment.findNodeById(e));
 
         this.cnn = FabricjsUtils.getEuclideanDistanceFromArray(nodes)
     }
@@ -143,7 +139,7 @@ class Canvas extends fabric.Canvas {
 
     updatePheromones() {
         this.remove(this.pheromones);
-        this.pheromones = FabricjsUtils.makeEdges(this.nodes, this.environment);
+        this.pheromones = FabricjsUtils.makeEdges(this.environment.nodes, this.environment);
 
         if (this.showPheromones) {
             this.add(this.pheromones);
@@ -206,30 +202,14 @@ class Canvas extends fabric.Canvas {
         this.ants = [];
     }
 
-    getAlpha() {
-        return 2.0;
-    }
-
-    getBeta() {
-        return 1.0;
-    }
-
     lockCanvas(lock) {
-        this.ants.forEach((ant) => {
+        this.environment.ants.forEach((ant) => {
             ant.set({
                 selectable: !lock,
                 evented: !lock
             });
         });
         this.discardActiveObject().renderAll();
-    }
-
-    getNumberOfAnts() {
-        return this.ants.length;
-    }
-
-    getNumberOfNodes() {
-        return this.nodes.length;
     }
 
     setPlay() {
@@ -263,7 +243,7 @@ class Canvas extends fabric.Canvas {
 
         this.generation++;
 
-        this.environment.setBestAnt(this.ants);
+        this.environment.setBestAnt();
 
         if (this.bestSolution) {
             this.remove(this.bestSolution);
@@ -287,40 +267,9 @@ class Canvas extends fabric.Canvas {
 
         let that = this;
 
-        let promisses = this.ants.map(ant => this.moveAnt(ant));
+        let promisses = this.environment.ants.map(ant => this.moveAnt(ant));
 
         Promise.all(promisses).then((result) => {
-
-
-            let total = 0;
-
-            result.forEach((a) => {
-                if(a ){
-                    total++;
-                }
-            });
-
-            if(total != 0 && total != that.getNumberOfAnts()){
-
-                that.ants.forEach(ant => {
-                    // console.log("nodeIdsToVisit", ant.nodeIdsToVisit)
-                    console.log(ant.id, ant.visitedNodeIds)
-                })
-
-                throw new Error("oi")
-
-                if(!that.index){
-                    that.index = result.indexOf(false);
-
-                    console.log(total)
-                    console.log("index", that.index)
-                }
-            }
-
-
-
-
-
 
             var isGenerationDone = result.reduce((acc, v) => acc && v);
 
@@ -342,14 +291,14 @@ class Canvas extends fabric.Canvas {
 
         return new Promise((resolve) => {
 
-            if (ant.visitedNodeIds.length == that.getNumberOfNodes()) {
+            if (ant.visitedNodeIds.length == that.environment.getNumberOfNodes()) {
                 ant.nodeIdsToVisit.push(ant.initialNodeId);
             }
 
-            ant.initializeNodesToVisit(that.nodes);
+            ant.initializeNodesToVisit(that.environment.nodes);
 
             let nextNodeId = that.aco.getNextNodeId(ant);
-            let nextNode = that.findNodeById(nextNodeId);
+            let nextNode = that.environment.findNodeById(nextNodeId);
 
             FabricjsUtils.moveWithAnimation(that, ant, nextNode, that.antSpeed).then(() => {
 

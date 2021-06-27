@@ -1,8 +1,8 @@
 class PseudoRandomProportional extends AntExploration {
 
-    constructor(canvas, selection) {
+    constructor(environment, selection) {
         super();
-        this.canvas = canvas;
+        this.environment = environment;
         this.selection = selection;
     }
 
@@ -12,18 +12,18 @@ class PseudoRandomProportional extends AntExploration {
 
         let sum = 0.0;
 
-        let tij = new Array(this.canvas.getNumberOfNodes()).fill(0);
-        let nij = new Array(this.canvas.getNumberOfNodes()).fill(0);
+        let tij = new Array(this.environment.getNumberOfNodes()).fill(0);
+        let nij = new Array(this.environment.getNumberOfNodes()).fill(0);
 
         ant.nodeIdsToVisit.forEach(j => {
 
-            tij[j] = Math.pow(this.canvas.environment.getTau(i, j), this.canvas.getAlpha());
-            nij[j] = Math.pow(this.canvas.environment.getNij(i, j), this.canvas.getBeta());
+            tij[j] = Math.pow(this.environment.getTau(i, j), this.environment.getAlpha());
+            nij[j] = Math.pow(this.environment.getNij(i, j), this.environment.getBeta());
 
             sum += tij[j] * nij[j];
         });
 
-        let probability = new Array(this.canvas.getNumberOfNodes()).fill(0);
+        let probability = new Array(this.environment.getNumberOfNodes()).fill(0);
 
         let sumProbability = 0.0;
 

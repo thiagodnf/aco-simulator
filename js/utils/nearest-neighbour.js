@@ -1,13 +1,13 @@
 class NearestNeighbour {
 
-    static solve(p) {
+    static solve(environment) {
 
         let citiesToVisit = [];
         let solution = [];
 
-        let currentCity = RandomUtils.nextInt(0, p.getNumberOfNodes() - 1);
+        let currentCity = RandomUtils.nextInt(0, environment.getNumberOfNodes() - 1);
 
-        for (let i = 0; i < p.getNumberOfNodes(); i++) {
+        for (let i = 0; i < environment.getNumberOfNodes(); i++) {
             if (i != currentCity) {
                 citiesToVisit.push(i);
             }
@@ -23,7 +23,7 @@ class NearestNeighbour {
 
             citiesToVisit.forEach(j => {
 
-                let distance = p.environment.getTourDistance(currentCity, j);
+                let distance = environment.getTourDistance(currentCity, j);
 
                 if (distance < minDistance) {
                     minDistance = distance;
@@ -38,8 +38,7 @@ class NearestNeighbour {
             currentCity = nextCity;
         }
 
-        //Add the start city in the solution
-        solution.push(solution[0]);
+        solution.push(solution[0]); //Add the start city in the solution
 
         return solution;
     }

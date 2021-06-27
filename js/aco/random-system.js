@@ -1,7 +1,7 @@
 class RandomSystem{
 
-    constructor(canvas){
-        this.canvas = canvas;
+    constructor(environment){
+        this.environment = environment;
     }
 
     getNextNodeId(ant){
