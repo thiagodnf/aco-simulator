@@ -256,40 +256,61 @@ class Canvas extends fabric.Canvas {
 
         let that = this;
 
-        let promisses = this.environment.ants.map(ant => this.moveAnt(ant));
+        let segments = [];
+        let nextNodes = [];
 
-        Promise.all(promisses).then((result) => {
-
-            var isGenerationDone = result.reduce((acc, v) => acc && v);
-
-            if (isGenerationDone) {
-                that.updateGeneration();
-            }
-
-            if (that.isPlay) {
-                that.moveAnts();
-            } else {
-                this.fire('stopped', {});
-            }
-        });
-    }
-
-    moveAnt(ant) {
-
-        let that = this;
-
-        return new Promise((resolve) => {
+        that.environment.ants.forEach(ant => {
 
             ant.initializeNodesToVisit(that.environment);
 
+            let currentNode = that.environment.findNodeById(ant.currentNodeId);
             let nextNode = that.aco.getNextNode(ant);
 
-            FabricjsUtils.moveWithAnimation(that, ant, nextNode, that.antSpeed).then(() => {
+            let distances = FabricjsUtils.getEuclideanDistance(currentNode, nextNode);
 
-                ant.setCurrentNode(nextNode);
-
-                resolve(ant.isGenerationDone())
-            });
+            segments.push(distances / that.antSpeed);
+            nextNodes.push(nextNode);
         });
+
+        var render = function () {
+
+            let moveDone = [];
+
+            that.environment.ants.forEach((ant, i) => {
+                moveDone.push(that.moveAnt(ant, nextNodes[i], segments[i]));
+            });
+
+            canvas.renderAll();
+
+            let isMoveDone = moveDone.reduce((acc, v) => acc && v);
+
+            if (isMoveDone) {
+
+                if (that.environment.isGenerationDone()) {
+                    that.updateGeneration();
+                }
+
+                if (that.isPlay) {
+                    that.moveAnts();
+                } else {
+                    that.fire('stopped', {});
+                }
+            } else {
+                setTimeout(render, 1);
+            }
+        };
+
+        setTimeout(render, 1);
+    }
+
+    moveAnt(ant, nextNode, segments) {
+
+        let isMoveDone = FabricjsUtils.move(ant, nextNode, segments);
+
+        if (isMoveDone) {
+            ant.setCurrentNode(nextNode);
+        }
+
+        return isMoveDone;
     }
 }

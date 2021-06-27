@@ -121,8 +121,21 @@
                                         <input class="form-check-input" type="checkbox" value="" id="show-pheromones">
                                         <label class="form-check-label" for="show-pheromones">Show Pheromones</label>
                                     </div>
-
-
+                                    <hr/>
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <label for="alpha" class="form-label" title="Relative influence of the pheromone">&alpha;</label>
+                                            <input type="number" class="form-control form-control-sm" id="alpha" step="0.1" min="0.0" value="1.0">
+                                        </div>
+                                        <div class="col">
+                                            <label for="beta" class="form-label" title="Relative influence of the heuristic information">&beta;</label>
+                                            <input type="number" class="form-control form-control-sm" id="beta" step="0.1" min="0.0" value="2.0">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label for="rho" class="form-label" title="pheromone trail evaporation">&rho;&nbsp;(Evaporation)</label>
+                                        <input type="number" class="form-control form-control-sm" id="rho" step="0.1" min="0.0" max="1.0" value="0.1">
+                                    </div>
                                 </form>
                             </div>
                         </div>

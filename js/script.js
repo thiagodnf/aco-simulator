@@ -60,6 +60,10 @@ $(function () {
     $('#show-grid').change(() => canvas.toggleShowGrid());
     $('#show-pheromones').change(() => canvas.toggleShowPheromones());
 
+    $('#alpha').change(function(){canvas.environment.alpha = $( this ).val();});
+    $('#beta').change(function(){canvas.environment.beta = $( this ).val();});
+    $('#rho').change(function(){canvas.environment.rho = $( this ).val();});
+
     $('input[name=ant-speed').change(function() {
         canvas.setAntSpeed(this.value)
     });
@@ -79,7 +83,7 @@ $(function () {
     canvas.on("generationUpdated", function(data){
         $generationCounter.text(data.generation.toLocaleString("en-US"));
         $bestValue.text(data.bestTourDistance.toLocaleString("en-US"));
-        // chart.addPoint(data.bestTourDistance);
+        chart.addPoint(data.bestTourDistance);
     });
 
     canvas.addNode({ x: 90, y: 90 })

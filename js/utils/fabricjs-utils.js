@@ -12,51 +12,32 @@ class FabricjsUtils{
 
     static NODE_RADIUS = 15;
 
-    static moveWithAnimation(canvas, el, target, speed) {
+    static move(el, target, segments) {
 
-        let distances = FabricjsUtils.getEuclideanDistance(el, target);
+        if (FabricjsUtils.isSamePosition(el, target)) {
+            return true;
+        }
 
-        var segments = distances / speed;
+        var dx = (target.left - el.left);
+        var dy = (target.top - el.top);
+        var dz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+        if(dz == 0){
+            throw new Error("oi[s")
+        }
 
-        return new Promise((resolve) => {
+        var angle = Math.atan2(dx, dy) * (180 / Math.PI);
 
-            var render = function () {
+        var cos0 = dx / dz;
+        var sen0 = dy / dz;
 
-                if (FabricjsUtils.isSamePosition(el, target)) {
-                    el.set({
-                        top: target.top,
-                        left: target.left,
-                    });
-                    el.setCoords();
-                    return resolve(el);
-                }
-
-                var dx = (target.left - el.left);
-                var dy = (target.top - el.top);
-                var dz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-                if(dz == 0){
-                    throw new Error("oi[s")
-                }
-
-                var angle = Math.atan2(dx, dy) * (180 / Math.PI);
-
-                var cos0 = dx / dz;
-                var sen0 = dy / dz;
-
-                el.set({
-                    top: el.top += segments * sen0,
-                    left: el.left += segments * cos0,
-                    angle: 180 - angle,
-                });
-                el.setCoords();
-
-                canvas.renderAll();
-
-                setTimeout(render, 1);
-            };
-
-            setTimeout(render, 1);
+        el.set({
+            top: el.top += segments * sen0,
+            left: el.left += segments * cos0,
+            angle: 180 - angle,
         });
+        el.setCoords();
+
+        return false;
     }
 
     static isSamePosition(el1, el2) {

@@ -85,6 +85,10 @@ class Environment {
         this.updateAnts();
     }
 
+    isGenerationDone(){
+        return this.ants.map(e => e.isGenerationDone()).reduce((acc, v) => acc && v);
+    }
+
     addAnt(ant){
         this.ants.push(ant);
     }
