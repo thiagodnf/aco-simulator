@@ -75,17 +75,6 @@ class FabricjsUtils{
         return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
     }
 
-    static getEuclideanDistanceFromArray(array) {
-
-        let total = 0.0;
-
-        for (let i = 0; i < array.length - 1; i++) {
-            total += FabricjsUtils.getEuclideanDistance(array[i], array[i + 1]);
-        }
-
-        return total;
-    }
-
     static getDefaultSettings(){
         return {
             originX: 'center',
@@ -99,12 +88,6 @@ class FabricjsUtils{
             hasBorders: true,
         }
     }
-
-
-
-
-
-
 
     static makeCircle(x, y){
         return new fabric.Circle({
@@ -158,31 +141,31 @@ class FabricjsUtils{
         });
     }
 
-    static makeEdges(nodes, environment) {
+    static makeEdges(environment) {
 
         var items = [];
 
-        let p = ArrayUtils.minMax(Object.values(environment.tau));
+        let p = ArrayUtils.minAndMax(environment.tau);
 
-        for (var i = 0; i < nodes.length; i++) {
-            for (var j = i + 1; j < nodes.length; j++) {
+        for (var i = 0; i < environment.getNumberOfNodes(); i++) {
+            for (var j = i + 1; j < environment.getNumberOfNodes(); j++) {
 
-                // let n1 = nodes[i];
-                // let n2 = nodes[j];
-                // let tau = environment.getTau(n1.id, n2.id);
+                let n1 = environment.findNodeById(i);
+                let n2 = environment.findNodeById(j);
+                let tau = environment.getTau(i, j);
 
-                // let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
+                let edge = FabricjsUtils.makeLine(n1.left - 5, n1.top - 5, n2.left - 5, n2.top - 5);
 
-                // let nTau = NormalizeUtils.normalize(tau, p.min, p.max, 0, 2);
+                let nTau = NormalizeUtils.normalize(tau, p.min, p.max, 0, 2);
 
-                // if (Number.isNaN(nTau)) {
-                //     nTau = 2;
-                // }
+                if (Number.isNaN(nTau)) {
+                    nTau = 2;
+                }
 
-                // edge.stroke = 'black';
-                // edge.strokeWidth = nTau;
+                edge.stroke = 'black';
+                edge.strokeWidth = nTau;
 
-                // items.push(edge);
+                items.push(edge);
             }
         }
 
@@ -193,16 +176,16 @@ class FabricjsUtils{
         });
     }
 
-    static makeBestSolution(nodes){
+    static makeBestSolution(environment){
 
-        var items = [];
+        let items = [];
 
-        for (var i = 0; i < nodes.length - 1; i++) {
+        for (var i = 0; i < environment.bestTour.length - 1; i++) {
 
-            let source = nodes[i];
-            let target = nodes[i + 1];
+            let ni = environment.findNodeById(environment.bestTour[i]);
+            let nj = environment.findNodeById(environment.bestTour[i + 1]);
 
-            let line = FabricjsUtils.makeLine(source.left, source.top, target.left, target.top);
+            let line = FabricjsUtils.makeLine(ni.left, ni.top, nj.left, nj.top);
 
             line.stroke = 'red';
             line.strokeWidth = 2;

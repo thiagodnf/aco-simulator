@@ -4,12 +4,11 @@ class Environment {
 
         this.aco = aco;
 
-        this.bestTour;
-        this.bestTourDistance;
+        this.bestTour = [];
+        this.bestTourDistance = Number.NaN;
 
         this.tau = [];
         this.distances = [];
-
 
         this.nodes = [];
         this.ants = [];
@@ -18,7 +17,9 @@ class Environment {
         this.alpha = 1.0;
         this.beta = 2.0;
 
-        this.reset();
+        this.rho = 0.1;
+        this.omega = 0.1;
+        this.q0 = 0.9;
     }
 
     updateDistances(){
@@ -39,16 +40,30 @@ class Environment {
         }
     }
 
+    updateBestTour() {
+
+        let that = this;
+
+        this.ants.map(ant => ant.tourDistance = that.evaluate(ant.visitedNodeIds));
+
+        let bestAnt = this.ants.reduce(function (p, v) {
+            return (p.tourDistance < v.tourDistance ? p : v);
+        });
+
+        if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
+            this.bestTour = bestAnt.visitedNodeIds;
+            this.bestTourDistance = bestAnt.tourDistance;
+        }
+    }
+
     upateCnn() {
+        this.cnn = this.evaluate(NearestNeighbour.solve(this));
+    }
 
-        let tour = NearestNeighbour.solve(this);
-
-        this.cnn = this.evaluate(tour);
-        console.log(tour)
-        console.log(this.cnn)
-        // let nodes = tour.map(e => this.environment.findNodeById(e));
-
-        // this.cnn = FabricjsUtils.getEuclideanDistanceFromArray(nodes)
+    updateAnts(){
+        this.ants.forEach(ant => {
+            ant.path = ArrayUtils.newMatrix(this.getNumberOfNodes(), this.getNumberOfNodes(), 0);
+        });
     }
 
     getNumberOfAnts() {
@@ -60,31 +75,18 @@ class Environment {
     }
 
     addNode(node){
+
+        this.bestTour = [];
+        this.bestTourDistance = Number.NaN;
+
         this.nodes.push(node);
         this.updateDistances();
         this.upateCnn();
-        this.reset();
+        this.updateAnts();
     }
 
     addAnt(ant){
         this.ants.push(ant);
-    }
-
-    reset() {
-        this.bestTour = [];
-        this.bestTourDistance = Number.NaN;
-    }
-
-    setBestAnt() {
-
-        let bestAnt = this.ants.reduce(function (p, v) {
-            return (p.tourDistance < v.tourDistance ? p : v);
-        });
-
-        if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
-            this.bestTour = bestAnt.visitedNodeIds;
-            this.bestTourDistance = bestAnt.tourDistance;
-        }
     }
 
     evaluate(array) {
@@ -110,11 +112,11 @@ class Environment {
         return this.distances[i][j];
     }
 
-    getTau(i, j) {
-        return this.tau[i, j];
+    setTau(i, j, value) {
+        return this.tau[i][j] = value
     }
 
-    setTau(i, j, value) {
-        return this.tau[i, j] = value
+    getTau(i, j) {
+        return this.tau[i][j];
     }
 }

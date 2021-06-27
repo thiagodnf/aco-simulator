@@ -12,10 +12,19 @@ class ArrayUtils {
         }
     }
 
-    static minMax(array) {
+    static minAndMax(matrix) {
+
+        let min = [];
+        let max = [];
+
+        for(let i=0;i<matrix.length;i++){
+            min.push(Math.min(...matrix[i]));
+            max.push(Math.max(...matrix[i]));
+        }
+
         return {
-            min: Math.min(...array),
-            max: Math.max(...array)
+            min: Math.min(...min),
+            max: Math.max(...max)
         }
     }
 }

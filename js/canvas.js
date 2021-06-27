@@ -69,8 +69,6 @@ class Canvas extends fabric.Canvas {
 
         this.aco.initializeTau();
 
-        console.log(this.environment)
-
         this.updatePheromones();
 
         this.sortCanvas();
@@ -129,13 +127,36 @@ class Canvas extends fabric.Canvas {
 
     updatePheromones() {
         this.remove(this.pheromones);
-        this.pheromones = FabricjsUtils.makeEdges(this.environment.nodes, this.environment);
+        this.pheromones = FabricjsUtils.makeEdges(this.environment);
 
         if (this.showPheromones) {
             this.add(this.pheromones);
         }
 
         this.sortCanvas();
+    }
+
+    updateGeneration() {
+
+        this.generation++;
+
+        this.environment.updateBestTour();
+
+        if (this.bestSolution) {
+            this.remove(this.bestSolution);
+        }
+
+        this.bestSolution = FabricjsUtils.makeBestSolution(this.environment)
+        this.add(this.bestSolution);
+
+        this.aco.runGlobalPheromoneUpdate();
+
+        this.updatePheromones();
+
+        this.fire('generationUpdated', {
+            generation: this.generation,
+            bestTourDistance: this.environment.bestTourDistance
+        });
     }
 
     toggleShowGrid() {
@@ -229,28 +250,6 @@ class Canvas extends fabric.Canvas {
         this.lockCanvas(false);
     }
 
-    updateGeneration() {
-
-        this.generation++;
-
-        this.environment.setBestAnt();
-
-        if (this.bestSolution) {
-            this.remove(this.bestSolution);
-        }
-
-        this.bestSolution = FabricjsUtils.makeBestSolution(this.environment.bestTour)
-        this.add(this.bestSolution);
-
-        this.aco.runGlobalUpdateRule();
-        this.updatePheromones();
-
-        this.fire('generationUpdated', {
-            generation: this.generation,
-            bestTourDistance: this.environment.bestTourDistance
-        });
-    }
-
     moveAnts() {
 
         this.fire('running', {});
@@ -281,14 +280,9 @@ class Canvas extends fabric.Canvas {
 
         return new Promise((resolve) => {
 
-            if (ant.visitedNodeIds.length == that.environment.getNumberOfNodes()) {
-                ant.nodeIdsToVisit.push(ant.initialNodeId);
-            }
+            ant.initializeNodesToVisit(that.environment);
 
-            ant.initializeNodesToVisit(that.environment.nodes);
-
-            let nextNodeId = that.aco.getNextNodeId(ant);
-            let nextNode = that.environment.findNodeById(nextNodeId);
+            let nextNode = that.aco.getNextNode(ant);
 
             FabricjsUtils.moveWithAnimation(that, ant, nextNode, that.antSpeed).then(() => {
 
