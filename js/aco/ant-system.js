@@ -1,20 +1,21 @@
-class AntSystem extends RandomSystem {
+class AntSystem extends ACO {
 
-    constructor(environment){
+    constructor(environment) {
         super(environment);
         this.exploration = new PseudoRandomProportional(environment, new RouletteWheel());
         this.Q = 1.0;
     }
 
+
     getT0() {
 
-     	let k = this.environment.getNumberOfAnts();
+        let k = this.environment.getNumberOfAnts();
         let cnn = this.environment.cnn;
 
-		return k / cnn;
-	}
+        return k / cnn;
+    }
 
-    getNextNodeId(ant){
+    getNextNodeId(ant) {
         return this.exploration.doExploration(ant, ant.currentNodeId);
     }
 
@@ -38,32 +39,32 @@ class AntSystem extends RandomSystem {
         }
     }
 
-    evaporationGetTheNewValue(i, j){
+    evaporationGetTheNewValue(i, j) {
 
         var RHO = 0.1;
 
         return (1.0 - RHO) * this.environment.getTau(i, j);
     }
 
-    depositGetTheNewValue(i, j){
+    depositGetTheNewValue(i, j) {
 
         var RHO = 0.1;
 
         return this.environment.getTau(i, j) + RHO * this.getDeltaTau(i, j);
     }
 
-    getDeltaTau(i, j){
+    getDeltaTau(i, j) {
 
         let Q = 1.0;
 
         let deltaTau = 0.0;
 
         this.environment.ants.forEach(ant => {
-			if (ant.getPath(i, j) == 1) {
-				deltaTau += (Q / ant.tourDistance);
-			}
-		});
+            if (ant.getPath(i, j) == 1) {
+                deltaTau += (Q / ant.tourDistance);
+            }
+        });
 
-		return deltaTau;
+        return deltaTau;
     }
 }

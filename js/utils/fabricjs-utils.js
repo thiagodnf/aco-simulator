@@ -217,23 +217,6 @@ class FabricjsUtils{
         });
     }
 
-    // static makeNode(x, y){
-
-    //     var nodeId = NODE_ID++;
-
-    //     var node =  FabricjsUtils.makeCircle(x, y);
-
-    //     var label = FabricjsUtils.makeText(x, y, nodeId);
-
-    //     var group = FabricjsUtils.makeGroup(nodeId, [node, label]);
-
-    //     group.set({
-    //         layer: LAYER.NODE,
-    //     });
-
-    //     return group;
-    // }
-
     static makeEdge(source, target) {
         return new fabric.Line([source.left, source.top, target.left, target.top], {
             fill: 'black',
@@ -244,29 +227,5 @@ class FabricjsUtils{
             source: source,
             target: target
         });
-    }
-
-    static makeAnt(node){
-
-        var antId = ANT_ID++;
-
-        var img = document.getElementById('ant-image');
-
-        var ant = new fabric.Ant(img, {
-            id: antId,
-            left: node.left,
-            top: node.top,
-            layer: LAYER.ANT,
-            initialNode: node,
-            currentNode: node,
-            initialNodeId: node.id,
-            currentNodeId: node.id,
-            ...FabricjsUtils.getDefaultSettings()
-        });
-
-        ant.scaleToWidth(FabricjsUtils.NODE_RADIUS * 2);
-        ant.scaleToHeight(FabricjsUtils.NODE_RADIUS * 2);
-
-        return ant;
     }
 }

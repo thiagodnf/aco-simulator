@@ -1,5 +1,9 @@
 class ArrayUtils {
 
+    static newMatrix(lines, columns, initialValue = 0) {
+        return Array(lines).fill().map(() => Array(columns).fill(initialValue));
+    }
+
     static shuffle(array) {
 
         for (let i = array.length - 1; i > 0; i--) {

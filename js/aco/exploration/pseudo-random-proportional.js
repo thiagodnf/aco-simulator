@@ -17,8 +17,8 @@ class PseudoRandomProportional extends AntExploration {
 
         ant.nodeIdsToVisit.forEach(j => {
 
-            tij[j] = Math.pow(this.environment.getTau(i, j), this.environment.getAlpha());
-            nij[j] = Math.pow(this.environment.getNij(i, j), this.environment.getBeta());
+            tij[j] = Math.pow(this.environment.getTau(i, j), this.environment.alpha);
+            nij[j] = Math.pow(this.environment.getNij(i, j), this.environment.beta);
 
             sum += tij[j] * nij[j];
         });

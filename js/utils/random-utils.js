@@ -14,7 +14,7 @@ class RandomUtils {
         return RandomUtils.chance.integer({ min: min, max: max })
     }
 
-    static nextFloat(min, max, fixed = 8) {
+    static nextFloat(min, max, fixed = 15) {
         return RandomUtils.chance.floating({ min: min, max: max, fixed: fixed });
     }
 

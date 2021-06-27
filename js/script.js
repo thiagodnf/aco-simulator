@@ -88,9 +88,6 @@ $(function () {
     canvas.addNode({ x: 90, y: 180 })
 
 
-
-
-
     // let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());
 
     // nodes.forEach((node) =>{

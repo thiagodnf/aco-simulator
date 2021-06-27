@@ -24,10 +24,7 @@ class Canvas extends fabric.Canvas {
         this.bestSolution = null;
         this.generation = 0;
 
-        // this.nodes = [];
-        // this.ants = [];
         this.pheromones = [];
-        this.cnn = 1.0;
         this.selectedOption;
         this.index = null;
 
@@ -62,23 +59,22 @@ class Canvas extends fabric.Canvas {
         }
 
         var node = new aco.Node(pos.x, pos.y);
-        // var ant = FabricjsUtils.makeAnt(node);
         var ant = new aco.Ant(node);
 
-        this.environment.nodes.push(node)
         this.add(node);
+        this.add(ant);
 
-        // if (this.ants.length <= 0) {
-            this.environment.ants.push(ant);
-            this.add(ant);
-        // }
+        this.environment.addNode(node);
+        this.environment.addAnt(ant);
 
-        this.environment.reset();
+        this.aco.initializeTau();
+
+        console.log(this.environment)
 
         this.updatePheromones();
-        this.upateCnn();
 
         this.sortCanvas();
+
         this.fire('addedNode', [node]);
     }
 
@@ -100,14 +96,6 @@ class Canvas extends fabric.Canvas {
         });
 
         return selected;
-    }
-
-    upateCnn() {
-
-        let tour = NearestNeighbour.solve(this.environment);
-        let nodes = tour.map(e => this.environment.findNodeById(e));
-
-        this.cnn = FabricjsUtils.getEuclideanDistanceFromArray(nodes)
     }
 
     replace(oldEl, newEl) {

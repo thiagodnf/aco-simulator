@@ -1,17 +1,54 @@
 class Environment {
 
-    constructor(canvas) {
-        this.bestTourDistance;
+    constructor(aco) {
+
+        this.aco = aco;
+
         this.bestTour;
-        this.tau = {};
-        this.canvas = canvas;
+        this.bestTourDistance;
+
+        this.tau = [];
+        this.distances = [];
+
 
         this.nodes = [];
         this.ants = [];
+
+        this.cnn = 1.0;
         this.alpha = 1.0;
-        this.beta = 1.0;
+        this.beta = 2.0;
 
         this.reset();
+    }
+
+    updateDistances(){
+
+        let size = this.getNumberOfNodes();
+
+        this.distances = ArrayUtils.newMatrix(size, size, 0);
+
+        for (let i = 0; i < size; i++) {
+
+            for (let j = i + 1; j < size; j++) {
+
+                let ni = this.findNodeById(i);
+                let nj = this.findNodeById(j);
+
+                this.distances[i][j] = this.distances[j][i] = FabricjsUtils.getEuclideanDistance(ni, nj);
+            }
+        }
+    }
+
+    upateCnn() {
+
+        let tour = NearestNeighbour.solve(this);
+
+        this.cnn = this.evaluate(tour);
+        console.log(tour)
+        console.log(this.cnn)
+        // let nodes = tour.map(e => this.environment.findNodeById(e));
+
+        // this.cnn = FabricjsUtils.getEuclideanDistanceFromArray(nodes)
     }
 
     getNumberOfAnts() {
@@ -22,33 +59,20 @@ class Environment {
         return this.nodes.length;
     }
 
-    getAlpha() {
-        return this.alpha;
+    addNode(node){
+        this.nodes.push(node);
+        this.updateDistances();
+        this.upateCnn();
+        this.reset();
     }
 
-    getBeta() {
-        return this.beta;
+    addAnt(ant){
+        this.ants.push(ant);
     }
 
     reset() {
-
-        this.tau = {};
         this.bestTour = [];
         this.bestTourDistance = Number.NaN;
-
-        for (let i = 0; i < this.getNumberOfNodes(); i++) {
-            for (let j = i + 1; j < this.getNumberOfNodes(); j++) {
-                this.setTau(i, j, this.getT0());
-            }
-        }
-    }
-
-    getT0() {
-
-        let k = this.getNumberOfAnts();
-        let cnn = this.canvas.cnn;
-
-        return k / cnn;
     }
 
     setBestAnt() {
@@ -63,31 +87,34 @@ class Environment {
         }
     }
 
+    evaluate(array) {
+
+        let total = 0.0;
+
+        for (let i = 0; i < array.length - 1; i++) {
+            total += this.getDistance(array[i], array[i + 1]);
+        }
+
+        return total;
+    }
+
     findNodeById(nodeId) {
         return this.nodes.filter(n => n.id == nodeId)[0];
     }
 
     getNij(i, j) {
-        return 1.0 / this.getTourDistance(i, j);
+        return 1.0 / this.getDistance(i, j);
     }
 
-    getTourDistance(i, j) {
-        return FabricjsUtils.getEuclideanDistance(this.findNodeById(i), this.findNodeById(j));
+    getDistance(i, j) {
+        return this.distances[i][j];
     }
 
     getTau(i, j) {
-        if (i < j) {
-            return this.tau[i + "_" + j];
-        } else {
-            return this.tau[j + "_" + i];
-        }
+        return this.tau[i, j];
     }
 
     setTau(i, j, value) {
-        if (i < j) {
-            this.tau[i + "_" + j] = value;
-        } else {
-            this.tau[j + "_" + i] = value;
-        }
+        return this.tau[i, j] = value
     }
 }

@@ -23,7 +23,7 @@ class NearestNeighbour {
 
             citiesToVisit.forEach(j => {
 
-                let distance = environment.getTourDistance(currentCity, j);
+                let distance = environment.getDistance(currentCity, j);
 
                 if (distance < minDistance) {
                     minDistance = distance;
