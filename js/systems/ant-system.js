@@ -15,7 +15,7 @@ class AntSystem extends RandomSystem {
 	}
 
     getNextNodeId(ant){
-        return this.exploration.doExploration(ant, ant.currentNode.id);
+        return this.exploration.doExploration(ant, ant.currentNodeId);
     }
 
     runGlobalUpdateRule() {

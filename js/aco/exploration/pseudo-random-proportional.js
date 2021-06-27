@@ -17,34 +17,22 @@ class PseudoRandomProportional extends AntExploration {
 
         ant.nodeIdsToVisit.forEach(j => {
 
-            // let j = node.id;
-
             tij[j] = Math.pow(this.canvas.environment.getTau(i, j), this.canvas.getAlpha());
             nij[j] = Math.pow(this.canvas.environment.getNij(i, j), this.canvas.getBeta());
 
             sum += tij[j] * nij[j];
         });
 
-        if (sum == 0.0) {
-            console.log(tij);
-            console.log(nij);
-            console.log(ant.visitedNodes.map(e => e.id));
-            console.log(ant.nodesToVisit.map(e => e.id));
-            console.log(this.canvas.environment.tau)
-            console.log(ant.currentNode.id)
-            throw new Error("The sum cannot be 0.0");
-        }
-
         let probability = new Array(this.canvas.getNumberOfNodes()).fill(0);
 
+        let sumProbability = 0.0;
+
         ant.nodeIdsToVisit.forEach(j => {
-
-            // let j = node.id;
-
             probability[j] = (tij[j] * nij[j]) / sum;
+            sumProbability += probability[j];
         });
 
-        nextNode = this.selection.doSelection(probability);
+        nextNode = this.selection.doSelection(probability, sumProbability);
 
         if (nextNode == -1) {
             throw new Error("The next node should not be -1");

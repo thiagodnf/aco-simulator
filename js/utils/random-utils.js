@@ -14,8 +14,8 @@ class RandomUtils {
         return RandomUtils.chance.integer({ min: min, max: max })
     }
 
-    static nextFloat(min, max){
-        return RandomUtils.chance.floating({ min: min, max: max });
+    static nextFloat(min, max, fixed = 8) {
+        return RandomUtils.chance.floating({ min: min, max: max, fixed: fixed });
     }
 
     static nextNodes(numberOfNodes, width, height) {

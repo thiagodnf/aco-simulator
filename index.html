@@ -89,6 +89,23 @@
                             <div class="tab-pane fade mt-3 show active" id="info">
                                 <p class="fw-bold">Best Value: <span class="fw-normal best-value">0.0</span></p>
                                 <p class="fw-bold">Generation: <span class="fw-normal generation-counter">0</span></p>
+
+                                <div>
+                                    <label class="form-label d-block">Ant Speed</label>
+                                    <div class="btn-group d-flex btn-group-sm" role="group">
+                                        <input type="radio" class="btn-check" name="ant-speed" id="slow" autocomplete="off" value="250" >
+                                        <label class="btn btn-outline-primary" for="slow">Slow</label>
+
+                                        <input type="radio" class="btn-check" name="ant-speed" id="good" autocomplete="off" value="80" checked>
+                                        <label class="btn btn-outline-primary" for="good">Good</label>
+
+                                        <input type="radio" class="btn-check" name="ant-speed" id="fast" autocomplete="off" value="10">
+                                        <label class="btn btn-outline-primary" for="fast">Fast</label>
+
+                                        <input type="radio" class="btn-check" name="ant-speed" id="crazy" autocomplete="off" value="1">
+                                        <label class="btn btn-outline-primary" for="crazy">Crazy</label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade mt-3" id="chart">
                                 <div id="chart"></div>
@@ -103,25 +120,8 @@
                                         <input class="form-check-input" type="checkbox" value="" id="show-pheromones">
                                         <label class="form-check-label" for="show-pheromones">Show Pheromones</label>
                                     </div>
-                                    <div>
-                                        <label class="form-label d-block">Ant Speed</label>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ant-speed" id="slow" value="250">
-                                            <label class="form-check-label" for="slow">Slow</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ant-speed" id="good" value="80" checked>
-                                            <label class="form-check-label" for="good">Good</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ant-speed" id="fast" value="10">
-                                            <label class="form-check-label" for="fast">Fast</label>
-                                        </div>
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" name="ant-speed" id="crazy" value="1">
-                                            <label class="form-check-label" for="crazy">Crazy</label>
-                                        </div>
-                                    </div>
+
+
                                 </form>
                             </div>
                         </div>

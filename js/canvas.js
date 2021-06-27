@@ -302,6 +302,13 @@ class Canvas extends fabric.Canvas {
 
             if(total != 0 && total != that.getNumberOfAnts()){
 
+                that.ants.forEach(ant => {
+                    // console.log("nodeIdsToVisit", ant.nodeIdsToVisit)
+                    console.log(ant.id, ant.visitedNodeIds)
+                })
+
+                throw new Error("oi")
+
                 if(!that.index){
                     that.index = result.indexOf(false);
 
@@ -340,10 +347,6 @@ class Canvas extends fabric.Canvas {
             }
 
             ant.initializeNodesToVisit(that.nodes);
-
-            if(that.index && that.index == ant.id){
-                console.log(ant.nodeIdsToVisit, ant.visitedNodeIds)
-            }
 
             let nextNodeId = that.aco.getNextNodeId(ant);
             let nextNode = that.findNodeById(nextNodeId);

@@ -34,6 +34,9 @@ class FabricjsUtils{
                 var dx = (target.left - el.left);
                 var dy = (target.top - el.top);
                 var dz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+                if(dz == 0){
+                    throw new Error("oi[s")
+                }
 
                 var angle = Math.atan2(dx, dy) * (180 / Math.PI);
 
