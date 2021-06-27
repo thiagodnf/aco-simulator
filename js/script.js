@@ -68,8 +68,6 @@ $(function () {
 
     resizeWindow();
 
-    canvas.setAddNode();
-
     canvas.on("running", () =>{
         setToolbarActive(true);
     });

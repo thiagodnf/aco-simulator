@@ -8,7 +8,7 @@ class NearestNeighbour {
         let currentCity = RandomUtils.nextInt(0, environment.getNumberOfNodes() - 1);
 
         for (let i = 0; i < environment.getNumberOfNodes(); i++) {
-            if (i != currentCity) {
+            if (i !== currentCity) {
                 citiesToVisit.push(i);
             }
         }

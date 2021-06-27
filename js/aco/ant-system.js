@@ -30,7 +30,7 @@ class AntSystem extends RandomSystem {
                     this.environment.setTau(i, j, this.evaporationGetTheNewValue(i, j));
                     this.environment.setTau(j, i, this.environment.getTau(i, j));
 
-                    // Do Deposit
+                    // // Do Deposit
                     this.environment.setTau(i, j, this.depositGetTheNewValue(i, j));
                     this.environment.setTau(j, i, this.environment.getTau(i, j));
                 }
@@ -54,11 +54,13 @@ class AntSystem extends RandomSystem {
 
     getDeltaTau(i, j){
 
+        let Q = 1.0;
+
         let deltaTau = 0.0;
 
         this.environment.ants.forEach(ant => {
 			if (ant.getPath(i, j) == 1) {
-				deltaTau += (this.Q / ant.tourDistance);
+				deltaTau += (Q / ant.tourDistance);
 			}
 		});
 

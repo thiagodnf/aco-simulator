@@ -18,7 +18,6 @@ class Canvas extends fabric.Canvas {
 
         this.antSpeed = 80;
         this.animation = null;
-        this.isRunning = false;
         this.isPlay = false;
 
         this.grid = null;
@@ -36,6 +35,8 @@ class Canvas extends fabric.Canvas {
 
         this.environment = new Environment(this);
         this.aco = new AntSystem(this.environment);
+
+        this.setAddNode();
     }
 
     onMoveUp(event) {
@@ -52,7 +53,7 @@ class Canvas extends fabric.Canvas {
 
     addNode(pos) {
 
-        if (this.isRunning) {
+        if (this.isPlay) {
             return;
         }
 
@@ -61,7 +62,8 @@ class Canvas extends fabric.Canvas {
         }
 
         var node = new aco.Node(pos.x, pos.y);
-        var ant = FabricjsUtils.makeAnt(node);
+        // var ant = FabricjsUtils.makeAnt(node);
+        var ant = new aco.Ant(node);
 
         this.environment.nodes.push(node)
         this.add(node);

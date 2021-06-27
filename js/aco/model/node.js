@@ -1,6 +1,6 @@
 'use strict'
 
-var aco = {}
+var aco = aco || {}
 
 aco.Node = class Node extends fabric.Group {
 
