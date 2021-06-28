@@ -8,11 +8,9 @@ Ant Colony Optimization Simulator developed in HTML
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
-## Description
-
-This project implement the Ant System in Javascript, showing a animated view about the Ant Colony Optimization developed by Marco Dorigo
-
 ## How to Use:
+
+This project implement the Ant System in Javascript, showing a animated view about the Ant Colony Optimization developed by Marco Dorigo. To use it, you need to:
 
 - Access http://thiagodnf.github.io/aco-simulator
 - Click in "New Node" and after, click on screen.
@@ -20,7 +18,7 @@ This project implement the Ant System in Javascript, showing a animated view abo
 
 ## Algorithms
 
-This simulator has implemented the follows algorithms:
+This simulator has implemented the following algorithms:
 
 - Ant System
 - Ant Colony System
