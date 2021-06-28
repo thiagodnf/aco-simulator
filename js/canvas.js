@@ -12,7 +12,7 @@ class Canvas extends fabric.Canvas {
         });
 
         // Default Settings
-        this.nodesLimit = 50;
+        this.nodesLimit = 150;
         this.showGrid = false;
         this.showPheromones = false;
 
@@ -69,6 +69,16 @@ class Canvas extends fabric.Canvas {
         this.environment.addAnt(ant);
 
         this.aco.initializeTau();
+
+
+        this.generation = 0;
+        this.updateBestSolution();
+        this.updatePheromones();
+
+        this.fire('generationUpdated', {
+            generation: this.generation,
+            bestTourDistance: this.environment.bestTourDistance
+        });
 
         this.updatePheromones();
 
@@ -137,11 +147,7 @@ class Canvas extends fabric.Canvas {
         this.sortCanvas();
     }
 
-    updateGeneration() {
-
-        this.generation++;
-
-        this.environment.updateBestTour();
+    updateBestSolution(){
 
         if (this.bestSolution) {
             this.remove(this.bestSolution);
@@ -149,9 +155,17 @@ class Canvas extends fabric.Canvas {
 
         this.bestSolution = FabricjsUtils.makeBestSolution(this.environment)
         this.add(this.bestSolution);
+    }
+
+    updateGeneration() {
+
+        this.generation++;
+
+        this.environment.updateBestTour();
 
         this.aco.runGlobalPheromoneUpdate();
 
+        this.updateBestSolution();
         this.updatePheromones();
 
         this.fire('generationUpdated', {
@@ -235,7 +249,7 @@ class Canvas extends fabric.Canvas {
 
     setPlay() {
 
-        if (this.isPlay) {
+        if (this.isPlay || this.environment.getNumberOfNodes() <= 1) {
             return;
         }
 
@@ -247,7 +261,7 @@ class Canvas extends fabric.Canvas {
 
     setStep() {
 
-        if (this.isPlay) {
+        if (this.isPlay || this.environment.getNumberOfNodes() <= 1) {
             return;
         }
 
