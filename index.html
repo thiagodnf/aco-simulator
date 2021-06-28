@@ -88,10 +88,28 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade mt-3 show active" id="info">
-                                <p class="fw-bold">Best Value: <span class="fw-normal best-value">0.0</span></p>
-                                <p class="fw-bold">Generation: <span class="fw-normal generation-counter">0</span></p>
-
-                                <div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="card card-body text-center text-dark bg-light mb-3">
+                                            <p class="fs-4 generation-counter">0</p>
+                                            <small class="text-muted">Generations</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card card-body text-center text-dark bg-light">
+                                            <p class="fs-4 best-value">0.0</p>
+                                            <small class="text-muted">Best Value</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">ACO</label>
+                                    <select class="form-select form-select-sm" id="aco">
+                                        <option value="as" selected>Ant System</option>
+                                        <option value="acs">Ant Colony System</option>
+                                      </select>
+                                </div>
+                                <div class="mb-3">
                                     <label class="form-label d-block">Ant Speed</label>
                                     <div class="btn-group d-flex btn-group-sm" role="group">
                                         <input type="radio" class="btn-check" name="ant-speed" id="slow" autocomplete="off" value="250" >
@@ -107,35 +125,50 @@
                                         <label class="btn btn-outline-primary" for="crazy">Crazy</label>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="tab-pane fade mt-3" id="chart">
                                 <div id="chart"></div>
                             </div>
                             <div class="tab-pane fade mt-3" id="settings">
                                 <form>
-                                    <div class="form-check mb-3">
+                                    <div class="form-check form-switch mb-3">
                                         <input class="form-check-input" type="checkbox" value="" id="show-grid">
                                         <label class="form-check-label" for="show-grid">Show Grid</label>
                                     </div>
-                                    <div class="form-check mb-3">
+                                    <div class="form-check form-switch mb-3">
                                         <input class="form-check-input" type="checkbox" value="" id="show-pheromones">
                                         <label class="form-check-label" for="show-pheromones">Show Pheromones</label>
                                     </div>
                                     <hr/>
                                     <div class="row mb-3">
-                                        <div class="col">
+                                        <div class="col-6">
                                             <label for="alpha" class="form-label" title="Relative influence of the pheromone">&alpha;</label>
                                             <input type="number" class="form-control form-control-sm" id="alpha" step="0.1" min="0.0" value="1.0">
                                         </div>
-                                        <div class="col">
+                                        <div class="col-6">
                                             <label for="beta" class="form-label" title="Relative influence of the heuristic information">&beta;</label>
                                             <input type="number" class="form-control form-control-sm" id="beta" step="0.1" min="0.0" value="2.0">
                                         </div>
                                     </div>
-                                    <div>
+
+                                    <div class="mb-3">
                                         <label for="rho" class="form-label" title="pheromone trail evaporation">&rho;&nbsp;(Evaporation)</label>
                                         <input type="number" class="form-control form-control-sm" id="rho" step="0.1" min="0.0" max="1.0" value="0.1">
                                     </div>
+
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <label for="omega" class="form-label">Omega</label>
+                                            <input type="number" class="form-control form-control-sm" id="omega" step="0.1" min="0.0" max="1.0"  value="0.1">
+                                        </div>
+                                        <div class="col-6">
+                                            <label for="q0" class="form-label">Q0</label>
+                                            <input type="number" class="form-control form-control-sm" id="q0" step="0.1" min="0.0" max="1.0" value="0.9">
+                                        </div>
+                                    </div>
+
+
                                 </form>
                             </div>
                         </div>
@@ -194,14 +227,21 @@
     <script src="js/utils/chart-utils.js"></script>
     <script src="js/utils/nearest-neighbour.js"></script>
 
-    <!-- Evaporation-->
+
+    <script src="js/aco/subset/all-ants.js"></script>
+    <script src="js/aco/subset/global-best.js"></script>
+
+    <!-- Evaporation and Deposit-->
+    <script src="js/aco/pheromone/local-update/acs-local-update.js"></script>
     <script src="js/aco/pheromone/global-update/global-update.js"></script>
     <script src="js/aco/pheromone/global-update/evaporation/full-evaporation.js"></script>
+    <script src="js/aco/pheromone/global-update/deposit/partial-deposit.js"></script>
     <script src="js/aco/pheromone/global-update/deposit/full-deposit.js"></script>
 
     <!-- Exploration-->
     <script src="js/aco/exploration/ant-exploration.js"></script>
     <script src="js/aco/exploration/pseudo-random-proportional.js"></script>
+    <script src="js/aco/exploration/q-selection.js"></script>
     <!-- Selection-->
     <script src="js/aco/selection/ant-selection.js"></script>
     <script src="js/aco/selection/roulette-wheel.js"></script>
@@ -209,6 +249,7 @@
     <script src="js/aco/aco.js"></script>
     <script src="js/aco/random-system.js"></script>
     <script src="js/aco/ant-system.js"></script>
+    <script src="js/aco/ant-colony-system.js"></script>
     <!-- Model -->
     <script src="js/aco/model/ant.js"></script>
     <script src="js/aco/model/node.js"></script>

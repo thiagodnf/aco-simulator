@@ -31,7 +31,8 @@ class Canvas extends fabric.Canvas {
         this.on('mouse:up', (event) => this.onMoveUp(event))
 
         this.environment = new Environment(this);
-        this.aco = new AntSystem(this.environment);
+        // this.aco = new AntSystem(this.environment);
+        this.aco = new AntColonySystem(this.environment);
 
         this.setAddNode();
     }
@@ -173,6 +174,14 @@ class Canvas extends fabric.Canvas {
         this.updatePheromones();
     }
 
+    setACO(aco){
+        if(aco == "as"){
+            this.aco = new AntSystem(this.environment);
+        }else if(aco == "acs"){
+            this.aco = new AntColonySystem(this.environment);
+        }
+    }
+
     setAddNode() {
         this.defaultCursor = 'crosshair';
         this.selectedOption = OPTIONS.ADD_NODE;
@@ -305,9 +314,16 @@ class Canvas extends fabric.Canvas {
 
     moveAnt(ant, nextNode, segments) {
 
+        let that = this;
+
         let isMoveDone = FabricjsUtils.move(ant, nextNode, segments);
 
         if (isMoveDone) {
+
+            if (that.aco.localUpdating) {
+                that.aco.localUpdating.execute(ant.currentNodeId, nextNode.id);
+            }
+
             ant.setCurrentNode(nextNode);
         }
 

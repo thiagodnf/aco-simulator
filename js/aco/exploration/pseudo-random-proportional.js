@@ -6,6 +6,10 @@ class PseudoRandomProportional extends AntExploration {
         this.selection = selection;
     }
 
+    getNextNode(ant, i) {
+		return this.doExploration(ant, i);
+	}
+
     doExploration(ant, i) {
 
         let nextNode = -1;

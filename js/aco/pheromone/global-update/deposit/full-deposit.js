@@ -1,23 +1,6 @@
-class FullDeposit extends GlobalUpdate {
+class FullDeposit extends PartialDeposit {
 
     constructor(environment) {
-        super(environment);
+        super(environment, new AllAnts());
     }
-
-    getTheNewValue(i, j) {
-        return this.environment.getTau(i, j) + this.environment.rho * this.getDeltaTau(i, j);
-	}
-
-    getDeltaTau(i, j) {
-
-		let deltaTau = 0.0;
-
-        this.environment.ants.forEach(ant => {
-            if (ant.path[i][j] == 1) {
-				deltaTau += 1.0 / ant.tourDistance;
-			}
-        });
-
-		return deltaTau;
-	}
 }

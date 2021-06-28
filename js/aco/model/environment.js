@@ -5,6 +5,7 @@ class Environment {
         this.aco = aco;
 
         this.bestTour = [];
+        this.bestPath = [];
         this.bestTourDistance = Number.NaN;
 
         this.tau = [];
@@ -16,8 +17,8 @@ class Environment {
         this.cnn = 1.0;
         this.alpha = 1.0;
         this.beta = 2.0;
-
         this.rho = 0.1;
+
         this.omega = 0.1;
         this.q0 = 0.9;
     }
@@ -51,8 +52,9 @@ class Environment {
         });
 
         if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
-            this.bestTour = bestAnt.visitedNodeIds;
+            this.bestTour = ArrayUtils.copyArray(bestAnt.visitedNodeIds);
             this.bestTourDistance = bestAnt.tourDistance;
+            this.bestPath = ArrayUtils.copyMatrix(bestAnt.path);
         }
     }
 

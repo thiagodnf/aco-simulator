@@ -42,13 +42,10 @@ $(function () {
     }
 
     $("#play").click(() => {canvas.setPlay();});
-
     $("#step").click(() => { canvas.setStep();});
-
     $("#stop").click(() => canvas.setStop());
 
     $("#add-node").click(() => canvas.setAddNode());
-
     $("#move-node").click(() => canvas.setMoveNode());
 
     $("#clear-all").click(() => {
@@ -60,9 +57,12 @@ $(function () {
     $('#show-grid').change(() => canvas.toggleShowGrid());
     $('#show-pheromones').change(() => canvas.toggleShowPheromones());
 
-    $('#alpha').change(function(){canvas.environment.alpha = $( this ).val();});
-    $('#beta').change(function(){canvas.environment.beta = $( this ).val();});
-    $('#rho').change(function(){canvas.environment.rho = $( this ).val();});
+    $('#alpha').change(function(){canvas.environment.alpha = parseFloat($( this ).val());});
+    $('#beta').change(function(){canvas.environment.beta = parseFloat($( this ).val());});
+    $('#rho').change(function(){canvas.environment.rho = parseFloat($( this ).val());});
+    $('#omega').change(function(){canvas.environment.omega = parseFloat($( this ).val());});
+    $('#q0').change(function(){canvas.environment.q0 = parseFloat($( this ).val());});
+    $('#aco').change(function(){canvas.setACO($( this ).val())});
 
     $('input[name=ant-speed').change(function() {
         canvas.setAntSpeed(this.value)

@@ -6,6 +6,7 @@ class ACO {
         this.exploration = exploration;
         this.evaporations = [];
         this.deposits = [];
+        this.localUpdating = null;
 
         if (this.constructor == ACO) {
             throw new Error("Abstract classes can't be instantiated.");
@@ -48,7 +49,7 @@ class ACO {
     }
 
     getNextNode(ant){
-        let nextNodeId = this.exploration.doExploration(ant, ant.currentNodeId);
+        let nextNodeId = this.exploration.getNextNode(ant, ant.currentNodeId);
         return this.environment.findNodeById(nextNodeId);
     }
 

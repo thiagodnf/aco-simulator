@@ -4,6 +4,21 @@ class ArrayUtils {
         return Array(lines).fill().map(() => Array(columns).fill(initialValue));
     }
 
+    static copyArray(array){
+        return [...array];
+    }
+
+    static copyMatrix(matrix){
+
+        let copy = [];
+
+        matrix.forEach(row => {
+            copy.push([...row]);
+        });
+
+        return copy;
+    }
+
     static shuffle(array) {
 
         for (let i = array.length - 1; i > 0; i--) {

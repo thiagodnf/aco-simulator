@@ -6,7 +6,7 @@ class AntExploration {
         }
     }
 
-    doExploration() {
-        throw new Error("Method 'doExploration' must be implemented.");
+    getNextNode() {
+        throw new Error("Method 'getNextNode' must be implemented.");
     }
 }
