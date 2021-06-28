@@ -68,7 +68,42 @@ $(function () {
         canvas.setAntSpeed(this.value)
     });
 
-    $('#ant-speed-value').text(canvas.antSpeed)
+    $('.examples').click(function(event){
+
+        $.get("examples/" + $(this).data("file"), function (result) {
+
+            canvas.setClearAll();
+
+            let numbers = [];
+
+            result.split("\n").forEach(row => {
+
+                let parts = row.trim().split(" ");
+
+                if (parts.length == 1) {
+                    return;
+                }
+
+                numbers.push([parseFloat(parts[1]), parseFloat(parts[2])]);
+            });
+
+            let mx = ArrayUtils.minAndMaxArray(numbers.map(e => e[0]));
+            let my = ArrayUtils.minAndMaxArray(numbers.map(e => e[1]));
+
+            numbers.forEach(number => {
+
+                let x = number[0];
+                let y = number[1];
+
+                let node = {
+                    x: NormalizeUtils.normalizeAnyInterval(x, mx.min, mx.max, 0 + FabricjsUtils.NODE_RADIUS, canvas.width - FabricjsUtils.NODE_RADIUS),
+                    y: NormalizeUtils.normalizeAnyInterval(y, my.min, my.max, 0 + FabricjsUtils.NODE_RADIUS, canvas.height - +FabricjsUtils.NODE_RADIUS),
+                };
+
+                canvas.addNode(node);
+            });
+        });
+    });
 
     resizeWindow();
 
@@ -86,10 +121,10 @@ $(function () {
         chart.addPoint(data.bestTourDistance);
     });
 
-    canvas.addNode({ x: 90, y: 90 })
-    canvas.addNode({ x: 180, y: 90 });
-    canvas.addNode({ x: 180, y: 180 })
-    canvas.addNode({ x: 90, y: 180 })
+    // canvas.addNode({ x: 90, y: 90 })
+    // canvas.addNode({ x: 180, y: 90 });
+    // canvas.addNode({ x: 180, y: 180 })
+    // canvas.addNode({ x: 90, y: 180 })
 
 
     // let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());

@@ -1,6 +1,3 @@
-var NODE_ID = 0;
-var ANT_ID = 0;
-
 var LAYER = {
     GRID: 1,
     EDGE: 2,
@@ -21,8 +18,9 @@ class FabricjsUtils{
         var dx = (target.left - el.left);
         var dy = (target.top - el.top);
         var dz = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+
         if(dz == 0){
-            throw new Error("oi[s")
+            throw new Error("dz==0")
         }
 
         var angle = Math.atan2(dx, dy) * (180 / Math.PI);
@@ -45,7 +43,7 @@ class FabricjsUtils{
         var distX = Math.abs(el1.left - el2.left);
         var distY = Math.abs(el1.top - el2.top);
 
-        return distX <= 0.1 && distY <= 0.1
+        return distX <= 0.01 && distY <= 0.01
     }
 
     static getEuclideanDistance(el1, el2){

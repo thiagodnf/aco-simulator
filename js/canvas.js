@@ -217,9 +217,10 @@ class Canvas extends fabric.Canvas {
     }
 
     setClearAll() {
-        this.clear()
-        this.nodes = [];
-        this.ants = [];
+        this.clear();
+        aco.Node.NODE_ID = 0;
+        this.environment.nodes = [];
+        this.environment.ants = [];
     }
 
     lockCanvas(lock) {

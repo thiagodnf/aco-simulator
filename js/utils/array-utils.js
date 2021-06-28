@@ -4,11 +4,11 @@ class ArrayUtils {
         return Array(lines).fill().map(() => Array(columns).fill(initialValue));
     }
 
-    static copyArray(array){
+    static copyArray(array) {
         return [...array];
     }
 
-    static copyMatrix(matrix){
+    static copyMatrix(matrix) {
 
         let copy = [];
 
@@ -27,12 +27,19 @@ class ArrayUtils {
         }
     }
 
+    static minAndMaxArray(array) {
+        return {
+            min: Math.min(...array),
+            max: Math.max(...array)
+        }
+    }
+
     static minAndMax(matrix) {
 
         let min = [];
         let max = [];
 
-        for(let i=0;i<matrix.length;i++){
+        for (let i = 0; i < matrix.length; i++) {
             min.push(Math.min(...matrix[i]));
             max.push(Math.max(...matrix[i]));
         }

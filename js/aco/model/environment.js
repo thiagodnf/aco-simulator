@@ -97,6 +97,10 @@ class Environment {
 
     evaluate(array) {
 
+        if (array.length <= 1) {
+            return Number.MAX_VALUE;
+        }
+
         let total = 0.0;
 
         for (let i = 0; i < array.length - 1; i++) {
