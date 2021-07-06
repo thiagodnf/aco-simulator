@@ -14,6 +14,7 @@ aco.Ant = class Ant extends fabric.Image {
             layer: LAYER.ANT,
             initialNodeId: node.id,
             currentNodeId: node.id,
+            currentNode: node,
             ...FabricjsUtils.getDefaultSettings()
         });
 
@@ -21,7 +22,7 @@ aco.Ant = class Ant extends fabric.Image {
         this.scaleToWidth(FabricjsUtils.NODE_RADIUS * 2);
         this.scaleToHeight(FabricjsUtils.NODE_RADIUS * 2);
 
-        // this.on('moving', (event) => this.onMoving(event));
+        this.on('moving', (event) => this.onMoving(event));
 
         this.tourDistance = 0.0;
         this.path = ArrayUtils.newMatrix(0, 0, 0);
@@ -49,13 +50,13 @@ aco.Ant = class Ant extends fabric.Image {
         this.nodeIdsToVisit = environment.nodes.map(n => n.id).filter(id => id != this.initialNodeId);
     }
 
-    // onMoving(event) {
-    //     this.currentNode.set({
-    //         top: this.top,
-    //         left: this.left,
-    //     });
-    //     this.currentNode.setCoords()
-    // }
+    onMoving(event) {
+        this.currentNode.set({
+            top: this.top,
+            left: this.left,
+        });
+        this.currentNode.setCoords()
+    }
 
     isGenerationDone(){
         return this.currentNodeId == this.initialNodeId;
@@ -67,6 +68,7 @@ aco.Ant = class Ant extends fabric.Image {
 
         this.visitedNodeIds.push(node.id);
 
+        this.currentNode = node;
         this.currentNodeId = node.id;
 
         this.set({
