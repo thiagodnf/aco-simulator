@@ -19,6 +19,11 @@ class Canvas extends fabric.Canvas {
         this.animation = null;
         this.isPlay = false;
 
+        // Pan
+        this.isDragging = false;
+        this.lastPosX = 0;
+        this.lastPosY = 0;
+
         this.bestSolution = null;
         this.generation = 0;
 
@@ -27,12 +32,51 @@ class Canvas extends fabric.Canvas {
         this.index = null;
 
         this.on('mouse:up', (event) => this.onMoveUp(event))
+        this.on('mouse:down', (event) => this.onMoveDown(event))
+        this.on('mouse:move', (event) => this.onMoveMove(event))
         this.on('mouse:wheel', (event) => this.onMoveWheel(event))
 
         this.environment = new Environment(this);
         this.aco = new AntSystem(this.environment);
 
         this.setAddNode();
+    }
+
+    onMoveUp(event) {
+
+        if (this.selectedOption == OPTIONS.ADD_NODE) {
+            this.addNode([event.absolutePointer]);
+        }
+
+        this.setViewportTransform(this.viewportTransform);
+        this.isDragging = false;
+    }
+
+    onMoveDown(event) {
+
+        if (this.selectedOption == OPTIONS.MOVE_NODE) {
+
+            let target = this.findTarget(event, false);
+
+            if (!target) {
+                this.isDragging = true;
+                this.lastPosX = event.e.clientX;
+                this.lastPosY = event.e.clientY;
+            }
+        }
+    }
+
+    onMoveMove(event) {
+
+        if (this.isDragging) {
+            var e = event.e;
+            var vpt = this.viewportTransform;
+            vpt[4] += e.clientX - this.lastPosX;
+            vpt[5] += e.clientY - this.lastPosY;
+            this.requestRenderAll();
+            this.lastPosX = e.clientX;
+            this.lastPosY = e.clientY;
+        }
     }
 
     onMoveWheel(opt){
@@ -44,12 +88,6 @@ class Canvas extends fabric.Canvas {
         canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
         opt.e.preventDefault();
         opt.e.stopPropagation();
-    }
-
-    onMoveUp(event) {
-        if (this.selectedOption == OPTIONS.ADD_NODE) {
-            this.addNode([event.absolutePointer]);
-        }
     }
 
     resize(width, height) {
