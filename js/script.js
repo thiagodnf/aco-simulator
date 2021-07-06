@@ -9,9 +9,11 @@ function resizeWindow() {
 
     let canvasHeight = $(window).height() - $("#canvas").offset().top - $("footer").height() - 30;
 
-    $("#sidebar").height(canvasHeight-36);
-
     canvas.resize($(".col-lg-9").width(), canvasHeight);
+
+    $("#sidebar").height(canvasHeight - 2);
+
+
 
     // console.log(canvasHeight)
     // console.log($(".charts").offset().top)
