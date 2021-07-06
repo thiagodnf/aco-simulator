@@ -90,7 +90,8 @@ class Canvas extends fabric.Canvas {
 
         this.fire('generationUpdated', {
             generation: this.generation,
-            bestTourDistance: this.environment.bestTourDistance
+            bestTourDistance: this.environment.bestTourDistance,
+            averageTourDistance: this.environment.averageTourDistance
         });
 
         this.updatePheromones();
@@ -183,7 +184,8 @@ class Canvas extends fabric.Canvas {
 
         this.fire('generationUpdated', {
             generation: this.generation,
-            bestTourDistance: this.environment.bestTourDistance
+            bestTourDistance: this.environment.bestTourDistance,
+            averageTourDistance: this.environment.averageTourDistance,
         });
     }
 

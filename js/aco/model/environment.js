@@ -7,6 +7,7 @@ class Environment {
         this.bestTour = [];
         this.bestPath = [];
         this.bestTourDistance = Number.NaN;
+        this.averageTourDistance = Number.NaN;
 
         this.tau = [];
         this.distances = [];
@@ -45,7 +46,14 @@ class Environment {
 
         let that = this;
 
-        this.ants.map(ant => ant.tourDistance = that.evaluate(ant.visitedNodeIds));
+        this.averageTourDistance = 0.0;
+
+        this.ants.forEach(ant => {
+            ant.tourDistance = that.evaluate(ant.visitedNodeIds)
+            that.averageTourDistance += ant.tourDistance;
+        });
+
+        this.averageTourDistance /= that.getNumberOfAnts();
 
         let bestAnt = this.ants.reduce(function (p, v) {
             return (p.tourDistance < v.tourDistance ? p : v);
@@ -80,6 +88,7 @@ class Environment {
 
         this.bestTour = [];
         this.bestTourDistance = Number.NaN;
+        this.averageTourDistance = Number.NaN;
 
         this.nodes.push(node);
         this.updateDistances();

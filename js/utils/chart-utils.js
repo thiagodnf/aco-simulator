@@ -1,6 +1,6 @@
 class ChartUtils{
 
-    static init(el, title, color=undefined){
+    static init(el, color=undefined){
 
         var chart = Highcharts.chart(el, {
 
@@ -24,7 +24,7 @@ class ChartUtils{
 
             yAxis: {
                 title: {
-                    text: "Value"
+                    text: null
                 },
                 min: 0
             },
@@ -53,7 +53,7 @@ class ChartUtils{
         return {
             chart: chart,
             addPoint: (value) => {
-                if (!Number.isNaN(value)) {
+                if (value && !Number.isNaN(value)) {
                     chart.series[0].addPoint(value);
                 }
             }

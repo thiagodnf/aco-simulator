@@ -1,7 +1,7 @@
 let url = null;
 let canvas = null;
-let chartGlobalBest = null;
-let chartCurrentBest = null;
+let chartGlobalBestValue = null;
+let chartAverageBestValue = null;
 let $generationCounter =    null;
 let $bestValue = null;
 
@@ -30,8 +30,8 @@ $(function () {
     RandomUtils.setSeed(url.query.seed);
 
     canvas = new Canvas();
-    chartGlobalBest = ChartUtils.init("chart-global-best", "Global Best", "#7cb5ec");
-    chartCurrentBest = ChartUtils.init("chart-current-best", "Current Best", "#90ed7d");
+    chartGlobalBestValue = ChartUtils.init("chart-global-best-value", "#7cb5ec");
+    chartAverageBestValue = ChartUtils.init("chart-average-best-value", "#90ed7d");
     $generationCounter = $(".generation-counter");
     $bestValue = $(".best-value");
 
@@ -148,7 +148,7 @@ $(function () {
     canvas.on("generationUpdated", function(data){
         $generationCounter.text(data.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
         $bestValue.text(data.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
-        chartGlobalBest.addPoint(data.bestTourDistance);
-        chartCurrentBest.addPoint(data.bestTourDistance);
+        chartGlobalBestValue.addPoint(data.bestTourDistance);
+        chartAverageBestValue.addPoint(data.averageTourDistance);
     });
 });
