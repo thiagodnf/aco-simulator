@@ -83,15 +83,16 @@ $(function () {
 
             canvas.setClearAll();
 
-            for (let i = 0; i < numberOfNodes; i++) {
+            let positions = [];
 
-                let node = {
+            for (let i = 0; i < numberOfNodes; i++) {
+                positions.push({
                     x: RandomUtils.nextFloat(0, canvas.width, 10),
                     y: RandomUtils.nextFloat(0, canvas.height, 10),
-                };
-
-                canvas.addNode(node);
+                });
             }
+
+            canvas.addNode(positions);
         }
     });
 
@@ -117,18 +118,20 @@ $(function () {
             let mx = ArrayUtils.minAndMaxArray(numbers.map(e => e[0]));
             let my = ArrayUtils.minAndMaxArray(numbers.map(e => e[1]));
 
+            let positions = [];
+
             numbers.forEach(number => {
 
                 let x = number[0];
                 let y = number[1];
 
-                let node = {
+                positions.push({
                     x: NormalizeUtils.normalizeAnyInterval(x, mx.min, mx.max, 0 + FabricjsUtils.NODE_RADIUS, canvas.width - FabricjsUtils.NODE_RADIUS),
                     y: NormalizeUtils.normalizeAnyInterval(y, my.min, my.max, 0 + FabricjsUtils.NODE_RADIUS, canvas.height - +FabricjsUtils.NODE_RADIUS),
-                };
-
-                canvas.addNode(node);
+                });
             });
+
+            canvas.addNode(positions);
         });
     });
 
@@ -148,16 +151,4 @@ $(function () {
         chartGlobalBest.addPoint(data.bestTourDistance);
         chartCurrentBest.addPoint(data.bestTourDistance);
     });
-
-    // canvas.addNode({ x: 90, y: 90 })
-    // canvas.addNode({ x: 180, y: 90 });
-    // canvas.addNode({ x: 180, y: 180 })
-    // canvas.addNode({ x: 90, y: 180 })
-
-
-    // let nodes = RandomUtils.nextNodes(5, canvas.getWidth(), canvas.getHeight());
-
-    // nodes.forEach((node) =>{
-    //     // canvas.addNode({ x: node[0], y: node[1] });
-    // });
 });

@@ -50,7 +50,7 @@ class Canvas extends fabric.Canvas {
 
     onMoveUp(event) {
         if (this.selectedOption == OPTIONS.ADD_NODE) {
-            this.addNode(event.pointer);
+            this.addNode([event.pointer]);
         }
     }
 
@@ -60,7 +60,7 @@ class Canvas extends fabric.Canvas {
         this.updateGrid();
     }
 
-    addNode(pos) {
+    addNode(positions) {
 
         if (this.isPlay) {
             return;
@@ -70,17 +70,19 @@ class Canvas extends fabric.Canvas {
             return;
         }
 
-        var node = new aco.Node(pos.x, pos.y);
-        var ant = new aco.Ant(node);
+        positions.forEach(pos => {
 
-        this.add(node);
-        this.add(ant);
+            var node = new aco.Node(pos.x, pos.y);
+            var ant = new aco.Ant(node);
 
-        this.environment.addNode(node);
-        this.environment.addAnt(ant);
+            this.add(node);
+            this.add(ant);
 
-        this.aco.initializeTau();
+            this.environment.addNode(node);
+            this.environment.addAnt(ant);
 
+            this.aco.initializeTau();
+        });
 
         this.generation = 0;
         this.updateBestSolution();
@@ -95,7 +97,7 @@ class Canvas extends fabric.Canvas {
 
         this.sortCanvas();
 
-        this.fire('addedNode', [node]);
+        this.fire('addedNode', positions);
     }
 
     sortCanvas() {
