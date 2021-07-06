@@ -15,3 +15,9 @@ canvas{
 main {
     padding-top: 56px
 }
+
+label {
+    font-weight: 500 !important;
+    /* font-size: .83333rem; */
+    letter-spacing: .02em;
+}

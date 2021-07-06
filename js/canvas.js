@@ -13,14 +13,12 @@ class Canvas extends fabric.Canvas {
 
         // Default Settings
         this.nodesLimit = 150;
-        this.showGrid = false;
         this.showPheromones = false;
 
         this.antSpeed = 80;
         this.animation = null;
         this.isPlay = false;
 
-        this.grid = null;
         this.bestSolution = null;
         this.generation = 0;
 
@@ -57,7 +55,6 @@ class Canvas extends fabric.Canvas {
     resize(width, height) {
         this.setDimensions({ width: width, height: height });
         this.calcOffset();
-        this.updateGrid();
     }
 
     addNode(positions) {
@@ -139,17 +136,6 @@ class Canvas extends fabric.Canvas {
         this.sortCanvas();
     }
 
-    updateGrid() {
-        this.remove(this.grid);
-        this.grid = FabricjsUtils.makeGrid(this.width, this.height);
-
-        if (this.showGrid) {
-            this.add(this.grid);
-        }
-
-        this.sortCanvas();
-    }
-
     updatePheromones() {
         this.remove(this.pheromones);
         this.pheromones = FabricjsUtils.makeEdges(this.environment);
@@ -187,13 +173,6 @@ class Canvas extends fabric.Canvas {
             bestTourDistance: this.environment.bestTourDistance,
             averageTourDistance: this.environment.averageTourDistance,
         });
-    }
-
-    toggleShowGrid() {
-
-        this.showGrid = !this.showGrid;
-
-        this.updateGrid();
     }
 
     toggleShowPheromones() {

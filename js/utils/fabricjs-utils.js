@@ -100,26 +100,6 @@ class FabricjsUtils{
         });
     }
 
-    static makeGrid(width, height){
-
-        var items = [];
-
-        for (var i = FabricjsUtils.NODE_RADIUS*2,j=1; i < width; i += FabricjsUtils.NODE_RADIUS*2, j++) {
-            items.push(FabricjsUtils.makeLine(i, 0, i, height));
-            items.push(FabricjsUtils.makeText(i, 7, j));
-        }
-        for (var i = FabricjsUtils.NODE_RADIUS*2,j=1; i < height; i += FabricjsUtils.NODE_RADIUS*2,j++) {
-            items.push(FabricjsUtils.makeLine(0, i, width, i));
-            items.push(FabricjsUtils.makeText(7, i, j));
-        }
-
-        return new fabric.Group(items, {
-            selectable: false,
-            evented: false,
-            layer: LAYER.GRID,
-        });
-    }
-
     static makeEdges(environment) {
 
         var items = [];

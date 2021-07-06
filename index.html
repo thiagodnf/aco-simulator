@@ -106,7 +106,7 @@
                                 </li>
                             </ul>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body overflow-auto">
                             <div class="tab-content">
                                 <div class="tab-pane fade show active" id="info">
                                     <div class="row mb-3">
@@ -123,7 +123,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="charts overflow-auto">
+                                    <div class="charts ">
                                         <div id="chart-global-best-value"></div>
                                         <div id="chart-average-best-value"></div>
                                     </div>
@@ -136,10 +136,6 @@
                                                 <option value="as" selected>Ant System</option>
                                                 <option value="acs">Ant Colony System</option>
                                             </select>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" value="" id="show-grid">
-                                            <label class="form-check-label" for="show-grid">Show Grid</label>
                                         </div>
                                         <div class="form-check form-switch mb-3">
                                             <input class="form-check-input" type="checkbox" value="" id="show-pheromones">
@@ -161,7 +157,8 @@
                                             <label for="rho" class="form-label" title="pheromone trail evaporation">&rho;&nbsp;(Evaporation)</label>
                                             <input type="number" class="form-control form-control-sm" id="rho" step="0.01" min="0.0" max="1.0" value="0.1">
                                         </div>
-
+                                        <hr/>
+                                        <p>Only for Ant Colony System</p>
                                         <div class="row mb-3">
                                             <div class="col-6">
                                                 <label for="omega" class="form-label">Omega</label>

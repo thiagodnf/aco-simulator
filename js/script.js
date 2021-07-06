@@ -12,18 +12,6 @@ function resizeWindow() {
     canvas.resize($(".col-lg-9").width(), canvasHeight);
 
     $("#sidebar").height(canvasHeight - 2);
-
-
-
-    // console.log(canvasHeight)
-    // console.log($(".charts").offset().top)
-
-
-
-    // chartGlobalBestValue.setHeight(chartHeight/2);
-    // chartAverageBestValue.setHeight(chartHeight/2);
-
-
 }
 
 function setToolbarActive(active){
@@ -70,7 +58,6 @@ $(function () {
         }
     });
 
-    $('#show-grid').change(() => canvas.toggleShowGrid());
     $('#show-pheromones').change(() => canvas.toggleShowPheromones());
 
     $('#alpha').change(function(){canvas.environment.alpha = parseFloat($( this ).val());});
