@@ -7,9 +7,22 @@ canvas{
     border: 1px solid rgba(0,0,0,.125);
 }
 
+.dropdown-menu li{
+    font-size: 14px;
+ }
+
 .toolbar{
     background-color: #fafafa;
     border-bottom: 1px solid #e5e5e5;
+}
+
+.menubar{
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.menubar .nav-item .nav-link{
+    padding-top: 3px;
+    padding-bottom: 4px;
 }
 
 main {
