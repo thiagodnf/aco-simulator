@@ -1,8 +1,12 @@
 class ChartUtils{
 
-    static init(el){
+    static init(el, title, color=undefined){
 
         var chart = Highcharts.chart(el, {
+
+            chart: {
+                height: 150,
+            },
 
             title: {
                 text: null
@@ -14,9 +18,13 @@ class ChartUtils{
                 },
             },
 
+            credits: {
+                enabled: false
+            },
+
             yAxis: {
                 title: {
-                    text: "Distance"
+                    text: "Value"
                 },
                 min: 0
             },
@@ -36,6 +44,7 @@ class ChartUtils{
 
             series: [{
                 showInLegend: false,
+                color: color,
                 name: "Distance",
                 data: []
             }],

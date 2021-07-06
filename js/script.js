@@ -1,20 +1,26 @@
 let url = null;
 let canvas = null;
-let chart = null;
-let $generationCounter = null;
+let chartGlobalBest = null;
+let chartCurrentBest = null;
+let $generationCounter =    null;
 let $bestValue = null;
 
 function resizeWindow() {
+
+    let height = $(window).height() - $("#canvas").offset().top - $("footer").height() - 30;
+
     canvas.resize(
         $(".col-lg-9").width(),
-        $(window).height() - $("#canvas").offset().top - $("footer").height() - 30
+        height
     );
+
+    $("#sidebar").height(height-35);
 }
 
 function setToolbarActive(active){
-    $(".toolbar button").prop( "disabled", active );
-    $(".toolbar input").prop( "disabled", active );
-    $(".toolbar #stop").prop( "disabled", !active );
+    $(".btn-toolbar button").prop( "disabled", active );
+    $(".btn-toolbar input").prop( "disabled", active );
+    $(".btn-toolbar #stop").prop( "disabled", !active );
 }
 
 $(function () {
@@ -24,7 +30,8 @@ $(function () {
     RandomUtils.setSeed(url.query.seed);
 
     canvas = new Canvas();
-    chart = ChartUtils.init("chart");
+    chartGlobalBest = ChartUtils.init("chart-global-best", "Global Best", "#7cb5ec");
+    chartCurrentBest = ChartUtils.init("chart-current-best", "Current Best", "#90ed7d");
     $generationCounter = $(".generation-counter");
     $bestValue = $(".best-value");
 
@@ -116,9 +123,10 @@ $(function () {
     });
 
     canvas.on("generationUpdated", function(data){
-        $generationCounter.text(data.generation.toLocaleString("en-US"));
-        $bestValue.text(data.bestTourDistance.toLocaleString("en-US"));
-        chart.addPoint(data.bestTourDistance);
+        $generationCounter.text(data.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        $bestValue.text(data.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        chartGlobalBest.addPoint(data.bestTourDistance);
+        chartCurrentBest.addPoint(data.bestTourDistance);
     });
 
     // canvas.addNode({ x: 90, y: 90 })
