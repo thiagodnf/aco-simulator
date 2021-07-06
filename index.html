@@ -73,16 +73,16 @@
                         <!-- <a class="btn btn-sm btn-success" href=""><i class="fa fa-share-alt me-1"></i>Share</a> -->
                         <div class="btn-group d-flex btn-group-sm" role="group">
                             <input type="radio" class="btn-check" name="ant-speed" id="slow" autocomplete="off" value="250" >
-                            <label class="btn btn-outline-primary" for="slow">Slow</label>
+                            <label class="btn btn-outline-success" for="slow">Slow</label>
 
                             <input type="radio" class="btn-check" name="ant-speed" id="good" autocomplete="off" value="80" checked>
-                            <label class="btn btn-outline-primary" for="good">Good</label>
+                            <label class="btn btn-outline-success" for="good">Good</label>
 
                             <input type="radio" class="btn-check" name="ant-speed" id="fast" autocomplete="off" value="10">
-                            <label class="btn btn-outline-primary" for="fast">Fast</label>
+                            <label class="btn btn-outline-success" for="fast">Fast</label>
 
                             <input type="radio" class="btn-check" name="ant-speed" id="crazy" autocomplete="off" value="1">
-                            <label class="btn btn-outline-primary" for="crazy">Crazy</label>
+                            <label class="btn btn-outline-success" for="crazy">Crazy</label>
                         </div>
                     </div>
                 </div>
@@ -95,83 +95,85 @@
                     <canvas id="canvas"></canvas>
                 </div>
                 <div class="col-lg-3 mb-3 mb-lg-0">
-                    <div id="sidebar" class="card card-body">
-                        <ul class="nav nav-tabs">
-                            <li class="nav-item">
-                                <button  class="nav-link active" data-toggle="tab" data-bs-toggle="tab" data-bs-target="#info" data-i18n="info">Info</button >
-                            </li>
-                            <li class="nav-item">
-                                <button  class="nav-link" data-bs-toggle="tab" data-bs-target="#settings" data-i18n="settings">Settings</button >
-                            </li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane fade mt-3 show active" id="info">
-                                <div class="row mb-3">
-                                    <div class="col-6">
-                                        <div class="card card-body text-center text-dark bg-light px-0 py-1">
-                                            <p class="fs-5 mb-0 generation-counter">0</p>
-                                            <small class="text-muted">Generations</small>
+                    <div id="sidebar" class="card">
+                        <div class="card-header">
+                            <ul class="nav nav-tabs card-header-tabs">
+                                <li class="nav-item">
+                                    <button  class="nav-link active" data-toggle="tab" data-bs-toggle="tab" data-bs-target="#info" data-i18n="info">Info</button >
+                                </li>
+                                <li class="nav-item">
+                                    <button  class="nav-link" data-bs-toggle="tab" data-bs-target="#settings" data-i18n="settings">Settings</button >
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade show active" id="info">
+                                    <div class="row mb-3">
+                                        <div class="col-6">
+                                            <div class="card card-body text-center text-dark bg-light px-0 py-1">
+                                                <p class="fs-5 mb-0 generation-counter">0</p>
+                                                <small class="text-muted">Generations</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="card card-body text-center text-dark bg-light px-0 py-1">
+                                                <p class="fs-5 mb-0 best-value">NaN</p>
+                                                <small class="text-muted">Best Value</small>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="card card-body text-center text-dark bg-light px-0 py-1">
-                                            <p class="fs-5 mb-0 best-value">NaN</p>
-                                            <small class="text-muted">Best Value</small>
-                                        </div>
+                                    <div class="charts overflow-auto">
+                                        <div id="chart-global-best-value"></div>
+                                        <div id="chart-average-best-value"></div>
                                     </div>
                                 </div>
-                                <p>Global Best Value</p>
-                                <div id="chart-global-best-value"></div>
-                                <p>Average Best Value</p>
-                                <div id="chart-average-best-value"></div>
-                            </div>
-                            <div class="tab-pane fade mt-3" id="settings">
-                                <form>
-                                    <div class="mb-3">
-                                        <label class="form-label" for="aco">ACO</label>
-                                        <select class="form-select form-select-sm" id="aco">
-                                            <option value="as" selected>Ant System</option>
-                                            <option value="acs">Ant Colony System</option>
-                                          </select>
-                                    </div>
-                                    <div class="form-check form-switch mb-3">
-                                        <input class="form-check-input" type="checkbox" value="" id="show-grid">
-                                        <label class="form-check-label" for="show-grid">Show Grid</label>
-                                    </div>
-                                    <div class="form-check form-switch mb-3">
-                                        <input class="form-check-input" type="checkbox" value="" id="show-pheromones">
-                                        <label class="form-check-label" for="show-pheromones">Show Pheromones</label>
-                                    </div>
-                                    <hr/>
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <label for="alpha" class="form-label" title="Relative influence of the pheromone">&alpha; (Pheromone)</label>
-                                            <input type="number" class="form-control form-control-sm" id="alpha" step="0.01" min="0.0" value="1.0">
+                                <div class="tab-pane fade" id="settings">
+                                    <form>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="aco">ACO</label>
+                                            <select class="form-select form-select-sm" id="aco">
+                                                <option value="as" selected>Ant System</option>
+                                                <option value="acs">Ant Colony System</option>
+                                            </select>
                                         </div>
-                                        <div class="col-6">
-                                            <label for="beta" class="form-label" title="Relative influence of the heuristic information">&beta; (Heuristic)</label>
-                                            <input type="number" class="form-control form-control-sm" id="beta" step="0.01" min="0.0" value="2.0">
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" value="" id="show-grid">
+                                            <label class="form-check-label" for="show-grid">Show Grid</label>
                                         </div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="rho" class="form-label" title="pheromone trail evaporation">&rho;&nbsp;(Evaporation)</label>
-                                        <input type="number" class="form-control form-control-sm" id="rho" step="0.01" min="0.0" max="1.0" value="0.1">
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <div class="col-6">
-                                            <label for="omega" class="form-label">Omega</label>
-                                            <input type="number" class="form-control form-control-sm" id="omega" step="0.01" min="0.0" max="1.0"  value="0.1">
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" value="" id="show-pheromones">
+                                            <label class="form-check-label" for="show-pheromones">Show Pheromones</label>
                                         </div>
-                                        <div class="col-6">
-                                            <label for="q0" class="form-label">Q0</label>
-                                            <input type="number" class="form-control form-control-sm" id="q0" step="0.01" min="0.0" max="1.0" value="0.9">
+                                        <hr/>
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <label for="alpha" class="form-label" title="Relative influence of the pheromone">&alpha; (Pheromone)</label>
+                                                <input type="number" class="form-control form-control-sm" id="alpha" step="0.01" min="0.0" value="1.0">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="beta" class="form-label" title="Relative influence of the heuristic information">&beta; (Heuristic)</label>
+                                                <input type="number" class="form-control form-control-sm" id="beta" step="0.01" min="0.0" value="2.0">
+                                            </div>
                                         </div>
-                                    </div>
 
+                                        <div class="mb-3">
+                                            <label for="rho" class="form-label" title="pheromone trail evaporation">&rho;&nbsp;(Evaporation)</label>
+                                            <input type="number" class="form-control form-control-sm" id="rho" step="0.01" min="0.0" max="1.0" value="0.1">
+                                        </div>
 
-                                </form>
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <label for="omega" class="form-label">Omega</label>
+                                                <input type="number" class="form-control form-control-sm" id="omega" step="0.01" min="0.0" max="1.0"  value="0.1">
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="q0" class="form-label">Q0</label>
+                                                <input type="number" class="form-control form-control-sm" id="q0" step="0.01" min="0.0" max="1.0" value="0.9">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div> <!-- sidebar -->

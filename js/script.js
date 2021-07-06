@@ -7,14 +7,21 @@ let $bestValue = null;
 
 function resizeWindow() {
 
-    let height = $(window).height() - $("#canvas").offset().top - $("footer").height() - 30;
+    let canvasHeight = $(window).height() - $("#canvas").offset().top - $("footer").height() - 30;
 
-    canvas.resize(
-        $(".col-lg-9").width(),
-        height
-    );
+    $("#sidebar").height(canvasHeight-36);
 
-    $("#sidebar").height(height-35);
+    canvas.resize($(".col-lg-9").width(), canvasHeight);
+
+    // console.log(canvasHeight)
+    // console.log($(".charts").offset().top)
+
+
+
+    // chartGlobalBestValue.setHeight(chartHeight/2);
+    // chartAverageBestValue.setHeight(chartHeight/2);
+
+
 }
 
 function setToolbarActive(active){
@@ -30,8 +37,8 @@ $(function () {
     RandomUtils.setSeed(url.query.seed);
 
     canvas = new Canvas();
-    chartGlobalBestValue = ChartUtils.init("chart-global-best-value", "#7cb5ec");
-    chartAverageBestValue = ChartUtils.init("chart-average-best-value", "#90ed7d");
+    chartGlobalBestValue = ChartUtils.init("chart-global-best-value", "Global Best Value", "#7cb5ec");
+    chartAverageBestValue = ChartUtils.init("chart-average-best-value", "Average Best Value", "#90ed7d");
     $generationCounter = $(".generation-counter");
     $bestValue = $(".best-value");
 

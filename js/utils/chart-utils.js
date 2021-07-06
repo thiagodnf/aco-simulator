@@ -1,15 +1,18 @@
 class ChartUtils{
 
-    static init(el, color=undefined){
+    static init(el, title, color=undefined){
 
         var chart = Highcharts.chart(el, {
 
             chart: {
-                height: 150,
+                height: 180,
             },
 
             title: {
-                text: null
+                text: title,
+                style: {
+                    fontSize: '14px'
+                 }
             },
 
             xAxis: {
@@ -56,6 +59,9 @@ class ChartUtils{
                 if (value && !Number.isNaN(value)) {
                     chart.series[0].addPoint(value);
                 }
+            },
+            setHeight: (value) => {
+                chart.setSize(undefined, value, false);
             }
         };
     }
