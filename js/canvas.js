@@ -29,12 +29,23 @@ class Canvas extends fabric.Canvas {
         this.index = null;
 
         this.on('mouse:up', (event) => this.onMoveUp(event))
+        this.on('mouse:wheel', (event) => this.onMoveWheel(event))
 
         this.environment = new Environment(this);
-        // this.aco = new AntSystem(this.environment);
-        this.aco = new AntColonySystem(this.environment);
+        this.aco = new AntSystem(this.environment);
 
         this.setAddNode();
+    }
+
+    onMoveWheel(opt){
+        var delta = opt.e.deltaY;
+        var zoom = canvas.getZoom();
+        zoom *= 0.999 ** delta;
+        if (zoom > 20) zoom = 20;
+        if (zoom < 0.01) zoom = 0.01;
+        canvas.zoomToPoint({ x: opt.e.offsetX, y: opt.e.offsetY }, zoom);
+        opt.e.preventDefault();
+        opt.e.stopPropagation();
     }
 
     onMoveUp(event) {

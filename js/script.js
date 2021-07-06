@@ -75,7 +75,27 @@ $(function () {
         canvas.setAntSpeed(this.value)
     });
 
-    $('.examples').click(function(event){
+    $('.random').click(function() {
+
+        var numberOfNodes = parseInt(prompt("Number of Nodes"));
+
+        if (!Number.isNaN(numberOfNodes) && numberOfNodes <= canvas.nodesLimit) {
+
+            canvas.setClearAll();
+
+            for (let i = 0; i < numberOfNodes; i++) {
+
+                let node = {
+                    x: RandomUtils.nextFloat(0, canvas.width, 10),
+                    y: RandomUtils.nextFloat(0, canvas.height, 10),
+                };
+
+                canvas.addNode(node);
+            }
+        }
+    });
+
+    $('.examples').click(function(){
 
         $.get("examples/" + $(this).data("file"), function (result) {
 
