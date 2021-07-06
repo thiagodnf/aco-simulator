@@ -18,7 +18,10 @@ class ChartUtils{
 
             xAxis: {
                 title: {
-                    text: "Generation"
+                    text: "Generation",
+                    style: {
+                        fontFamily: "var(--bs-font-sans-serif)"
+                    }
                 },
                 tickInterval: 1
             },
