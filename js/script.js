@@ -4,6 +4,7 @@ let chartGlobalBestValue = null;
 let chartAverageBestValue = null;
 let $generationCounter =    null;
 let $bestValue = null;
+let $bestSolution = [];
 
 function resizeWindow() {
 
@@ -31,6 +32,7 @@ $(function () {
     chartAverageBestValue = ChartUtils.init("chart-average-best-value", "Average Best Value", "#90ed7d");
     $generationCounter = $(".generation-counter");
     $bestValue = $(".best-value");
+    $bestSolution = $("#best-solution")
 
     $(window).resize(resizeWindow);
 
@@ -144,6 +146,8 @@ $(function () {
     canvas.on("generationUpdated", function(data){
         $generationCounter.text(data.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
         $bestValue.text(data.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        $bestSolution.val(data.bestTour);
+
         chartGlobalBestValue.addPoint(data.bestTourDistance);
         chartAverageBestValue.addPoint(data.averageTourDistance);
     });

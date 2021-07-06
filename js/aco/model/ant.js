@@ -6,7 +6,7 @@ aco.Ant = class Ant extends fabric.Image {
 
     static ANT_ID = 0;
 
-    constructor(node) {
+    constructor(environment, node) {
         super(ANT_IMAGE, {
             id: Ant.ANT_ID++,
             left: node.left,
@@ -18,6 +18,7 @@ aco.Ant = class Ant extends fabric.Image {
             ...FabricjsUtils.getDefaultSettings()
         });
 
+        this.environment = environment;
 
         this.scaleToWidth(FabricjsUtils.NODE_RADIUS * 2);
         this.scaleToHeight(FabricjsUtils.NODE_RADIUS * 2);
@@ -41,9 +42,8 @@ aco.Ant = class Ant extends fabric.Image {
             return;
         }
 
-        this.path = ArrayUtils.newMatrix(environment.getNumberOfNodes(), environment.getNumberOfNodes(), 0);
-
         this.tourDistance = 0.0;
+        this.path = ArrayUtils.newMatrix(environment.getNumberOfNodes(), environment.getNumberOfNodes(), 0);
 
         this.currentNodeId = this.initialNodeId;
         this.visitedNodeIds = [this.initialNodeId];
@@ -64,6 +64,7 @@ aco.Ant = class Ant extends fabric.Image {
 
     setCurrentNode(node) {
 
+        this.tourDistance += this.environment.getDistance(this.currentNodeId, node.id);
         this.path[this.currentNodeId][node.id] = this.path[node.id][this.currentNodeId] = 1;
 
         this.visitedNodeIds.push(node.id);
@@ -76,6 +77,8 @@ aco.Ant = class Ant extends fabric.Image {
             left: node.left,
         });
         this.setCoords();
+
+
 
         this.nodeIdsToVisit = this.nodeIdsToVisit.filter(id => id != node.id);
     }

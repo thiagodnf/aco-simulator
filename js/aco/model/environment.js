@@ -49,11 +49,8 @@ class Environment {
         this.averageTourDistance = 0.0;
 
         this.ants.forEach(ant => {
-            ant.tourDistance = that.evaluate(ant.visitedNodeIds)
             that.averageTourDistance += ant.tourDistance;
         });
-
-        this.averageTourDistance /= that.getNumberOfAnts();
 
         let bestAnt = this.ants.reduce(function (p, v) {
             return (p.tourDistance < v.tourDistance ? p : v);
@@ -64,6 +61,8 @@ class Environment {
             this.bestTourDistance = bestAnt.tourDistance;
             this.bestPath = ArrayUtils.copyMatrix(bestAnt.path);
         }
+
+        this.averageTourDistance /= that.getNumberOfAnts();
     }
 
     upateCnn() {

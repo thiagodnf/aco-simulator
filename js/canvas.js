@@ -108,7 +108,7 @@ class Canvas extends fabric.Canvas {
         positions.forEach(pos => {
 
             var node = new aco.Node(pos.x, pos.y);
-            var ant = new aco.Ant(node);
+            var ant = new aco.Ant(this.environment, node);
 
             this.add(node);
             this.add(ant);
@@ -126,6 +126,7 @@ class Canvas extends fabric.Canvas {
         this.fire('generationUpdated', {
             generation: this.generation,
             bestTourDistance: this.environment.bestTourDistance,
+            bestTour: this.environment.bestTour,
             averageTourDistance: this.environment.averageTourDistance
         });
 
@@ -209,6 +210,7 @@ class Canvas extends fabric.Canvas {
         this.fire('generationUpdated', {
             generation: this.generation,
             bestTourDistance: this.environment.bestTourDistance,
+            bestTour: this.environment.bestTour,
             averageTourDistance: this.environment.averageTourDistance,
         });
     }
