@@ -21,3 +21,15 @@ label {
     /* font-size: .83333rem; */
     letter-spacing: .02em;
 }
+
+.btn-group-move label{
+    min-width: 36px;
+}
+
+.btn-group-speed label{
+    min-width: 55px;
+}
+
+.btn-group-control button{
+    min-width: 64px;
+}

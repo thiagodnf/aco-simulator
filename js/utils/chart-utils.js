@@ -11,14 +11,16 @@ class ChartUtils{
             title: {
                 text: title,
                 style: {
-                    fontSize: '14px'
-                 }
+                    fontSize: '14px',
+                    fontFamily: "var(--bs-font-sans-serif)"
+                }
             },
 
             xAxis: {
                 title: {
                     text: "Generation"
                 },
+                tickInterval: 1
             },
 
             credits: {
