@@ -29,20 +29,26 @@ class ChartUtils{
                 title: {
                     text: null
                 },
-                min: 0
+                min: 0,
             },
 
             responsive: {
                 rules: [{
-                  condition: {
-                    maxWidth: 500
-                  },
-                  chartOptions: {
-                    legend: {
-                      enabled: false
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            enabled: false
+                        }
                     }
-                  }
                 }]
+            },
+
+            plotOptions: {
+                series: {
+                    pointStart: 1
+                }
             },
 
             series: [{

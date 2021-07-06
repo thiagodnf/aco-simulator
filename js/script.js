@@ -15,9 +15,9 @@ function resizeWindow() {
 }
 
 function setToolbarActive(active){
-    $(".btn-toolbar button").prop( "disabled", active );
-    $(".btn-toolbar input").prop( "disabled", active );
-    $(".btn-toolbar #stop").prop( "disabled", !active );
+    $(".disable-when-playing button").prop( "disabled", active );
+    $(".disable-when-playing input").prop( "disabled", active );
+    $(".disable-when-playing #stop").prop( "disabled", !active );
 }
 
 $(function () {
