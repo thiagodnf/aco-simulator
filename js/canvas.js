@@ -50,7 +50,7 @@ class Canvas extends fabric.Canvas {
 
     onMoveUp(event) {
         if (this.selectedOption == OPTIONS.ADD_NODE) {
-            this.addNode([event.pointer]);
+            this.addNode([event.absolutePointer]);
         }
     }
 
