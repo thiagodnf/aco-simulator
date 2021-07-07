@@ -23,11 +23,6 @@ function setToolbarActive(active){
 
 $(function () {
 
-    // Check for the various File API support.
-    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-        alert('The File APIs are not fully supported by your browser.');
-    }
-
     url = new Url;
 
     RandomUtils.setSeed(url.query.seed);
@@ -86,7 +81,7 @@ $(function () {
             positions.push([ant.left, ant.top]);
         })
 
-        FileUtils.export(positions, "tete.csv");
+        FileUtils.exportToCSV(positions, "output.csv");
     })
 
     $("#form-import-csv").submit(event => {
