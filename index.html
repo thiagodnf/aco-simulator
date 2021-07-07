@@ -45,10 +45,15 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">File</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Import .CSV</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal-import-csv">Import .CSV</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><a class="dropdown-item" href="#" id="menu-export">Export</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Edit</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item text-danger" id="clear-all" href="#"><i class="fa fa-trash me-1"></i>Clear All</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -88,16 +93,16 @@
                             </div>
                             <div class="btn-group btn-group-sm me-2 btn-group-speed">
                                 <input type="radio" class="btn-check" name="ant-speed" id="slow" autocomplete="off" value="250" >
-                                <label class="btn btn-outline-success" for="slow">Slow</label>
+                                <label class="btn btn-outline-primary" for="slow">Slow</label>
 
                                 <input type="radio" class="btn-check" name="ant-speed" id="good" autocomplete="off" value="80" checked>
-                                <label class="btn btn-outline-success" for="good">Good</label>
+                                <label class="btn btn-outline-primary" for="good">Good</label>
 
                                 <input type="radio" class="btn-check" name="ant-speed" id="fast" autocomplete="off" value="10">
-                                <label class="btn btn-outline-success" for="fast">Fast</label>
+                                <label class="btn btn-outline-primary" for="fast">Fast</label>
 
                                 <input type="radio" class="btn-check" name="ant-speed" id="crazy" autocomplete="off" value="1">
-                                <label class="btn btn-outline-success" for="crazy">Crazy</label>
+                                <label class="btn btn-outline-primary" for="crazy">Crazy</label>
                             </div>
                         </div>
 
@@ -195,10 +200,6 @@
                                                 <input type="number" class="form-control form-control-sm" id="q0" step="0.01" min="0.0" max="1.0" value="0.9">
                                             </div>
                                         </div>
-                                        <hr/>
-                                        <div class="btn-group me-2">
-                                            <button id="clear-all" class="btn btn-sm btn-outline-danger"><i class="fa fa-trash me-1"></i>Clear All</button>
-                                        </div>
                                     </form>
                                 </div>
                             </div>
@@ -228,6 +229,36 @@
         </div>
     </footer>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal-import-csv" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="form-import-csv" action="#">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Import .CSV</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="csv-file" class="form-label">File</label>
+                            <input class="form-control form-control-sm" type="file" id="csv-file" required>
+                            <small class="form-text">Use a comma to separate values.</small>
+                        </div>
+                        <div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="has-header">
+                                <label class="form-check-label" for="has-header">Has Header</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-secondary">Import</button>
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Vendor -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -256,6 +287,7 @@
     <script src="js/utils/random-utils.js"></script>
     <script src="js/utils/array-utils.js"></script>
     <script src="js/utils/chart-utils.js"></script>
+    <script src="js/utils/file-utils.js"></script>
     <script src="js/utils/nearest-neighbour.js"></script>
 
 

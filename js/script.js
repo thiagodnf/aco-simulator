@@ -23,6 +23,11 @@ function setToolbarActive(active){
 
 $(function () {
 
+    // Check for the various File API support.
+    if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
+        alert('The File APIs are not fully supported by your browser.');
+    }
+
     url = new Url;
 
     RandomUtils.setSeed(url.query.seed);
@@ -73,6 +78,34 @@ $(function () {
         canvas.setAntSpeed(this.value)
     });
 
+    $("#menu-export").click((event) => {
+
+        let positions = [];
+
+        canvas.environment.ants.forEach(ant =>{
+            positions.push([ant.left, ant.top]);
+        })
+
+        FileUtils.export(positions, "tete.csv");
+    })
+
+    $("#form-import-csv").submit(event => {
+
+        let csvFile = $(this).find("#csv-file").prop('files')[0];
+        let hasHeader = $(this).find("#has-header").is(':checked');
+
+        FileUtils.readCSV(csvFile, hasHeader, (positions) => {
+
+            canvas.setClearAll();
+
+            canvas.addNode(positions);
+
+            $("#modal-import-csv").modal("hide")
+        });
+
+        return false;
+    });
+
     $('.random').click(function() {
 
         var numberOfNodes = parseInt(prompt("Number of Nodes"));
@@ -100,34 +133,7 @@ $(function () {
 
             canvas.setClearAll();
 
-            let numbers = [];
-
-            result.split("\n").forEach(row => {
-
-                let parts = row.trim().split(" ");
-
-                if (parts.length == 1) {
-                    return;
-                }
-
-                numbers.push([parseFloat(parts[1]), parseFloat(parts[2])]);
-            });
-
-            let mx = ArrayUtils.minAndMaxArray(numbers.map(e => e[0]));
-            let my = ArrayUtils.minAndMaxArray(numbers.map(e => e[1]));
-
-            let positions = [];
-
-            numbers.forEach(number => {
-
-                let x = number[0];
-                let y = number[1];
-
-                positions.push({
-                    x: NormalizeUtils.normalizeAnyInterval(x, mx.min, mx.max, 0 + FabricjsUtils.NODE_RADIUS, canvas.width - FabricjsUtils.NODE_RADIUS),
-                    y: NormalizeUtils.normalizeAnyInterval(y, my.min, my.max, 0 + FabricjsUtils.NODE_RADIUS, canvas.height - +FabricjsUtils.NODE_RADIUS),
-                });
-            });
+            let positions = FileUtils.parseContent(result, false);
 
             canvas.addNode(positions);
         });
