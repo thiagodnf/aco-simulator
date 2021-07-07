@@ -21,16 +21,31 @@ canvas{
 }
 
 .menubar .nav-item .nav-link{
-    padding-top: 3px;
-    padding-bottom: 4px;
     color: #495057;
+}
+
+.menubar .dropdown-item span{
+    padding-left: 10px;
+}
+
+.menubar .dropdown-item-checkbox label{
+    padding-left: 4px;
+}
+
+.menubar .dropdown-item-checkbox label:hover{
+    cursor: pointer;
+}
+
+.menubar .fa-blank{
+    visibility:hidden !important;
+    max-width: 12px;
 }
 
 main {
     padding-top: 56px
 }
 
-label {
+form label {
     font-weight: 500 !important;
     letter-spacing: .02em;
 }
@@ -50,3 +65,11 @@ label {
 hr{
     color: lightgray;
 }
+
+.dropdown-menu .form-csheck{
+    width: 100%;
+    padding: .25rem 1rem;
+    clear: both;
+}
+
+

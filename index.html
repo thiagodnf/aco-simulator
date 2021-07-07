@@ -45,17 +45,29 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">File</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal-import-csv">Import .CSV</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#modal-import-csv"><i class="fa fa-upload"></i><span>Import .CSV</span></a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><h6 class="dropdown-header">Export</h6></li>
-                                <li><a class="dropdown-item" href="#" id="menu-export-positions">Positions</a></li>
-                                <li><a class="dropdown-item" href="#" id="menu-export-canvas">Canvas</a></li>
+                                <li><a class="dropdown-item" href="#" id="menu-export-positions"><i class="fa fa-blank"></i><span>Positions</span></a></li>
+                                <li><a class="dropdown-item" href="#" id="menu-export-canvas"><i class="fa fa-blank"></i><span>Canvas</span></a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Edit</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item text-danger" id="clear-all" href="#"><i class="fa fa-trash me-1"></i>Clear All</a></li>
+                                <li><a class="dropdown-item text-danger" id="clear-all" href="#"><i class="fa fa-trash"></i><span>Clear All</span></a></li>
+                                <li><a class="dropdown-item" href="#" id="menu-export-positions"><i class="fa fa-blank"></i><span>Positions</span></a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">View</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item dropdown-item-checkbox" href="#">
+                                        <input class="form-check-input" type="checkbox" value="" id="show-pheromones"/>
+                                        <label class="form-check-label" href="#" for="show-pheromones">Show Pheromones</label>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -162,7 +174,7 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="settings">
-                                    <form>
+                                    <form class="form">
                                         <div class="mb-3">
                                             <label class="form-label" for="aco">ACO</label>
                                             <select class="form-select form-select-sm" id="aco">
