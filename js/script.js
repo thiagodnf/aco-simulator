@@ -73,7 +73,7 @@ $(function () {
         canvas.setAntSpeed(this.value)
     });
 
-    $("#menu-export").click((event) => {
+    $("#menu-export-positions").click((event) => {
 
         let positions = [];
 
@@ -81,7 +81,14 @@ $(function () {
             positions.push([ant.left, ant.top]);
         })
 
-        FileUtils.exportToCSV(positions, "output.csv");
+        FileUtils.exportToCSV(positions, "positions.csv");
+    })
+
+    $("#menu-export-canvas").click((event) => {
+
+        document.getElementById("canvas").toBlob(function(blob) {
+            saveAs(blob, "canvas.png");
+        });
     })
 
     $("#form-import-csv").submit(event => {
