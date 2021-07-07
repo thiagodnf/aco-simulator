@@ -48,61 +48,30 @@ class FileUtils {
             csvContent += index < data.length ? dataString + '\n' : dataString;
         });
 
-        let mimeType = 'text/csv;encoding:utf-8';
+        // let mimeType = 'text/csv;encoding:utf-8';
 
-        var a = document.createElement('a');
-        mimeType = mimeType || 'application/octet-stream';
-
-
-        // for UTF-16
-        var cCode, bArr = [];
-        bArr.push(255, 254);
-        for (var i = 0; i < csvContent.length; ++i) {
-            cCode = csvContent.charCodeAt(i);
-            bArr.push(cCode & 0xff);
-            bArr.push(cCode / 256 >>> 0);
-        }
-
-        var blob = new Blob([new Uint8Array(bArr)], { type: 'text/csv;charset=UTF-16LE;' });
-
-        if (navigator.msSaveBlob) {
-            navigator.msSaveBlob(blob, fileName);
-        } else {
-            var link = document.createElement("a");
-            if (link.download !== undefined) {
-                var url = window.URL.createObjectURL(blob);
-                link.setAttribute("href", url);
-                link.setAttribute("download", fileName);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                window.URL.revokeObjectURL(url);
-
-            }
-        }
+        // var a = document.createElement('a');
+        // mimeType = mimeType || 'application/octet-stream';
 
 
-
-        // if (navigator.msSaveBlob) { // IE10
-        //     navigator.msSaveBlob(new Blob([csvContent], {
-        //         type: mimeType
-        //     }), fileName);
-        // } else if (URL && 'download' in a) { //html5 A[download]
-        //     a.href = URL.createObjectURL(new Blob([csvContent], {
-        //         type: mimeType
-        //     }));
-        //     a.setAttribute('download', fileName);
-        //     document.body.appendChild(a);
-        //     a.click();
-        //     document.body.removeChild(a);
-        // } else {
-        //     location.href = 'data:application/octet-stream,' + encodeURIComponent(csvContent); // only this mime type is supported
+        // // for UTF-16
+        // var cCode, bArr = [];
+        // bArr.push(255, 254);
+        // for (var i = 0; i < csvContent.length; ++i) {
+        //     cCode = csvContent.charCodeAt(i);
+        //     bArr.push(cCode & 0xff);
+        //     bArr.push(cCode / 256 >>> 0);
         // }
 
+        console.log(csvContent)
 
-        // var download = document.getElementById('download');
-        // download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
-        // download.setAttribute('download', 'test.csv');
+        var blob = new Blob(["o"], { type: "text/plain;charset=utf-8" });
+
+        var a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = window.URL.createObjectURL(blob);
+        a.download = "script.gnu";
+        a.click();
     }
 }
