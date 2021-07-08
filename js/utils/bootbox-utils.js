@@ -2,20 +2,23 @@ class BootBoxUtils {
 
     static setDefaults() {
 
+        bootbox.setDefaults({
+            backdrop: true,
+            closeButton: false,
+            swapButtonOrder: true,
+            animate: false,
+            size: "small",
+            centerVertical: true,
+        });
     }
 
-    static promptNumber(title, min=1, max=20) {
+    static promptNumber(title, min = 1, max = 20) {
 
         BootBoxUtils.setDefaults();
 
         return new Promise((resolve, reject) => {
             bootbox.prompt({
                 title: title,
-                centerVertical: true,
-                size: "small",
-                swapButtonOrder: true,
-                closeButton: false,
-                animate: false,
                 inputType: "number",
                 required: true,
                 min: min,
@@ -36,10 +39,9 @@ class BootBoxUtils {
                 }
             });
 
-            $(".bootbox-input").after(`<div class="form-text mt-2">Min: ${min}, Max: ${max}</div>`)
+            $(".bootbox-input").after(`<div class="form-text mt-2">Min: ${min} and Max: ${max}</div>`)
         });
     }
-
 
     static alert(message) {
 
@@ -48,11 +50,6 @@ class BootBoxUtils {
         return new Promise((resolve, reject) => {
             bootbox.alert({
                 message: message,
-                centerVertical: true,
-                size: "small",
-                swapButtonOrder: true,
-                closeButton: false,
-                animate: false,
                 callback: function (result) {
                     if (result) {
                         resolve();
@@ -71,11 +68,6 @@ class BootBoxUtils {
         return new Promise((resolve, reject) => {
             bootbox.confirm({
                 message: message,
-                centerVertical: true,
-                size: "small",
-                swapButtonOrder: true,
-                closeButton: false,
-                animate: false,
                 buttons: {
                     confirm: {
                         label: 'Yes',
@@ -96,5 +88,4 @@ class BootBoxUtils {
             });
         });
     }
-
 }
