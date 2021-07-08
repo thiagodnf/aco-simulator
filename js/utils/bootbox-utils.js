@@ -20,7 +20,7 @@ class BootBoxUtils {
         }
     }
 
-    static promptNumber(title, min = 1, max = 20) {
+    static promptNumber(title, min = 1, max = 20, value=2) {
 
         BootBoxUtils.setDefaults();
 
@@ -31,7 +31,7 @@ class BootBoxUtils {
                 required: true,
                 min: min,
                 max: max,
-                value: 10,
+                value: value,
                 buttons: {
                     cancel: {
                         label: 'Cancel',

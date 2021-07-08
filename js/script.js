@@ -126,6 +126,18 @@ $(function () {
         });
     })
 
+    $("#menubar-insert-circle").click((event) => {
+
+        BootBoxUtils.promptNumber("Number of Circles", 1, 5, 2).then((value) => {
+
+            var numberOfCircles = parseInt(value);
+
+            canvas.setClearAll();
+
+            canvas.addNode(GeneratorUtils.circle(numberOfCircles));
+        });
+    })
+
     $("#form-import-csv").submit(event => {
 
         let csvFile = $(this).find("#csv-file").prop('files')[0];
