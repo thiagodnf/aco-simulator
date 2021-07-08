@@ -174,7 +174,7 @@ $(function () {
 
     $('.random').click(function() {
 
-        BootBoxUtils.promptNumber("Number of Nodes").then((value) => {
+        BootBoxUtils.promptNumber("Number of Nodes", 1, canvas.nodesLimit).then((value) => {
 
             var numberOfNodes = parseInt(value);
 

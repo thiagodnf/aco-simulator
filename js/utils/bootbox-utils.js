@@ -1,20 +1,25 @@
 class BootBoxUtils {
 
-    static promptNumber(title) {
+    static setDefaults() {
+
+    }
+
+    static promptNumber(title, min=1, max=20) {
+
+        BootBoxUtils.setDefaults();
 
         return new Promise((resolve, reject) => {
             bootbox.prompt({
                 title: title,
                 centerVertical: true,
-                message: '<p>Please select an option below:</p>',
                 size: "small",
                 swapButtonOrder: true,
                 closeButton: false,
                 animate: false,
                 inputType: "number",
                 required: true,
-                min: 1,
-                max: canvas.nodesLimit,
+                min: min,
+                max: max,
                 value: 10,
                 buttons: {
                     cancel: {
@@ -30,11 +35,15 @@ class BootBoxUtils {
                     }
                 }
             });
+
+            $(".bootbox-input").after(`<div class="form-text mt-2">Min: ${min}, Max: ${max}</div>`)
         });
     }
 
 
     static alert(message) {
+
+        BootBoxUtils.setDefaults();
 
         return new Promise((resolve, reject) => {
             bootbox.alert({
@@ -56,6 +65,8 @@ class BootBoxUtils {
     }
 
     static confirm(message) {
+
+        BootBoxUtils.setDefaults();
 
         return new Promise((resolve, reject) => {
             bootbox.confirm({
