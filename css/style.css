@@ -66,16 +66,9 @@ hr{
     color: lightgray;
 }
 
-.dropdown-menu .form-csheck{
-    width: 100%;
-    padding: .25rem 1rem;
-    clear: both;
-}
 
 
 
-
-/* ============ desktop view ============ */
 @media all and (min-width: 992px) {
 	.dropdown-menu li{ position: relative; 	}
 	.nav-item .submenu{
@@ -89,12 +82,8 @@ hr{
 	.dropdown-menu > li:hover{ background-color: #f1f1f1 }
 	.dropdown-menu > li:hover > .submenu{ display: block; }
 }
-/* ============ desktop view .end// ============ */
-
-/* ============ small devices ============ */
 @media (max-width: 991px) {
   .dropdown-menu .dropdown-menu{
       margin-left:0.7rem; margin-right:0.7rem; margin-bottom: .5rem;
   }
 }
-/* ============ small devices .end// ============ */
