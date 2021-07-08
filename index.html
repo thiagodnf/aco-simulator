@@ -50,8 +50,8 @@
                                 <li>
                                     <a class="dropdown-item" href="#"><i class="fa fa-blank"></i><span>Export</span><i class="fa fa-chevron-right float-end mt-1"></i></a>
                                     <ul class="submenu dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" id="menu-export-positions"><i class="fa fa-blank"></i><span>Canvas</span></a></li>
-                                        <li><a class="dropdown-item" href="#" id="menu-export-canvas"><i class="fa fa-blank"></i><span>Positions</span></a></li>
+                                        <li><a class="dropdown-item" href="#" id="menu-export-canvas"><i class="fa fa-blank"></i><span>Canvas</span></a></li>
+                                        <li><a class="dropdown-item" href="#" id="menu-export-positions"><i class="fa fa-blank"></i><span>Positions</span></a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -59,11 +59,9 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Edit</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item text-danger" id="clear-all" href="#"><i class="fa fa-trash"></i><span>Clear All</span></a></li>
-                                <li><a class="dropdown-item" href="#" id="menu-export-positions"><i class="fa fa-blank"></i><span>Positions</span></a></li>
-
-
-
+                                <li><a class="dropdown-item" id="clear-all" href="#"><i class="fa fa-blank"></i><span>Clear All</span></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-settings" href="#"><i class="fa fa-cog"></i><span>Settings</span></a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -83,14 +81,13 @@
                                 <li><a class="dropdown-item examples" data-file="dj30.csv" href="#"><i class="fa fa-blank"></i><span>dj30.csv</span></a></li>
                                 <li><a class="dropdown-item examples" data-file="oliver55.csv" href="#"><i class="fa fa-blank"></i><span>oliver55.csv</span></a></li>
                                 <li><hr class="dropdown-divider"></li>
-
                                 <li><a class="dropdown-item random" href="#"><i class="fa fa-dice"></i><span>Random</span></a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Help</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">About</a></li>
+                                <li><a class="dropdown-item" target="_blank" href="https://en.wikipedia.org/wiki/Ant_colony_optimization_algorithms"><i class="fa fa-blank"></i><span>About</span></a></li>
                             </ul>
                         </li>
                     </ul>
@@ -150,7 +147,7 @@
                                     <button  class="nav-link active" data-toggle="tab" data-bs-toggle="tab" data-bs-target="#info" data-i18n="info">Info</button >
                                 </li>
                                 <li class="nav-item">
-                                    <button  class="nav-link" data-bs-toggle="tab" data-bs-target="#settings" data-i18n="settings">Settings</button >
+                                    <button  class="nav-link" data-bs-toggle="tab" data-bs-target="#parameters" data-i18n="parameters">Parameters</button >
                                 </li>
                             </ul>
                         </div>
@@ -181,20 +178,8 @@
                                         <div id="chart-average-best-value"></div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="settings">
+                                <div class="tab-pane fade" id="parameters">
                                     <form class="form">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="aco">ACO</label>
-                                            <select class="form-select form-select-sm" id="aco">
-                                                <option value="as" selected>Ant System</option>
-                                                <option value="acs">Ant Colony System</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" value="" id="show-pheromones">
-                                            <label class="form-check-label" for="show-pheromones">Show Pheromones</label>
-                                        </div>
-                                        <hr/>
                                         <div class="row mb-3">
                                             <div class="col-6">
                                                 <label for="alpha" class="form-label" title="Relative influence of the pheromone">&alpha; (Pheromone)</label>
@@ -205,21 +190,20 @@
                                                 <input type="number" class="form-control form-control-sm" id="beta" step="0.01" min="0.0" value="2.0">
                                             </div>
                                         </div>
-
                                         <div class="mb-3">
                                             <label for="rho" class="form-label" title="pheromone trail evaporation">&rho;&nbsp;(Evaporation)</label>
                                             <input type="number" class="form-control form-control-sm" id="rho" step="0.01" min="0.0" max="1.0" value="0.1">
                                         </div>
-                                        <hr/>
-                                        <p>Only for Ant Colony System</p>
-                                        <div class="row mb-3">
-                                            <div class="col-6">
-                                                <label for="omega" class="form-label">Omega</label>
-                                                <input type="number" class="form-control form-control-sm" id="omega" step="0.01" min="0.0" max="1.0"  value="0.1">
-                                            </div>
-                                            <div class="col-6">
-                                                <label for="q0" class="form-label">Q0</label>
-                                                <input type="number" class="form-control form-control-sm" id="q0" step="0.01" min="0.0" max="1.0" value="0.9">
+                                        <div class="acs-parameters">
+                                            <div class="row mb-3">
+                                                <div class="col-6">
+                                                    <label for="omega" class="form-label">Omega</label>
+                                                    <input type="number" class="form-control form-control-sm" id="omega" step="0.01" min="0.0" max="1.0"  value="0.1">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="q0" class="form-label">Q0</label>
+                                                    <input type="number" class="form-control form-control-sm" id="q0" step="0.01" min="0.0" max="1.0" value="0.9">
+                                                </div>
                                             </div>
                                         </div>
                                     </form>
@@ -273,8 +257,37 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-secondary">Import</button>
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-settings" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="form-settings" action="#">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fa fa-cog me-2"></i>Settings</h5>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label" for="aco">ACO</label>
+                            <select class="form-select form-select-sm" id="aco">
+                                <option value="as" selected>Ant System</option>
+                                <option value="acs">Ant Colony System</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="random-seed" class="form-label">Random Seed</label>
+                            <input type="number" class="form-control form-control-sm" id="random-seed">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -292,6 +305,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.4.0/fabric.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.4/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.5.2/bootbox.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>

@@ -2,12 +2,13 @@ class RandomUtils {
 
     static chance = new Chance();
 
+    static seed = new Date().getTime()
+
     static setSeed(seed) {
-        if (seed) {
-            RandomUtils.chance = new Chance(seed);
-        } else {
-            RandomUtils.chance = new Chance();
-        }
+
+        RandomUtils.seed = seed;
+
+        RandomUtils.chance = new Chance(RandomUtils.seed);
     }
 
     static nextInt(min, max) {

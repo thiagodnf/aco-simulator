@@ -25,14 +25,16 @@ $(function () {
 
     url = new Url;
 
-    RandomUtils.setSeed(url.query.seed);
+    RandomUtils.setSeed(url.query.seed || new Date().getTime());
 
     canvas = new Canvas();
     chartGlobalBestValue = ChartUtils.init("chart-global-best-value", "Global Best Value", "#7cb5ec");
     chartAverageBestValue = ChartUtils.init("chart-average-best-value", "Average Best Value", "#90ed7d");
     $generationCounter = $(".generation-counter");
     $bestValue = $(".best-value");
-    $bestSolution = $("#best-solution")
+    $bestSolution = $("#best-solution");
+
+    $(".acs-parameters").hide();
 
     $(window).resize(resizeWindow);
 
@@ -82,22 +84,7 @@ $(function () {
         });
         // DOMContentLoaded  end
 
-    // $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function(event) {
-	// 	event.preventDefault();
-	// 	event.stopPropagation();
 
-	// 	$(".dropdown-menu").find('.show').removeClass("show");
-
-	// 	$(this).siblings().toggleClass("show");
-
-	// 	if (!$(this).next().hasClass('show')) {
-	// 		$(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-	// 	}
-
-	// 	$(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
-	// 		$('.dropdown-submenu .show').removeClass("show");
-	// 	});
-	// });
 
     $("#play").click(() => {canvas.setPlay();});
     $("#step").click(() => { canvas.setStep();});
@@ -119,7 +106,6 @@ $(function () {
     $('#rho').change(function(){canvas.environment.rho = parseFloat($( this ).val());});
     $('#omega').change(function(){canvas.environment.omega = parseFloat($( this ).val());});
     $('#q0').change(function(){canvas.environment.q0 = parseFloat($( this ).val());});
-    $('#aco').change(function(){canvas.setACO($( this ).val())});
 
     $('input[name=ant-speed').change(function() {
         canvas.setAntSpeed(this.value)
@@ -160,25 +146,47 @@ $(function () {
         return false;
     });
 
+    $("#form-settings").submit(event => {
+
+        let aco = $(this).find("#aco").val();
+        let randomSeed = $(this).find("#random-seed").val();
+
+        canvas.setACO(aco);
+        RandomUtils.setSeed(randomSeed);
+
+        $("#modal-settings").modal("hide")
+
+        if(aco == "acs"){
+            $(".acs-parameters").show();
+        }else{
+            $(".acs-parameters").hide();
+        }
+
+        return false;
+    });
+
     $('.random').click(function() {
 
-        var numberOfNodes = parseInt(prompt("Number of Nodes"));
+        bootbox.prompt("Number of Nodes", function(result){
 
-        if (!Number.isNaN(numberOfNodes) && numberOfNodes <= canvas.nodesLimit) {
+            var numberOfNodes = parseInt(result);
 
-            canvas.setClearAll();
+            if (!Number.isNaN(numberOfNodes) && numberOfNodes <= canvas.nodesLimit) {
 
-            let positions = [];
+                canvas.setClearAll();
 
-            for (let i = 0; i < numberOfNodes; i++) {
-                positions.push({
-                    x: RandomUtils.nextFloat(0, canvas.width, 10),
-                    y: RandomUtils.nextFloat(0, canvas.height, 10),
-                });
+                let positions = [];
+
+                for (let i = 0; i < numberOfNodes; i++) {
+                    positions.push({
+                        x: RandomUtils.nextFloat(0, canvas.width, 10),
+                        y: RandomUtils.nextFloat(0, canvas.height, 10),
+                    });
+                }
+
+                canvas.addNode(positions);
             }
-
-            canvas.addNode(positions);
-        }
+        });
     });
 
     $('.examples').click(function(){
@@ -192,6 +200,10 @@ $(function () {
             canvas.addNode(positions);
         });
     });
+
+    $("#modal-settings").on("show.bs.modal", (event) => {
+        $("#random-seed").val(RandomUtils.seed)
+    })
 
     resizeWindow();
 
