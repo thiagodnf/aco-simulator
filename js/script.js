@@ -126,15 +126,23 @@ $(function () {
         });
     })
 
-    $("#menubar-insert-circle").click((event) => {
+    $("#menubar-insert-circles").click((event) => {
 
         BootBoxUtils.promptNumber("Number of Circles", 1, 5, 2).then((value) => {
 
-            var numberOfCircles = parseInt(value);
+            canvas.setClearAll();
+
+            canvas.addNode(GeneratorUtils.circle(parseInt(value)));
+        });
+    })
+
+    $("#menubar-insert-squares").click((event) => {
+
+        BootBoxUtils.promptNumber("Number of Squares", 1, 5, 2).then((value) => {
 
             canvas.setClearAll();
 
-            canvas.addNode(GeneratorUtils.circle(numberOfCircles));
+            canvas.addNode(GeneratorUtils.square(parseInt(value)));
         });
     })
 
