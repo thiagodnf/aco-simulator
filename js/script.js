@@ -6,6 +6,8 @@ let $generationCounter =    null;
 let $bestValue = null;
 let $bestSolution = [];
 
+let $modalSettings = null;
+
 function resizeWindow() {
 
     let canvasHeight = $(window).height() - $("#canvas").offset().top - $("footer").height() - 30;
@@ -33,6 +35,7 @@ $(function () {
     $generationCounter = $(".generation-counter");
     $bestValue = $(".best-value");
     $bestSolution = $("#best-solution");
+    $modalSettings = $("#modal-settings");
 
     $(".acs-parameters").hide();
 
@@ -44,8 +47,8 @@ $(function () {
         };
     });
 
-    window.onerror = (errorMsg, url, lineNumber) => {
-        alert(errorMsg);
+    window.onerror = (errorMsg) => {
+        BootBoxUtils.alert(errorMsg);
         return false;
     }
 
@@ -94,9 +97,9 @@ $(function () {
     $("#move-node").click(() => canvas.setMoveNode());
 
     $("#clear-all").click(() => {
-        if (confirm("Are you sure?")) {
+        BootBoxUtils.confirm("Are you sure?").then(() =>{
             canvas.setClearAll()
-        }
+        });
     });
 
     $('#show-pheromones').change(() => canvas.toggleShowPheromones());
@@ -146,7 +149,11 @@ $(function () {
         return false;
     });
 
-    $("#form-settings").submit(event => {
+    $modalSettings.on("show.bs.modal", (event) => {
+        $("#random-seed").val(RandomUtils.seed)
+    });
+
+    $modalSettings.find("#form-settings").submit(event => {
 
         let aco = $(this).find("#aco").val();
         let randomSeed = $(this).find("#random-seed").val();
@@ -167,9 +174,9 @@ $(function () {
 
     $('.random').click(function() {
 
-        bootbox.prompt("Number of Nodes", function(result){
+        BootBoxUtils.promptNumber("Number of Nodes").then((value) => {
 
-            var numberOfNodes = parseInt(result);
+            var numberOfNodes = parseInt(value);
 
             if (!Number.isNaN(numberOfNodes) && numberOfNodes <= canvas.nodesLimit) {
 
@@ -201,9 +208,7 @@ $(function () {
         });
     });
 
-    $("#modal-settings").on("show.bs.modal", (event) => {
-        $("#random-seed").val(RandomUtils.seed)
-    })
+
 
     resizeWindow();
 

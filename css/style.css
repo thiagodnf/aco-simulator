@@ -1,5 +1,5 @@
 body{
-    font-size: 14px;
+    font-size: .875rem;
 }
 
 canvas{
@@ -24,15 +24,15 @@ canvas{
     color: #495057;
 }
 
+.menubar .dropdown-item-checkbox span{
+    padding-left: 4px !important;
+}
+
 .menubar .dropdown-item span{
     padding-left: 10px;
 }
 
-.menubar .dropdown-item-checkbox label{
-    padding-left: 4px;
-}
-
-.menubar .dropdown-item-checkbox label:hover{
+.menubar .dropdown-item-checkbox:hover{
     cursor: pointer;
 }
 
@@ -66,6 +66,21 @@ hr{
     color: lightgray;
 }
 
+
+
+.form-select {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+    padding-left: .5rem;
+    font-size: .875rem;
+}
+
+.form-control {
+    min-height: calc(1.5em + .5rem + 2px);
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    border-radius: .2rem;
+}
 
 
 
