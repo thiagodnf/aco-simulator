@@ -50,8 +50,8 @@
                                 <li>
                                     <a class="dropdown-item" href="#"><i class="fa fa-blank"></i><span>Export</span><i class="fa fa-chevron-right float-end mt-1"></i></a>
                                     <ul class="submenu dropdown-menu">
-                                        <li><a class="dropdown-item" href="#" id="menu-export-canvas"><i class="fa fa-blank"></i><span>Canvas</span></a></li>
-                                        <li><a class="dropdown-item" href="#" id="menu-export-positions"><i class="fa fa-blank"></i><span>Positions</span></a></li>
+                                        <li><a class="dropdown-item" href="#" id="menubar-export-canvas"><i class="fa fa-blank"></i><span>Canvas</span></a></li>
+                                        <li><a class="dropdown-item" href="#" id="menubar-export-positions"><i class="fa fa-blank"></i><span>Positions</span></a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -59,7 +59,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">Edit</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" id="clear-all" href="#"><i class="fa fa-blank"></i><span>Clear All</span></a></li>
+                                <li><a class="dropdown-item" id="menubar-clear-all" href="#"><i class="fa fa-blank"></i><span>Clear All</span></a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-settings" href="#"><i class="fa fa-cog"></i><span>Settings</span></a></li>
                             </ul>
@@ -68,8 +68,8 @@
                             <a class="nav-link" href="#" id="navbarDropdown" data-bs-toggle="dropdown">View</a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <label class="dropdown-item dropdown-item-checkbox" for="show-pheromones">
-                                        <input class="form-check-input" type="checkbox" value="" id="show-pheromones"/>
+                                    <label class="dropdown-item dropdown-item-checkbox" for="menubar-show-pheromones">
+                                        <input class="form-check-input" type="checkbox" value="" id="menubar-show-pheromones"/>
                                         <span>Show Pheromones</span>
                                     </label>
                                 </li>
@@ -179,33 +179,36 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="parameters">
-                                    <form class="form">
+                                    <form id="form-parameters">
                                         <div class="row mb-3">
                                             <div class="col-6">
                                                 <label for="alpha" class="form-label" title="Relative influence of the pheromone">&alpha; (Pheromone)</label>
-                                                <input type="number" class="form-control" id="alpha" step="0.01" min="0.0" value="1.0">
+                                                <input type="number" class="form-control" id="alpha" step="0.1" min="0.0" value="1.0" data-default-value="1.0" required>
                                             </div>
                                             <div class="col-6">
                                                 <label for="beta" class="form-label" title="Relative influence of the heuristic information">&beta; (Heuristic)</label>
-                                                <input type="number" class="form-control" id="beta" step="0.01" min="0.0" value="2.0">
+                                                <input type="number" class="form-control" id="beta" step="0.1" min="0.0" value="2.0" data-default-value="2.0" required>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <label for="rho" class="form-label" title="pheromone trail evaporation">&rho;&nbsp;(Evaporation)</label>
-                                            <input type="number" class="form-control" id="rho" step="0.01" min="0.0" max="1.0" value="0.1">
+                                            <input type="number" class="form-control" id="rho" step="0.1" min="0.0" max="1.0" value="0.1" data-default-value="0.1" required>
                                         </div>
                                         <div class="acs-parameters">
                                             <div class="row mb-3">
                                                 <div class="col-6">
                                                     <label for="omega" class="form-label">Omega</label>
-                                                    <input type="number" class="form-control=" id="omega" step="0.01" min="0.0" max="1.0"  value="0.1">
+                                                    <input type="number" class="form-control" id="omega" step="0.1" min="0.0" max="1.0"  value="0.1" data-default-value="0.1" required>
                                                 </div>
                                                 <div class="col-6">
                                                     <label for="q0" class="form-label">Q0</label>
-                                                    <input type="number" class="form-control=" id="q0" step="0.01" min="0.0" max="1.0" value="0.9">
+                                                    <input type="number" class="form-control" id="q0" step="0.1" min="0.0" max="1.0" value="0.9" data-default-value="0.9" required>
                                                 </div>
                                             </div>
                                         </div>
+                                        <hr/>
+                                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                                        <button type="button" class="btn btn-light btn-sm" id="btn-reset-default-values">Reset</button>
                                     </form>
                                 </div>
                             </div>

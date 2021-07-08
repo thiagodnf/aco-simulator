@@ -3,13 +3,21 @@ class BootBoxUtils {
     static setDefaults() {
 
         bootbox.setDefaults({
-            backdrop: true,
+            backdrop: null,
             closeButton: false,
             swapButtonOrder: true,
             animate: false,
             size: "small",
             centerVertical: true,
         });
+
+        bootstrap.callback = function (value, resolve, reject) {
+            if (value) {
+                resolve(value);
+            } else {
+                reject(value);
+            }
+        }
     }
 
     static promptNumber(title, min = 1, max = 20) {
@@ -30,13 +38,7 @@ class BootBoxUtils {
                         className: 'btn-light'
                     }
                 },
-                callback: function (value) {
-                    if (value) {
-                        resolve(value);
-                    } else {
-                        reject(value);
-                    }
-                }
+                callback: (result) => bootstrap.callback(result, resolve, reject)
             });
 
             $(".bootbox-input").after(`<div class="form-text mt-2">Min: ${min} and Max: ${max}</div>`)
@@ -50,13 +52,7 @@ class BootBoxUtils {
         return new Promise((resolve, reject) => {
             bootbox.alert({
                 message: message,
-                callback: function (result) {
-                    if (result) {
-                        resolve();
-                    } else {
-                        reject();
-                    }
-                }
+                callback: (result) => bootstrap.callback(result, resolve, reject)
             });
         });
     }
@@ -67,6 +63,7 @@ class BootBoxUtils {
 
         return new Promise((resolve, reject) => {
             bootbox.confirm({
+                title: "Please Confirm",
                 message: message,
                 buttons: {
                     confirm: {
@@ -78,13 +75,7 @@ class BootBoxUtils {
                         className: 'btn-light'
                     }
                 },
-                callback: function (result) {
-                    if (result) {
-                        resolve();
-                    } else {
-                        reject();
-                    }
-                }
+                callback: (result) => bootstrap.callback(result, resolve, reject)
             });
         });
     }

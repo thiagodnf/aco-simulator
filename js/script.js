@@ -96,25 +96,19 @@ $(function () {
     $("#add-node").click(() => canvas.setAddNode());
     $("#move-node").click(() => canvas.setMoveNode());
 
-    $("#clear-all").click(() => {
-        BootBoxUtils.confirm("Are you sure?").then(() =>{
-            canvas.setClearAll()
-        });
-    });
-
-    $('#show-pheromones').change(() => canvas.toggleShowPheromones());
-
-    $('#alpha').change(function(){canvas.environment.alpha = parseFloat($( this ).val());});
-    $('#beta').change(function(){canvas.environment.beta = parseFloat($( this ).val());});
-    $('#rho').change(function(){canvas.environment.rho = parseFloat($( this ).val());});
-    $('#omega').change(function(){canvas.environment.omega = parseFloat($( this ).val());});
-    $('#q0').change(function(){canvas.environment.q0 = parseFloat($( this ).val());});
-
     $('input[name=ant-speed').change(function() {
         canvas.setAntSpeed(this.value)
     });
 
-    $("#menu-export-positions").click((event) => {
+    $("#menubar-clear-all").click(() => {
+        BootBoxUtils.confirm("Are you sure you want to clear all?").then(() =>{
+            canvas.setClearAll()
+        });
+    });
+
+    $('#menubar-show-pheromones').change(() => canvas.toggleShowPheromones());
+
+    $("#menubar-export-positions").click((event) => {
 
         let positions = [];
 
@@ -125,7 +119,7 @@ $(function () {
         FileUtils.exportToCSV(positions, "positions.csv");
     })
 
-    $("#menu-export-canvas").click((event) => {
+    $("#menubar-export-canvas").click((event) => {
 
         document.getElementById("canvas").toBlob(function(blob) {
             saveAs(blob, "canvas.png");
@@ -149,27 +143,40 @@ $(function () {
         return false;
     });
 
+    $("#form-parameters").submit(event => {
+
+        canvas.environment.alpha = parseFloat($('#alpha').val());
+        canvas.environment.beta = parseFloat($('#beta').val());
+        canvas.environment.rho = parseFloat($('#rho').val());
+        canvas.environment.omega = parseFloat($('#omega').val());
+        canvas.environment.q0 = parseFloat($('#q0').val());
+
+        return false;
+    });
+
     $modalSettings.on("show.bs.modal", (event) => {
         $("#random-seed").val(RandomUtils.seed)
     });
 
     $modalSettings.find("#form-settings").submit(event => {
 
-        let aco = $(this).find("#aco").val();
-        let randomSeed = $(this).find("#random-seed").val();
+        let aco = $(this).find("#aco").val().trim();
+        let randomSeed = $(this).find("#random-seed").val().trim();
 
         canvas.setACO(aco);
         RandomUtils.setSeed(randomSeed);
 
-        $("#modal-settings").modal("hide")
+        $(".acs-parameters").toggle(aco == "acs");
 
-        if(aco == "acs"){
-            $(".acs-parameters").show();
-        }else{
-            $(".acs-parameters").hide();
-        }
+        $modalSettings.modal("hide")
 
         return false;
+    });
+
+    $("#btn-reset-default-values").click(event => {
+        $("#form-parameters input").each(function(event){
+            $(this).val($(this).data("default-value"));
+        });
     });
 
     $('.random').click(function() {
