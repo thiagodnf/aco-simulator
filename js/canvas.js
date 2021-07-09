@@ -352,11 +352,15 @@ class Canvas extends fabric.Canvas {
                     that.fire('stopped', {});
                 }
             } else {
-                setTimeout(render, 1);
+                // fabric.util.requestAnimFrame(render);
+                // window.requestAnimationFrame(render);
+                setTimeout(render, 0)
             }
         };
 
-        setTimeout(render, 1);
+        // fabric.util.requestAnimFrame(render);
+        // window.requestAnimationFrame(render);
+        setTimeout(render, 0)
     }
 
     moveAnt(ant, nextNode, segments) {
