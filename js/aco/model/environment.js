@@ -24,6 +24,18 @@ class Environment {
         this.q0 = 0.9;
     }
 
+    init(){
+        console.log("init")
+
+        this.bestTour = [];
+        this.bestTourDistance = Number.NaN;
+        this.averageTourDistance = Number.NaN;
+
+        this.updateDistances();
+        this.upateCnn();
+        this.updateAnts();
+    }
+
     updateDistances(){
 
         let size = this.getNumberOfNodes();
@@ -84,15 +96,7 @@ class Environment {
     }
 
     addNode(node){
-
-        this.bestTour = [];
-        this.bestTourDistance = Number.NaN;
-        this.averageTourDistance = Number.NaN;
-
         this.nodes.push(node);
-        this.updateDistances();
-        this.upateCnn();
-        this.updateAnts();
     }
 
     isGenerationDone(){

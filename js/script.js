@@ -240,12 +240,19 @@ $(function () {
         setToolbarActive(false);
     });
 
-    canvas.on("generationUpdated", function(data){
-        $generationCounter.text(data.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
-        $bestValue.text(data.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
-        $bestSolution.val(data.bestTour);
+    canvas.on("generationUpdated", function(canvas){
 
-        chartGlobalBestValue.addPoint(data.bestTourDistance);
-        chartAverageBestValue.addPoint(data.averageTourDistance);
+
+        // generation: this.generation,
+        // bestTourDistance: this.environment.bestTourDistance,
+        // bestTour: this.environment.bestTour,
+        // averageTourDistance: this.environment.averageTourDistance
+
+        $generationCounter.text(canvas.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        $bestValue.text(canvas.environment.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        $bestSolution.val(canvas.environment.bestTour);
+
+        chartGlobalBestValue.addPoint(canvas.environment.bestTourDistance);
+        chartAverageBestValue.addPoint(canvas.environment.averageTourDistance);
     });
 });

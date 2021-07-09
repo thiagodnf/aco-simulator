@@ -115,20 +115,17 @@ class Canvas extends fabric.Canvas {
 
             this.environment.addNode(node);
             this.environment.addAnt(ant);
-
-            this.aco.initializeTau();
         });
+
+        this.environment.init();
+
+        this.aco.initializeTau();
 
         this.generation = 0;
         this.updateBestSolution();
         this.updatePheromones();
 
-        this.fire('generationUpdated', {
-            generation: this.generation,
-            bestTourDistance: this.environment.bestTourDistance,
-            bestTour: this.environment.bestTour,
-            averageTourDistance: this.environment.averageTourDistance
-        });
+        this.fire('generationUpdated', canvas);
 
         this.updatePheromones();
 
@@ -207,12 +204,7 @@ class Canvas extends fabric.Canvas {
         this.updateBestSolution();
         this.updatePheromones();
 
-        this.fire('generationUpdated', {
-            generation: this.generation,
-            bestTourDistance: this.environment.bestTourDistance,
-            bestTour: this.environment.bestTour,
-            averageTourDistance: this.environment.averageTourDistance,
-        });
+        this.fire('generationUpdated', canvas);
     }
 
     toggleShowPheromones() {
