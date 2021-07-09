@@ -12,7 +12,7 @@ class Canvas extends fabric.Canvas {
         });
 
         // Default Settings
-        this.nodesLimit = 150;
+        this.nodesLimit = 200;
         this.showPheromones = false;
 
         this.antSpeed = 80;
@@ -122,15 +122,13 @@ class Canvas extends fabric.Canvas {
         this.aco.initializeTau();
 
         this.generation = 0;
+
         this.updateBestSolution();
-        this.updatePheromones();
-
-        this.fire('generationUpdated', canvas);
-
         this.updatePheromones();
 
         this.sortCanvas();
 
+        this.fire('generationUpdated', canvas);
         this.fire('addedNode', positions);
     }
 
@@ -275,8 +273,12 @@ class Canvas extends fabric.Canvas {
 
     setPlay() {
 
-        if (this.isPlay || this.environment.getNumberOfNodes() <= 1) {
+        if (this.isPlay) {
             return;
+        }
+
+        if (this.environment.getNumberOfNodes() <= 1) {
+            throw new Error("You need at least 2 nodes to play");
         }
 
         this.isPlay = true;
@@ -287,8 +289,12 @@ class Canvas extends fabric.Canvas {
 
     setStep() {
 
-        if (this.isPlay || this.environment.getNumberOfNodes() <= 1) {
+        if (this.isPlay) {
             return;
+        }
+
+        if (this.environment.getNumberOfNodes() <= 1) {
+            throw new Error("You need at least 2 nodes to step");
         }
 
         this.lockCanvas(true);

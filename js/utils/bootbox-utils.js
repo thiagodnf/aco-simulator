@@ -45,13 +45,14 @@ class BootBoxUtils {
         });
     }
 
-    static alert(message) {
+    static alert(title, message) {
 
         BootBoxUtils.setDefaults();
 
         return new Promise((resolve, reject) => {
             bootbox.alert({
                 message: message,
+                title: title,
                 callback: (result) => bootstrap.callback(result, resolve, reject)
             });
         });

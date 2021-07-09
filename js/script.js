@@ -48,7 +48,7 @@ $(function () {
     });
 
     window.onerror = (errorMsg) => {
-        BootBoxUtils.alert(errorMsg);
+        BootBoxUtils.alert(`<i class="fas fa-exclamation-triangle me-2"></i>Ooops...`, errorMsg);
         return false;
     }
 
@@ -241,12 +241,6 @@ $(function () {
     });
 
     canvas.on("generationUpdated", function(canvas){
-
-
-        // generation: this.generation,
-        // bestTourDistance: this.environment.bestTourDistance,
-        // bestTour: this.environment.bestTour,
-        // averageTourDistance: this.environment.averageTourDistance
 
         $generationCounter.text(canvas.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
         $bestValue.text(canvas.environment.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
