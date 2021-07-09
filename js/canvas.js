@@ -330,15 +330,14 @@ class Canvas extends fabric.Canvas {
 
         var render = function () {
 
-            let moveDone = [];
+            let isMoveDone = true;
 
             that.environment.ants.forEach((ant, i) => {
-                moveDone.push(that.moveAnt(ant, nextNodes[i], segments[i]));
+                let isAntDone = that.moveAnt(ant, nextNodes[i], segments[i]);
+                isMoveDone = isMoveDone && isAntDone;
             });
 
             canvas.renderAll();
-
-            let isMoveDone = moveDone.reduce((acc, v) => acc && v);
 
             if (isMoveDone) {
 

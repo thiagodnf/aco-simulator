@@ -33,7 +33,6 @@ class Environment {
 
         this.updateDistances();
         this.upateCnn();
-        this.updateAnts();
     }
 
     updateDistances(){
@@ -60,31 +59,28 @@ class Environment {
 
         this.averageTourDistance = 0.0;
 
+        let bestAnt = null;
+
         this.ants.forEach(ant => {
+
             that.averageTourDistance += ant.tourDistance;
-        });
 
-        let bestAnt = this.ants.reduce(function (p, v) {
-            return (p.tourDistance < v.tourDistance ? p : v);
+            if (bestAnt == null || ant.tourDistance < bestAnt.tourDistance) {
+                bestAnt = ant;
+            }
         });
-
-        if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
-            this.bestTour = ArrayUtils.copyArray(bestAnt.visitedNodeIds);
-            this.bestTourDistance = bestAnt.tourDistance;
-            this.bestPath = ArrayUtils.copyMatrix(bestAnt.path);
-        }
 
         this.averageTourDistance /= that.getNumberOfAnts();
+
+        if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
+            this.bestTour = bestAnt.visitedNodeIds;
+            this.bestTourDistance = bestAnt.tourDistance;
+            this.bestPath = bestAnt.path;
+        }
     }
 
     upateCnn() {
         this.cnn = this.evaluate(NearestNeighbour.solve(this));
-    }
-
-    updateAnts(){
-        this.ants.forEach(ant => {
-            ant.path = ArrayUtils.newMatrix(this.getNumberOfNodes(), this.getNumberOfNodes(), 0);
-        });
     }
 
     getNumberOfAnts() {
@@ -123,7 +119,7 @@ class Environment {
     }
 
     findNodeById(nodeId) {
-        return this.nodes.filter(n => n.id == nodeId)[0];
+        return this.nodes[nodeId];
     }
 
     getNij(i, j) {
