@@ -25,6 +25,12 @@ This simulator has implemented the following algorithms:
 
 ## Screenshots
 
+<div >
+    <kbd>
+        <img src=""/>
+    </kbd>
+</div>
+
 ## Questions or Suggestions
 
 Feel free to create <a href="https://github.com/thiagodnf/aco-simulator/issues">issues</a> here as you need
