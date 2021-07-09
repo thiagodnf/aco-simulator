@@ -203,23 +203,18 @@ $(function () {
 
         BootBoxUtils.promptNumber("Number of Nodes", 1, canvas.nodesLimit).then((value) => {
 
-            var numberOfNodes = parseInt(value);
+            canvas.setClearAll();
 
-            if (!Number.isNaN(numberOfNodes) && numberOfNodes <= canvas.nodesLimit) {
+            let positions = [];
 
-                canvas.setClearAll();
-
-                let positions = [];
-
-                for (let i = 0; i < numberOfNodes; i++) {
-                    positions.push({
-                        x: RandomUtils.nextFloat(0, canvas.width, 10),
-                        y: RandomUtils.nextFloat(0, canvas.height, 10),
-                    });
-                }
-
-                canvas.addNode(positions);
+            for (let i = 0; i < value; i++) {
+                positions.push({
+                    x: RandomUtils.nextFloat(0, canvas.width, 10),
+                    y: RandomUtils.nextFloat(0, canvas.height, 10),
+                });
             }
+
+            canvas.addNode(positions);
         });
     });
 
@@ -234,8 +229,6 @@ $(function () {
             canvas.addNode(positions);
         });
     });
-
-
 
     resizeWindow();
 
