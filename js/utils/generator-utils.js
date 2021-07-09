@@ -27,98 +27,52 @@ class GeneratorUtils {
 
         let positions = [];
 
-        let distance = FabricjsUtils.NODE_RADIUS * 2;
-
         for (let i = 1; i <= numberOfSquare; i++) {
 
-            let radius = 30 + (i * distance);
-            let angle = Math.tan(45 * (Math.PI / 180));
-            let centerX = canvas.width/2;
-            let centerY = canvas.height/2;
+            let radius = 0 + (75 * i);
+            let centerX = canvas.width / 2;
+            let centerY = canvas.height / 2;
 
-            let center = {
-                x: centerX,
-                y: centerY
-            };
+            let d1 = { x: centerX - radius, y: centerY - radius };
+            let d2 = { x: centerX + radius, y: centerY - radius };
+            let d3 = { x: centerX - radius, y: centerY + radius };
+            let d4 = { x: centerX + radius, y: centerY + radius };
 
-            positions.push(center);
-
-            for (let j = 0; j <= 45; j += 5) {
-                positions.push({
-                    x: centerX - radius / Math.sin(j * (Math.PI / 180)),
-                    y: centerY
-                });
-            }
-
-            // positions.push({
-            //     x: centerX,
-            //     y: centerY
-            // });
-            // for (let j = 1; j <= 2; j++) {
-            //     positions.push({
-            //         x: centerX + radius*j,
-            //         y: centerY
-            //     });
-            // }
-            // for (let j = 1; j <= 2; j++) {
-            //     positions.push({
-            //         x: centerX,
-            //         y: centerY + radius*j,
-            //     });
-            // }
-            // positions.push({
-            //     x: centerX + radius,
-            //     y: centerY + radius
-            // });
-
-            // positions.push({
-            //     x: centerX,
-            //     y: centerY-radius
-            // });
-
-            // for (let j = 1; j <= 2; j++) {
-            //     positions.push({
-            //         x: centerX + radius * j,
-            //         y: centerY
-            //     });
-            //     positions.push({
-            //         x: centerX,
-            //         y: centerY + radius * j
-            //     });
-            // }
-
-            // centerX = centerX + radius * 2;
-            // centerY = centerY + radius * 2;
-
-            // positions.push({
-            //     x: centerX,
-            //     y: centerY
-            // });
-
-            // for (let j = 1; j <= 2; j++) {
-            //     positions.push({
-            //         x: centerX - radius * j,
-            //         y: centerY
-            //     });
-            //     positions.push({
-            //         x: centerX,
-            //         y: centerY - radius * j
-            //     });
-            // }
-
-            // positions = [...positions, ...GeneratorUtils.points(d1,d2) ]
+            positions = [...positions, ...[d1, d2, d3, d4]]
+            positions = [...positions, ...GeneratorUtils.points(d1, d2, 3 * i)]
+            positions = [...positions, ...GeneratorUtils.points(d1, d3, 3 * i)]
+            positions = [...positions, ...GeneratorUtils.points(d3, d4, 3 * i)]
+            positions = [...positions, ...GeneratorUtils.points(d2, d4, 3 * i)]
         }
 
         return positions;
     }
 
-    static points(p1, p2) {
+    static points(p1, p2, div) {
 
-        let distX = p1.x = p2.x;
-        let distY = p1.y = p2.y;
+        let distX = (p1.x - p2.x) / div;
+        let distY = (p1.y - p2.y) / div;
 
+        let points = [];
 
-        return [];
+        if (p1.y == p2.y) {
+            for (let i = 1; i <= div - 1; i++) {
+                points.push({
+                    x: p1.x - distX * i,
+                    y: p1.y
+                });
+            }
+        }
+        if (p1.x == p2.x) {
+            for (let i = 1; i <= div - 1; i++) {
+                points.push({
+                    x: p1.x,
+                    y: p1.y - distY * i
+                });
+            }
+        }
+
+        return points;
     }
 
 }

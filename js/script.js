@@ -138,7 +138,7 @@ $(function () {
 
     $("#menubar-insert-squares").click((event) => {
 
-        BootBoxUtils.promptNumber("Number of Squares", 1, 5, 2).then((value) => {
+        BootBoxUtils.promptNumber("Number of Squares", 1, 3, 2).then((value) => {
 
             canvas.setClearAll();
 
