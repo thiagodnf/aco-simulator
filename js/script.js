@@ -106,7 +106,7 @@ $(function () {
         });
     });
 
-    $('#menubar-show-pheromones').change(() => canvas.toggleShowPheromones());
+    $('#menubar-view-pheromones').change(() => canvas.toggleViewPheromones());
 
     $('#menubar-view-shortest-path').change(() => {
         canvas.toggleViewShortestPath()

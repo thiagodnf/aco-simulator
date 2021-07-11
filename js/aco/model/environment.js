@@ -4,6 +4,9 @@ class Environment {
 
         this.aco = aco;
 
+        this.nodes = [];
+        this.ants = [];
+
         this.bestTour = [];
         this.bestPath = [];
         this.bestTourDistance = Number.NaN;
@@ -12,8 +15,7 @@ class Environment {
         this.tau = [];
         this.distances = [];
 
-        this.nodes = [];
-        this.ants = [];
+
 
         this.cnn = 1.0;
         this.alpha = 1.0;
@@ -25,9 +27,8 @@ class Environment {
     }
 
     init(){
-        console.log("init")
-
         this.bestTour = [];
+        this.bestPath = [];
         this.bestTourDistance = Number.NaN;
         this.averageTourDistance = Number.NaN;
 
@@ -53,6 +54,10 @@ class Environment {
         }
     }
 
+    upateCnn() {
+        this.cnn = this.evaluate(NearestNeighbour.solve(this));
+    }
+
     updateBestTour() {
 
         let that = this;
@@ -74,13 +79,9 @@ class Environment {
 
         if (Number.isNaN(this.bestTourDistance) || bestAnt.tourDistance < this.bestTourDistance) {
             this.bestTour = bestAnt.visitedNodeIds;
-            this.bestTourDistance = bestAnt.tourDistance;
             this.bestPath = bestAnt.path;
+            this.bestTourDistance = bestAnt.tourDistance;
         }
-    }
-
-    upateCnn() {
-        this.cnn = this.evaluate(NearestNeighbour.solve(this));
     }
 
     getNumberOfAnts() {
@@ -95,12 +96,12 @@ class Environment {
         this.nodes.push(node);
     }
 
-    isGenerationDone(){
-        return this.ants.map(e => e.isGenerationDone()).reduce((acc, v) => acc && v);
-    }
-
     addAnt(ant){
         this.ants.push(ant);
+    }
+
+    isGenerationDone(){
+        return this.ants.map(e => e.isGenerationDone()).reduce((acc, v) => acc && v);
     }
 
     evaluate(array) {

@@ -31,14 +31,14 @@ class Canvas extends fabric.Canvas {
         this.selectedOption;
         this.index = null;
 
+        this.aco = new AntSystem(this.environment);
+
+        this.setAddNode();
+
         this.on('mouse:up', (event) => this.onMoveUp(event))
         this.on('mouse:down', (event) => this.onMoveDown(event))
         this.on('mouse:move', (event) => this.onMoveMove(event))
         this.on('mouse:wheel', (event) => this.onMoveWheel(event))
-
-        this.aco = new AntSystem(this.environment);
-
-        this.setAddNode();
     }
 
     onMoveUp(event) {
@@ -203,7 +203,7 @@ class Canvas extends fabric.Canvas {
         this.fire('generationUpdated', canvas);
     }
 
-    toggleShowPheromones() {
+    toggleViewPheromones() {
 
         if (this.pheromones) {
             this.remove(this.pheromones);
