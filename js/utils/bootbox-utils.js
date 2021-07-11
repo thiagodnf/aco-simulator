@@ -45,7 +45,7 @@ class BootBoxUtils {
         });
     }
 
-    static alert(title, message) {
+    static alert(message, title) {
 
         BootBoxUtils.setDefaults();
 

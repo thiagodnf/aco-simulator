@@ -48,7 +48,7 @@ $(function () {
     });
 
     window.onerror = (errorMsg) => {
-        BootBoxUtils.alert(`<i class="fas fa-exclamation-triangle me-2"></i>Ooops...`, errorMsg);
+        BootBoxUtils.alert(errorMsg, `<i class="fas fa-exclamation-triangle me-2"></i>Ooops...`);
         return false;
     }
 

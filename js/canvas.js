@@ -14,7 +14,7 @@ class Canvas extends fabric.Canvas {
         // Default Settings
         this.nodesLimit = 200;
 
-        this.antSpeed = 80;
+        this.antSpeed = 20;
         this.animation = null;
         this.isPlay = false;
 
@@ -368,14 +368,14 @@ class Canvas extends fabric.Canvas {
                 }
             } else {
                 // fabric.util.requestAnimFrame(render);
-                // window.requestAnimationFrame(render);
-                setTimeout(render, 1)
+                window.requestAnimationFrame(render);
+                // setTimeout(render, 1)
             }
         };
 
         // fabric.util.requestAnimFrame(render);
-        // window.requestAnimationFrame(render);
-        setTimeout(render, 1)
+        window.requestAnimationFrame(render);
+        // setTimeout(render, 1)
     }
 
     moveAnt(ant, nextNode, segments) {
