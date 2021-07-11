@@ -135,7 +135,7 @@ class FabricjsUtils{
         });
     }
 
-    static makeBestSolution(environment){
+    static makeShortestPath(environment){
 
         let items = [];
 

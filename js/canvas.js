@@ -13,7 +13,6 @@ class Canvas extends fabric.Canvas {
 
         // Default Settings
         this.nodesLimit = 200;
-        this.showPheromones = false;
 
         this.antSpeed = 80;
         this.animation = null;
@@ -24,10 +23,11 @@ class Canvas extends fabric.Canvas {
         this.lastPosX = 0;
         this.lastPosY = 0;
 
-        this.bestSolution = null;
+        this.environment = new Environment(this);
+        this.shortestPath = FabricjsUtils.makeShortestPath(this.environment)
+        this.pheromones = null;
         this.generation = 0;
 
-        this.pheromones = [];
         this.selectedOption;
         this.index = null;
 
@@ -36,7 +36,6 @@ class Canvas extends fabric.Canvas {
         this.on('mouse:move', (event) => this.onMoveMove(event))
         this.on('mouse:wheel', (event) => this.onMoveWheel(event))
 
-        this.environment = new Environment(this);
         this.aco = new AntSystem(this.environment);
 
         this.setAddNode();
@@ -123,7 +122,7 @@ class Canvas extends fabric.Canvas {
 
         this.generation = 0;
 
-        this.updateBestSolution();
+        this.updateShortestPath();
         this.updatePheromones();
 
         this.sortCanvas();
@@ -171,24 +170,23 @@ class Canvas extends fabric.Canvas {
     }
 
     updatePheromones() {
-        this.remove(this.pheromones);
-        this.pheromones = FabricjsUtils.makeEdges(this.environment);
 
-        if (this.showPheromones) {
+        if (this.pheromones) {
+            this.remove(this.pheromones);
+            this.pheromones = FabricjsUtils.makeEdges(this.environment);
             this.add(this.pheromones);
+            this.sortCanvas();
         }
-
-        this.sortCanvas();
     }
 
-    updateBestSolution(){
+    updateShortestPath() {
 
-        if (this.bestSolution) {
-            this.remove(this.bestSolution);
+        if (this.shortestPath) {
+            this.remove(this.shortestPath);
+            this.shortestPath = FabricjsUtils.makeShortestPath(this.environment)
+            this.add(this.shortestPath);
+            this.sortCanvas();
         }
-
-        this.bestSolution = FabricjsUtils.makeBestSolution(this.environment)
-        this.add(this.bestSolution);
     }
 
     updateGeneration() {
@@ -199,7 +197,7 @@ class Canvas extends fabric.Canvas {
 
         this.aco.runGlobalPheromoneUpdate();
 
-        this.updateBestSolution();
+        this.updateShortestPath();
         this.updatePheromones();
 
         this.fire('generationUpdated', canvas);
@@ -207,9 +205,26 @@ class Canvas extends fabric.Canvas {
 
     toggleShowPheromones() {
 
-        this.showPheromones = !this.showPheromones;
+        if (this.pheromones) {
+            this.remove(this.pheromones);
+            this.pheromones = null;
+        } else {
+            this.pheromones = FabricjsUtils.makeEdges(this.environment);
+            this.add(this.pheromones);
+            this.sortCanvas();
+        }
+    }
 
-        this.updatePheromones();
+    toggleViewShortestPath() {
+
+        if (this.shortestPath) {
+            this.remove(this.shortestPath);
+            this.shortestPath = null;
+        } else {
+            this.shortestPath = FabricjsUtils.makeShortestPath(this.environment)
+            this.add(this.shortestPath);
+            this.sortCanvas();
+        }
     }
 
     setACO(aco){
@@ -332,10 +347,11 @@ class Canvas extends fabric.Canvas {
 
             let isMoveDone = true;
 
-            that.environment.ants.forEach((ant, i) => {
+            for (let i = 0; i < that.environment.ants.length; i++) {
+                let ant = that.environment.ants[i];
                 let isAntDone = that.moveAnt(ant, nextNodes[i], segments[i]);
                 isMoveDone = isMoveDone && isAntDone;
-            });
+            }
 
             canvas.renderAll();
 
@@ -353,13 +369,13 @@ class Canvas extends fabric.Canvas {
             } else {
                 // fabric.util.requestAnimFrame(render);
                 // window.requestAnimationFrame(render);
-                setTimeout(render, 0)
+                setTimeout(render, 1)
             }
         };
 
         // fabric.util.requestAnimFrame(render);
         // window.requestAnimationFrame(render);
-        setTimeout(render, 0)
+        setTimeout(render, 1)
     }
 
     moveAnt(ant, nextNode, segments) {

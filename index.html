@@ -70,7 +70,13 @@
                                 <li>
                                     <label class="dropdown-item dropdown-item-checkbox" for="menubar-show-pheromones">
                                         <input class="form-check-input" type="checkbox" value="" id="menubar-show-pheromones"/>
-                                        <span>Show Pheromones</span>
+                                        <span>Pheromones</span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="dropdown-item dropdown-item-checkbox" for="menubar-view-shortest-path">
+                                        <input class="form-check-input" type="checkbox" value="" id="menubar-view-shortest-path" checked/>
+                                        <span>Shortest Path</span>
                                     </label>
                                 </li>
                             </ul>
@@ -171,19 +177,19 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="card card-body text-center text-dark bg-light px-0 py-1">
-                                                <p class="fs-5 mb-0 best-value">NaN</p>
-                                                <small class="text-muted">Best Value</small>
+                                                <p class="fs-5 mb-0 shortest-distance">NaN</p>
+                                                <small class="text-muted">Shortest Distance</small>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="input-group input-group-sm mb-3">
-                                        <label  class="input-group-text bg-light fw-normal text-muted" for="best-solution">Best Solution</label >
-                                        <input type="text" class="form-control bg-white" id="best-solution" readonly>
+                                        <label  class="input-group-text bg-light fw-normal text-muted" for="shortest-path">Shortest Path</label >
+                                        <input type="text" class="form-control bg-white" id="shortest-path" readonly>
                                     </div>
                                     <hr/>
                                     <div class="charts ">
-                                        <div id="chart-global-best-value"></div>
-                                        <div id="chart-average-best-value"></div>
+                                        <div id="chart-global-shortest-distance"></div>
+                                        <div id="chart-average-shortest-distance"></div>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="parameters">

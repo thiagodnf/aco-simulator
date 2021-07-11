@@ -1,10 +1,10 @@
 let url = null;
 let canvas = null;
-let chartGlobalBestValue = null;
-let chartAverageBestValue = null;
+let chartGlobalShortestDistance = null;
+let chartAverageShortestDistance = null;
 let $generationCounter =    null;
-let $bestValue = null;
-let $bestSolution = [];
+let $shortestDistance = null;
+let $shortestPath = [];
 
 let $modalSettings = null;
 
@@ -30,11 +30,11 @@ $(function () {
     RandomUtils.setSeed(url.query.seed || new Date().getTime());
 
     canvas = new Canvas();
-    chartGlobalBestValue = ChartUtils.init("chart-global-best-value", "Global Best Value", "#7cb5ec");
-    chartAverageBestValue = ChartUtils.init("chart-average-best-value", "Average Best Value", "#90ed7d");
+    chartGlobalShortestDistance = ChartUtils.init("chart-global-shortest-distance", "Global Shortest Distance", "#7cb5ec");
+    chartAverageShortestDistance = ChartUtils.init("chart-average-shortest-distance", "Average Shortest Distance", "#90ed7d");
     $generationCounter = $(".generation-counter");
-    $bestValue = $(".best-value");
-    $bestSolution = $("#best-solution");
+    $shortestDistance = $(".shortest-distance");
+    $shortestPath = $("#shortest-path");
     $modalSettings = $("#modal-settings");
 
     $(".acs-parameters").hide();
@@ -107,6 +107,13 @@ $(function () {
     });
 
     $('#menubar-show-pheromones').change(() => canvas.toggleShowPheromones());
+
+    $('#menubar-view-shortest-path').change(() => {
+        canvas.toggleViewShortestPath()
+    });
+
+
+
 
     $("#menubar-export-positions").click((event) => {
 
@@ -243,10 +250,10 @@ $(function () {
     canvas.on("generationUpdated", function(canvas){
 
         $generationCounter.text(canvas.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
-        $bestValue.text(canvas.environment.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
-        $bestSolution.val(canvas.environment.bestTour);
+        $shortestDistance.text(canvas.environment.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
+        $shortestPath.val(canvas.environment.bestTour);
 
-        chartGlobalBestValue.addPoint(canvas.environment.bestTourDistance);
-        chartAverageBestValue.addPoint(canvas.environment.averageTourDistance);
+        chartGlobalShortestDistance.addPoint(canvas.environment.bestTourDistance);
+        chartAverageShortestDistance.addPoint(canvas.environment.averageTourDistance);
     });
 });
