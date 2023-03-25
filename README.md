@@ -10,11 +10,11 @@ Ant Colony Optimization Simulator developed in HTML
 
 ## How to Use:
 
-This project implement the Ant System in Javascript, showing a animated view about the Ant Colony Optimization developed by Marco Dorigo. To use it, you need to:
+This project implements the Ant System in Javascript, showing an animated view of the Ant Colony Optimization developed by Marco Dorigo. To use it, you need to:
 
 - Access https://thiagodnf.github.io/aco-simulator
-- Click on screen to add new nodes.
-- Click in "Play" and enjoy it!
+- Click on the screen to add new nodes.
+- Click on "Play" and enjoy it!
 
 ## Algorithms
 
@@ -37,7 +37,7 @@ Feel free to create <a href="https://github.com/thiagodnf/aco-simulator/issues">
 
 ## Contribute
 
-Contributions to the this project are very welcome! We can't do this alone! Feel free to fork this project, work on it and then make a pull request.
+Contributions to this project are very welcome! We can't do this alone! Feel free to fork this project, work on it and then make a pull request.
 
 ## Authors
 
@@ -53,7 +53,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 I open-source almost everything I can, and I try to reply to everyone needing help using these projects. Obviously, this takes time. You can integrate and use these projects in your applications for free! You can even change the source code and redistribute (even resell it).
 
-However, if you get some profit from this or just want to encourage me to continue creating stuff, there are few ways you can do it:
+However, if you get some profit from this or just want to encourage me to continue creating stuff, there are a few ways you can do it:
 
 <a href="https://www.buymeacoffee.com/thiagodnf" target="_blank">
   <img src="https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-2.svg" alt="Buy Me A Coffee">
