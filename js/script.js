@@ -2,7 +2,7 @@ let url = null;
 let canvas = null;
 let chartGlobalShortestDistance = null;
 let chartAverageShortestDistance = null;
-let $generationCounter =    null;
+let $generationCounter = null;
 let $shortestDistance = null;
 let $shortestPath = [];
 
@@ -17,10 +17,10 @@ function resizeWindow() {
     $("#sidebar").height(canvasHeight - 2);
 }
 
-function setToolbarActive(active){
-    $(".disable-when-playing button").prop( "disabled", active );
-    $(".disable-when-playing input").prop( "disabled", active );
-    $(".disable-when-playing #stop").prop( "disabled", !active );
+function setToolbarActive(active) {
+    $(".disable-when-playing button").prop("disabled", active);
+    $(".disable-when-playing input").prop("disabled", active);
+    $(".disable-when-playing #stop").prop("disabled", !active);
 }
 
 $(function () {
@@ -30,8 +30,8 @@ $(function () {
     RandomUtils.setSeed(url.query.seed || new Date().getTime());
 
     canvas = new Canvas();
-    chartGlobalShortestDistance = ChartUtils.init("chart-global-shortest-distance", "Global Shortest Distance", "#7cb5ec");
-    chartAverageShortestDistance = ChartUtils.init("chart-average-shortest-distance", "Average Shortest Distance", "#90ed7d");
+    chartGlobalShortestDistance = ChartUtils.init("chart-global-shortest-distance", "Global Shortest Distance", "#36A2EB", "#9BD0F5");
+    chartAverageShortestDistance = ChartUtils.init("chart-average-shortest-distance", "Average Shortest Distance", "#FF6384", "#FFB1C1");
     $generationCounter = $(".generation-counter");
     $shortestDistance = $(".shortest-distance");
     $shortestPath = $("#shortest-path");
@@ -52,7 +52,7 @@ $(function () {
         return false;
     }
 
-    $(".dropdown-item-no-click").click((event) =>{
+    $(".dropdown-item-no-click").click((event) => {
         event.preventDefault();
         return false;
     })
@@ -94,19 +94,19 @@ $(function () {
 
 
 
-    $("#play").click(() => {canvas.setPlay();});
-    $("#step").click(() => { canvas.setStep();});
+    $("#play").click(() => { canvas.setPlay(); });
+    $("#step").click(() => { canvas.setStep(); });
     $("#stop").click(() => canvas.setStop());
 
     $("#add-node").click(() => canvas.setAddNode());
     $("#move-node").click(() => canvas.setMoveNode());
 
-    $('input[name=ant-speed').change(function() {
+    $('input[name=ant-speed').change(function () {
         canvas.setAntSpeed(this.value)
     });
 
     $("#menubar-clear-all").click(() => {
-        BootBoxUtils.confirm("Are you sure you want to clear all?").then(() =>{
+        BootBoxUtils.confirm("Are you sure you want to clear all?").then(() => {
             canvas.setClearAll()
         });
     });
@@ -124,7 +124,7 @@ $(function () {
 
         let positions = [];
 
-        canvas.environment.ants.forEach(ant =>{
+        canvas.environment.ants.forEach(ant => {
             positions.push([ant.left, ant.top]);
         })
 
@@ -133,7 +133,7 @@ $(function () {
 
     $("#menubar-export-canvas").click((event) => {
 
-        document.getElementById("canvas").toBlob(function(blob) {
+        document.getElementById("canvas").toBlob(function (blob) {
             saveAs(blob, "canvas.png");
         });
     })
@@ -206,12 +206,12 @@ $(function () {
     });
 
     $("#btn-reset-default-values").click(event => {
-        $("#form-parameters input").each(function(event){
+        $("#form-parameters input").each(function (event) {
             $(this).val($(this).data("default-value"));
         });
     });
 
-    $('.random').click(function() {
+    $('.random').click(function () {
 
         BootBoxUtils.promptNumber("Number of Nodes", 1, canvas.nodesLimit).then((value) => {
 
@@ -230,7 +230,7 @@ $(function () {
         });
     });
 
-    $('.examples').click(function(){
+    $('.examples').click(function () {
 
         $.get("examples/" + $(this).data("file"), function (result) {
 
@@ -244,15 +244,15 @@ $(function () {
 
     resizeWindow();
 
-    canvas.on("running", () =>{
+    canvas.on("running", () => {
         setToolbarActive(true);
     });
 
-    canvas.on("stopped", () =>{
+    canvas.on("stopped", () => {
         setToolbarActive(false);
     });
 
-    canvas.on("generationUpdated", function(canvas){
+    canvas.on("generationUpdated", function (canvas) {
 
         $generationCounter.text(canvas.generation.toLocaleString("en-US", { maximumFractionDigits: 2 }));
         $shortestDistance.text(canvas.environment.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
@@ -260,5 +260,6 @@ $(function () {
 
         chartGlobalShortestDistance.addPoint(canvas.environment.bestTourDistance);
         chartAverageShortestDistance.addPoint(canvas.environment.averageTourDistance);
+
     });
 });

@@ -1,78 +1,43 @@
-class ChartUtils{
+class ChartUtils {
 
-    static init(el, title, color=undefined){
+    static init(el, title, borderColor, backgroundColor) {
 
-        var chart = Highcharts.chart(el, {
+        const ctx = document.getElementById(el);
 
-            chart: {
-                height: 180,
-            },
-
-            title: {
-                text: title,
-                style: {
-                    fontSize: '14px',
-                    fontFamily: "var(--bs-font-sans-serif)"
-                }
-            },
-
-            xAxis: {
-                title: {
-                    text: "Generation",
-                    style: {
-                        fontFamily: "var(--bs-font-sans-serif)"
-                    }
-                },
-                tickInterval: 1
-            },
-
-            credits: {
-                enabled: false
-            },
-
-            yAxis: {
-                title: {
-                    text: null
-                },
-                min: 0,
-            },
-
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        legend: {
-                            enabled: false
-                        }
-                    }
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: [{
+                    label: title,
+                    data: [],
+                    borderColor,
+                    backgroundColor
                 }]
             },
-
-            plotOptions: {
-                series: {
-                    pointStart: 1
+            options: {
+                scales: {
+                    y: {
+                        min: 0
+                    }
                 }
-            },
-
-            series: [{
-                showInLegend: false,
-                color: color,
-                name: "Distance",
-                data: []
-            }],
+            }
         });
 
+        let label = 1;
+
         return {
-            chart: chart,
+            chart,
             addPoint: (value) => {
                 if (value && !Number.isNaN(value)) {
-                    chart.series[0].addPoint(value);
+                    chart.data.labels.push(label++);
+                    chart.data.datasets.forEach((dataset) => {
+                        dataset.data.push(value);
+                    });
+                    chart.update();
                 }
             },
             setHeight: (value) => {
-                chart.setSize(undefined, value, false);
+                // chart.setSize(undefined, value, false);
             }
         };
     }
