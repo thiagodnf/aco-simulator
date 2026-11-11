@@ -1,7 +1,6 @@
 let url = null;
 let canvas = null;
-let chartGlobalShortestDistance = null;
-let chartAverageShortestDistance = null;
+let myChart = null;
 let $generationCounter = null;
 let $shortestDistance = null;
 let $shortestPath = [];
@@ -30,8 +29,7 @@ $(function () {
     RandomUtils.setSeed(url.query.seed || new Date().getTime());
 
     canvas = new Canvas();
-    chartGlobalShortestDistance = ChartUtils.init("chart-global-shortest-distance", "Global Shortest Distance", "#36A2EB", "#9BD0F5");
-    chartAverageShortestDistance = ChartUtils.init("chart-average-shortest-distance", "Average Shortest Distance", "#FF6384", "#FFB1C1");
+    myChart = ChartUtils.init("myChart", "Average Shortest Distance", "#FF6384", "#FFB1C1");
     $generationCounter = $(".generation-counter");
     $shortestDistance = $(".shortest-distance");
     $shortestPath = $("#shortest-path");
@@ -258,8 +256,7 @@ $(function () {
         $shortestDistance.text(canvas.environment.bestTourDistance.toLocaleString("en-US", { maximumFractionDigits: 2 }));
         $shortestPath.val(canvas.environment.bestTour);
 
-        chartGlobalShortestDistance.addPoint(canvas.environment.bestTourDistance);
-        chartAverageShortestDistance.addPoint(canvas.environment.averageTourDistance);
+        myChart.addPointTo(canvas.environment.bestTourDistance, canvas.environment.averageTourDistance);
 
     });
 });

@@ -8,10 +8,15 @@ class ChartUtils {
             type: 'line',
             data: {
                 datasets: [{
-                    label: title,
+                    label: "global",
                     data: [],
-                    borderColor,
-                    backgroundColor
+                    borderColor: "#36A2EB",
+                    backgroundColor: "#9BD0F5"
+                },{
+                    label: "average",
+                    data: [],
+                    borderColor: "#FF6384",
+                    backgroundColor: "#FFB1C1"
                 }]
             },
             options: {
@@ -27,15 +32,17 @@ class ChartUtils {
 
         return {
             chart,
-            addPoint: (value) => {
-                if (value && !Number.isNaN(value)) {
+            addPointTo: (globalValue, averageValue) => {
+                if (globalValue && !Number.isNaN(globalValue)) {
                     chart.data.labels.push(label++);
-                    chart.data.datasets.forEach((dataset) => {
-                        dataset.data.push(value);
-                    });
+
+                    chart.data.datasets[0].data.push(globalValue);
+                    chart.data.datasets[1].data.push(averageValue);
+
                     chart.update();
                 }
             },
+
             setHeight: (value) => {
                 // chart.setSize(undefined, value, false);
             }
